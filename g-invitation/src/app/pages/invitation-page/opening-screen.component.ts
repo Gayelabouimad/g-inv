@@ -1,0 +1,179 @@
+import {Component, EventEmitter, Input, Output, Signal} from '@angular/core';
+import {CountdownSectionComponent} from "./countdown-section.component";
+
+@Component({
+  selector: 'app-opening-screen',
+  standalone: true,
+  template: `
+    <div
+        class="opening-screen"
+        [class.hidden]="!isVisible"
+        (click)="onTap()"
+    >
+      <div class="background-wrapper" [style]="backgroundStyle">
+        <div class="overlay"></div>
+      </div>
+
+      <div class="content">
+        <div class="inner">
+          <h1 class="couple-name">{{ coupleName }}</h1>
+          <p class="subtitle">{{ titleLine }}</p>
+          <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
+
+          <div class="tap-hint">
+            <span>Tap to begin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  imports: [
+    CountdownSectionComponent
+  ],
+  styles: [`
+    .opening-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    .opening-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .background-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, v-bind('overlayOpacity'));
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      animation: fadeInContent 0.8s ease-out 0.2s both;
+    }
+
+    .inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .couple-name {
+      font-family: "Great Vibes", cursive;
+      font-size: 4rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin: 0;
+      line-height: 1.2;
+      max-width: 50%;
+      animation: slideUp 0.8s ease-out 0.3s both;
+    }
+
+    .subtitle {
+      font-family: "Limelight", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      animation: slideUp 0.8s ease-out 0.4s both;
+    }
+
+    .tap-hint {
+      font-family: "Limelight", sans-serif;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      opacity: 0.8;
+      animation: pulse 2s ease-in-out 0.8s infinite;
+    }
+
+    @keyframes fadeInContent {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.8;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .tap-hint {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+      }
+    }
+  `]
+})
+export class OpeningScreenComponent {
+  @Input() coupleName = '';
+  @Input() titleLine = '';
+  @Input() backgroundImage = '';
+  @Input() overlayOpacity = 0.45;
+  @Input() isVisible = true;
+  @Input() targetDate!: Date;
+
+  @Output() tapStart = new EventEmitter<void>();
+
+  get backgroundStyle() {
+    return {
+      'background-image': `url('${this.backgroundImage}')`
+    };
+  }
+
+  onTap(): void {
+    this.tapStart.emit();
+  }
+}
+
+
