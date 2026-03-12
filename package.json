@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "web:dev": "npm --prefix g-invitation run start",
+    "web:build": "npm --prefix g-invitation run build",
+    "deploy:apphosting": "firebase deploy --only apphosting",
+    "deploy": "firebase deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "esbuild": "^0.19.12",
     "firebase-tools": "^15.9.1"
   }
 }
