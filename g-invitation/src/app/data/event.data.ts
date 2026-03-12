@@ -11,7 +11,7 @@ export const EVENT_CONFIG: EventConfig = {
   quote: 'Therefore what God has joined together, let no one separate.',
   quoteSource: 'Mark 10:9',
   families: [
-    'Mr. & Mrs. Abdo & Nada El Hage',
+    'Mr. Abdo &  Mrs. Nada El Hage',
     'General Imad & Mrs. Itab Abou Imad',
   ],
   introText: 'Joyfully request your presence at the wedding of their children',
@@ -37,7 +37,7 @@ export const EVENT_CONFIG: EventConfig = {
       ],
     },
     ceremony: {
-      enabled: true,
+      enabled: false,
       title: 'Wedding Ceremony',
       dateText: 'Saturday, July 18, 2026',
       time: '5:30 pm',

@@ -1,0 +1,140 @@
+<div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
+
+  <!-- Opening Screen -->
+  @if (showOpening()) {
+    <app-opening-screen
+      [coupleName]="event.couple.primaryNames"
+      [titleLine]="event.couple.titleLine"
+      [backgroundImage]="event.branding.backgroundImage"
+      [overlayOpacity]="event.branding.overlayOpacity"
+      [isVisible]="showOpening()"
+      [targetDate]="targetDate"
+      (tapStart)="onOpeningTap()"
+    ></app-opening-screen>
+  }
+
+  <!-- Main Content -->
+  @if (!showOpening()) {
+    <div class="page-content">
+      <div class="page-background"></div>
+
+      <div
+        class="slides-shell"
+        (pointerdown)="onPointerDown($event)"
+        (pointerup)="onPointerUp($event)"
+        (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)"
+        (wheel)="onWheel($event)"
+      >
+        <div class="slides-track" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
+          @for (slide of slides(); track slide.key) {
+            <section class="slide-page">
+              <div class="slide-scroll">
+                @switch (slide.key) {
+                  @case ('intro') {
+                    <app-intro-section
+                      [coupleName]="event.couple.primaryNames"
+                      [quote]="event.quote"
+                      [quoteSource]="event.quoteSource"
+                      [families]="event.families"
+                      [introText]="event.introText"
+                    ></app-intro-section>
+                  }
+
+                  @case ('gathering') {
+                    <app-event-section
+                      [title]="event.sections.gathering.title"
+                      [description]="event.sections.gathering.description"
+                      [items]="event.sections.gathering.items"
+                    ></app-event-section>
+                  }
+
+                  @case ('ceremony') {
+                    <app-event-section
+                      [title]="event.sections.ceremony.title"
+                      [dateText]="event.sections.ceremony.dateText"
+                      [time]="event.sections.ceremony.time"
+                      [items]="ceremonyItems()"
+                    ></app-event-section>
+                  }
+
+                  @case ('reception') {
+                    <app-event-section
+                      [title]="event.sections.reception.title"
+                      [dateText]="event.sections.reception.dateText"
+                      [time]="event.sections.reception.time"
+                      [items]="receptionItems()"
+                    ></app-event-section>
+                  }
+
+                  @case ('timeline') {
+                    <app-timeline-section
+                      [title]="event.sections.timeline.title"
+                      [subtitle]="event.sections.timeline.subtitle"
+                      [image]="event.sections.timeline.image"
+                    ></app-timeline-section>
+                  }
+
+                  @case ('registry') {
+                    <app-registry-section
+                      [title]="event.sections.registry.title"
+                      [text]="event.sections.registry.text"
+                      [name]="event.sections.registry.name"
+                      [accountNumber]="event.sections.registry.accountNumber"
+                    ></app-registry-section>
+                  }
+
+                  @case ('rsvp') {
+                    <app-rsvp-section
+                      [invitee]="invitee()"
+                      [deadlineText]="event.rsvp.deadlineText"
+                      [maxMessageLength]="event.rsvp.maxMessageLength"
+                      [accentColor]="event.branding.accentColor"
+                      (onRsvpSubmit)="onRsvpSubmit($event)"
+                    ></app-rsvp-section>
+                  }
+
+                  @case ('thankyou') {
+                    <app-thank-you-section
+                      [attending]="submittedResponse()?.attending ?? false"
+                      [attendeeCount]="submittedResponse()?.attendeeCount ?? 0"
+                      [message]="submittedResponse()?.message ?? ''"
+                    ></app-thank-you-section>
+                  }
+                }
+              </div>
+            </section>
+          }
+        </div>
+
+        <div class="slide-controls">
+          <button class="nav-button" type="button" (click)="previousSlide()" [disabled]="currentSlideIndex() === 0">
+            Back
+          </button>
+
+          <div class="slide-dots" aria-label="Invitation section navigation">
+            @for (slide of slides(); track slide.key; let i = $index) {
+              <button
+                type="button"
+                class="dot"
+                [class.active]="i === currentSlideIndex()"
+                [attr.aria-label]="'Go to ' + slide.label"
+                (click)="goToSlide(i)"
+              ></button>
+            }
+          </div>
+
+          <button
+            class="nav-button"
+            type="button"
+            (click)="nextSlide()"
+            [disabled]="currentSlideIndex() === slides().length - 1"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   addDoc,
   collection,
+  deleteDoc,
   getDocs,
   getFirestore,
   limit,
@@ -100,6 +101,28 @@ export class RsvpService {
     }
 
     await addDoc(rsvps, { ...docPayload, createdAt: now });
+  }
+
+  /**
+   * Delete an existing RSVP response for a specific invitee.
+   * If no response exists, this is a no-op.
+   */
+  async delete(inviteeId: string, eventSlug: string): Promise<void> {
+    this.ensureInitialized();
+
+    const db = getFirestore();
+    const collectionName = this.getCollectionName(eventSlug);
+    const rsvps = collection(db, collectionName);
+
+    const existing = await getDocs(
+      query(rsvps, where('inviteeId', '==', inviteeId), limit(1)),
+    );
+
+    if (existing.empty) {
+      return;
+    }
+
+    await deleteDoc(existing.docs[0].ref);
   }
 }
 
