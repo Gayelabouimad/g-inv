@@ -85,7 +85,7 @@
       id="status-filter"
       class="filter-select"
       (change)="filterStatus($event)">
-      <option value="">All Responses ({{ filteredRsvps().length }})</option>
+      <option value="">All Responses ({{ totalInvitations }})</option>
       <option value="attending">Attending ({{ confirmedCount() }})</option>
       <option value="notAttending">Not Attending ({{ declinedCount() }})</option>
       <option value="pending">No Response ({{ pendingCount() }})</option>
@@ -104,35 +104,44 @@
             <th class="col-message">Message</th>
             <th class="col-date">Submitted</th>
             <th class="col-date">Last Updated</th>
+            <th class="col-action">Invitation</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            *ngFor="let rsvp of filteredRsvps()"
-            [ngClass]="'row-status-' + (rsvp.attending ? 'yes' : 'no')">
+            *ngFor="let item of filteredRsvps()"
+            [ngClass]="'row-status-' + (item.attending ? 'yes' : (item.isResponded ? 'no' : 'pending'))">
             <td class="col-names">
-              <strong>{{ rsvp.guestNamesDisplay }}</strong>
+              <strong>{{ item.guestNamesDisplay }}</strong>
             </td>
             <td class="col-status">
-              <span [ngClass]="'badge badge-' + (rsvp.attending ? 'yes' : 'no')">
-                {{ rsvp.attending ? '✓ Yes' : '✗ No' }}
+              <span *ngIf="item.isResponded" [ngClass]="'badge badge-' + (item.attending ? 'yes' : 'no')">
+                {{ item.attending ? '✓ Yes' : '✗ No' }}
+              </span>
+              <span *ngIf="!item.isResponded" class="badge badge-pending">
+                ⏳ Pending
               </span>
             </td>
             <td class="col-attendees">
-              {{ rsvp.attending ? rsvp.attendeeCount : '—' }}
+              {{ item.isResponded && item.attending ? item.attendeeCount : '—' }}
             </td>
             <td class="col-message">
-              <em>{{ rsvp.message || '—' }}</em>
+              <em>{{ item.message || '—' }}</em>
             </td>
-            <td class="col-date" [title]="rsvp.createdAt">
-              {{ formatDate(rsvp.createdAt ?? '') }}
+            <td class="col-date" [title]="item.createdAt">
+              {{ item.createdAt ? formatDate(item.createdAt) : '—' }}
             </td>
-            <td class="col-date" [title]="rsvp.updatedAt">
-              {{ formatDate(rsvp.updatedAt ?? '') }}
+            <td class="col-date" [title]="item.updatedAt">
+              {{ item.updatedAt ? formatDate(item.updatedAt) : '—' }}
+            </td>
+            <td class="col-action">
+              <a [href]="getInvitationLink(item.submittedFromRoute)" target="_blank" class="btn-link">
+                View →
+              </a>
             </td>
           </tr>
           <tr *ngIf="filteredRsvps().length === 0">
-            <td colspan="6" class="empty-state">
+            <td colspan="7" class="empty-state">
               <p>No RSVPs found matching the selected filter</p>
             </td>
           </tr>

@@ -264,6 +264,7 @@
 .col-attendees { width: 12%; }
 .col-message { width: 28%; }
 .col-date { width: 10%; }
+.col-action { width: 10%; }
 
 .rsvp-table td {
   padding: 16px;
@@ -295,6 +296,14 @@
   background: rgba(220, 53, 69, 0.08);
 }
 
+.row-status-pending {
+  background: rgba(255, 193, 7, 0.03);
+}
+
+.row-status-pending:hover {
+  background: rgba(255, 193, 7, 0.08);
+}
+
 .badge {
   display: inline-block;
   padding: 6px 12px;
@@ -315,6 +324,11 @@
   color: white;
 }
 
+.badge-pending {
+  background: var(--color-warning);
+  color: #333;
+}
+
 .col-message {
   color: #666;
   font-style: italic;
@@ -326,6 +340,22 @@
   font-size: 13px;
   color: #999;
   white-space: nowrap;
+}
+
+.btn-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: var(--transition);
+  display: inline-block;
+  border: 1px solid var(--color-primary);
+}
+
+.btn-link:hover {
+  background: var(--color-primary);
+  color: white;
 }
 
 .empty-state {
@@ -421,6 +451,15 @@
 
   .col-message {
     display: none;
+  }
+
+  .col-action {
+    width: 100%;
+  }
+
+  .btn-link {
+    width: 100%;
+    text-align: center;
   }
 }
 

@@ -64,16 +64,12 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   protected filteredRsvps() {
     const filterValue = this.filter();
     const allRsvps = this.rsvps();
+    const submittedIds = new Set(allRsvps.map(r => r.inviteeId));
 
-    if (!filterValue) return allRsvps;
-
-    if (filterValue === 'attending') {
-      return allRsvps.filter(r => r.attending);
-    } else if (filterValue === 'notAttending') {
-      return allRsvps.filter(r => !r.attending);
-    } else if (filterValue === 'pending') {
-      const submittedIds = new Set(allRsvps.map(r => r.inviteeId));
-      return INVITEES.filter(inv => !submittedIds.has(inv.id)).map(inv => ({
+    // Get all items (submitted + non-submitted)
+    const allItems = [
+      ...allRsvps.map(r => ({ ...r, isResponded: true })),
+      ...INVITEES.filter(inv => !submittedIds.has(inv.id)).map(inv => ({
         inviteeId: inv.id,
         accessToken: inv.accessToken,
         eventSlug: this.event.eventSlug,
@@ -84,10 +80,26 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
         attendeeCount: 0,
         message: '',
         submittedFromRoute: inv.routeSlug,
-      } as RSVPSubmission));
+        isResponded: false,
+      } as RSVPSubmission & { isResponded: boolean }),
+      )
+    ];
+
+    // Apply filters
+    if (!filterValue) {
+      // Default: show all
+      return allItems;
     }
 
-    return allRsvps;
+    if (filterValue === 'attending') {
+      return allItems.filter(r => r.isResponded && r.attending);
+    } else if (filterValue === 'notAttending') {
+      return allItems.filter(r => r.isResponded && !r.attending);
+    } else if (filterValue === 'pending') {
+      return allItems.filter(r => !r.isResponded);
+    }
+
+    return allItems;
   }
 
   protected confirmedCount() {
@@ -122,6 +134,10 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     } catch {
       return '—';
     }
+  }
+
+  protected getInvitationLink(routeSlug: string): string {
+    return `/${this.event.eventSlug}/${routeSlug}`;
   }
 
   protected exportToCSV(): void {
