@@ -104,5 +104,7 @@ export interface RSVPSubmission {
   attendeeCount: number;
   message: string;
   submittedFromRoute: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 

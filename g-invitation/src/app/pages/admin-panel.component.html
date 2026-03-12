@@ -1,0 +1,152 @@
+<div class="admin-wrapper">
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>{{ event.couple.primaryNames }}</h1>
+        <p class="header-subtitle">RSVP Management Console</p>
+      </div>
+      <div class="header-meta">
+        <span class="meta-item">Event: <strong>{{ event.eventSlug }}</strong></span>
+        <span class="meta-item">Collection: <strong>rsvp-{{ event.eventSlug }}</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="button-group">
+      <button
+        class="btn btn-primary"
+        (click)="loadRsvps()"
+        [disabled]="loading()">
+        <span *ngIf="!loading()">🔄 Refresh RSVPs</span>
+        <span *ngIf="loading()">⏳ Loading...</span>
+      </button>
+      <button
+        class="btn btn-secondary"
+        (click)="exportToCSV()"
+        [disabled]="filteredRsvps().length === 0">
+        📥 Export to CSV
+      </button>
+    </div>
+    <div class="last-loaded">
+      Last updated: <span class="timestamp">{{ lastLoaded() }}</span>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Invitations</h3>
+        <p class="stat-value">{{ totalInvitations }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card-yes">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Confirmed</h3>
+        <p class="stat-value">{{ confirmedCount() }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card-no">
+      <div class="stat-icon">❌</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Declined</h3>
+        <p class="stat-value">{{ declinedCount() }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card-info">
+      <div class="stat-icon">👥</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Attendees</h3>
+        <p class="stat-value">{{ totalAttendees() }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card-pending">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-content">
+        <h3 class="stat-label">No Response</h3>
+        <p class="stat-value">{{ pendingCount() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <label for="status-filter" class="filter-label">Filter by Status:</label>
+    <select
+      id="status-filter"
+      class="filter-select"
+      (change)="filterStatus($event)">
+      <option value="">All Responses ({{ filteredRsvps().length }})</option>
+      <option value="attending">Attending ({{ confirmedCount() }})</option>
+      <option value="notAttending">Not Attending ({{ declinedCount() }})</option>
+      <option value="pending">No Response ({{ pendingCount() }})</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <div *ngIf="!loading(); else loadingState" class="table-container">
+      <table class="rsvp-table">
+        <thead>
+          <tr>
+            <th class="col-names">Guest Names</th>
+            <th class="col-status">Attending</th>
+            <th class="col-attendees">Attendees</th>
+            <th class="col-message">Message</th>
+            <th class="col-date">Submitted</th>
+            <th class="col-date">Last Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let rsvp of filteredRsvps()"
+            [ngClass]="'row-status-' + (rsvp.attending ? 'yes' : 'no')">
+            <td class="col-names">
+              <strong>{{ rsvp.guestNamesDisplay }}</strong>
+            </td>
+            <td class="col-status">
+              <span [ngClass]="'badge badge-' + (rsvp.attending ? 'yes' : 'no')">
+                {{ rsvp.attending ? '✓ Yes' : '✗ No' }}
+              </span>
+            </td>
+            <td class="col-attendees">
+              {{ rsvp.attending ? rsvp.attendeeCount : '—' }}
+            </td>
+            <td class="col-message">
+              <em>{{ rsvp.message || '—' }}</em>
+            </td>
+            <td class="col-date" [title]="rsvp.createdAt">
+              {{ formatDate(rsvp.createdAt ?? '') }}
+            </td>
+            <td class="col-date" [title]="rsvp.updatedAt">
+              {{ formatDate(rsvp.updatedAt ?? '') }}
+            </td>
+          </tr>
+          <tr *ngIf="filteredRsvps().length === 0">
+            <td colspan="6" class="empty-state">
+              <p>No RSVPs found matching the selected filter</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #loadingState>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading RSVPs from Firestore...</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+
