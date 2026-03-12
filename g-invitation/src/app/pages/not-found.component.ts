@@ -19,7 +19,6 @@ import { RouterLink } from '@angular/router';
         place-items: center;
         background: #111;
         color: #fff;
-        font-family: Arial, Helvetica, sans-serif;
       }
       a {
         color: #d6c3a5;

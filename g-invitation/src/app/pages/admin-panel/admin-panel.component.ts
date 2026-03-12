@@ -1,14 +1,35 @@
 import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EVENT_CONFIG } from '../data/event.data';
-import { INVITEES } from '../data/invitees.data';
-import { RSVPSubmission } from '../models/invitation.models';
-import { RsvpService } from '../services/rsvp.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { EVENT_CONFIG } from '../../data/event.data';
+import { INVITEES } from '../../data/invitees.data';
+import { RSVPSubmission } from '../../models/invitation.models';
+import { RsvpService } from '../../services/rsvp.service';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+  ],
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.css'
 })
@@ -18,6 +39,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   protected readonly rsvps = signal<RSVPSubmission[]>([]);
   protected readonly filter = signal<string>('');
 
+  displayedColumns: string[] = ['guestNames', 'attending', 'attendees', 'message', 'submitted', 'updated', 'invitation'];
   lastLoaded = signal('Never');
   totalInvitations = INVITEES.length;
 
@@ -113,7 +135,10 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   protected totalAttendees() {
     return this.rsvps()
       .filter(r => r.attending)
-      .reduce((sum, r) => sum + (r.attendeeCount || 0), 0);
+      .reduce((sum, r) => {
+        const count = Number(r.attendeeCount);
+        return sum + (Number.isFinite(count) ? count : 0);
+      }, 0);
   }
 
   protected pendingCount() {
@@ -121,9 +146,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     return INVITEES.filter(inv => !submittedIds.has(inv.id)).length;
   }
 
-  protected filterStatus(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.filter.set(value);
+  protected filterStatus(event: MatSelectChange): void {
+    this.filter.set((event.value as string) ?? '');
   }
 
   protected formatDate(dateString: string): string {
@@ -145,8 +169,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     const headers = ['Guest Names', 'Attending', 'Attendees', 'Message', 'Submitted', 'Last Updated'];
     const rows = data.map(rsvp => [
       rsvp.guestNamesDisplay,
-      rsvp.attending ? 'Yes' : 'No',
-      rsvp.attending ? rsvp.attendeeCount : '-',
+      rsvp.isResponded ? (rsvp.attending ? 'Yes' : 'No') : 'No Response',
+      rsvp.isResponded && rsvp.attending ? rsvp.attendeeCount : '-',
       rsvp.message || '',
       this.formatDate(rsvp.createdAt || ''),
       this.formatDate(rsvp.updatedAt || ''),
