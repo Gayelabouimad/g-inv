@@ -81,3 +81,47 @@ button {
   color: #ff8484;
 }
 
+.thank-you {
+  padding: 16px 0;
+}
+
+.thank-you h3 {
+  color: #7dff9d;
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.thank-you-message {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.response-summary {
+  margin-top: 20px;
+  padding: 12px;
+  background: rgba(125, 255, 157, 0.1);
+  border: 1px solid rgba(125, 255, 157, 0.3);
+  border-radius: 8px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(125, 255, 157, 0.2);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-item strong {
+  color: #7dff9d;
+}
+
+.summary-item span {
+  text-align: right;
+  flex: 1;
+  margin-left: 12px;
+}
+

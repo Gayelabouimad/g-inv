@@ -37,18 +37,52 @@ export class RsvpService {
     }
   }
 
+  /**
+   * Get the collection name for a specific event
+   * @param eventSlug The event slug (e.g., 'g-invitation')
+   * @returns The collection name (e.g., 'rsvp-g-invitation')
+   */
+  private getCollectionName(eventSlug: string): string {
+    return `rsvp-${eventSlug}`;
+  }
+
+  /**
+   * Read existing RSVP response for a specific invitee
+   * @param inviteeId The invitee ID
+   * @param eventSlug The event slug
+   * @returns The RSVP submission if found, null otherwise
+   */
+  async read(inviteeId: string, eventSlug: string): Promise<RSVPSubmission | null> {
+    this.ensureInitialized();
+
+    const db = getFirestore();
+    const collectionName = this.getCollectionName(eventSlug);
+    const rsvps = collection(db, collectionName);
+
+    const existing = await getDocs(
+      query(rsvps, where('inviteeId', '==', inviteeId), limit(1)),
+    );
+
+    if (existing.empty) {
+      return null;
+    }
+
+    return existing.docs[0].data() as RSVPSubmission;
+  }
+
+  /**
+   * Submit or update RSVP response
+   * @param payload The RSVP submission data
+   */
   async submit(payload: RSVPSubmission): Promise<void> {
     this.ensureInitialized();
 
     const db = getFirestore();
-    const rsvps = collection(db, 'rsvps');
+    const collectionName = this.getCollectionName(payload.eventSlug);
+    const rsvps = collection(db, collectionName);
+
     const existing = await getDocs(
-      query(
-        rsvps,
-        where('inviteeId', '==', payload.inviteeId),
-        where('eventSlug', '==', payload.eventSlug),
-        limit(1),
-      ),
+      query(rsvps, where('inviteeId', '==', payload.inviteeId), limit(1)),
     );
 
     const now = new Date().toISOString();

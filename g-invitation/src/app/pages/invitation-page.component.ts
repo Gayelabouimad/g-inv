@@ -60,28 +60,53 @@ import { RsvpService } from '../services/rsvp.service';
           <h2>RSVP</h2>
           <p class="muted">{{ event.rsvp.deadlineText }}</p>
 
-          <form [formGroup]="rsvpForm" (ngSubmit)="submitRsvp()">
-            <label>Will you attend?</label>
-            <div class="row gap">
-              <button type="button" (click)="setAttending(true)">Yes</button>
-              <button type="button" (click)="setAttending(false)">No</button>
+          <ng-container *ngIf="!rsvpSubmitted(); else thankYou">
+            <form [formGroup]="rsvpForm" (ngSubmit)="submitRsvp()">
+              <label>Will you attend?</label>
+              <div class="row gap">
+                <button type="button" (click)="setAttending(true)">Yes</button>
+                <button type="button" (click)="setAttending(false)">No</button>
+              </div>
+
+              <div *ngIf="rsvpForm.value.attending === true">
+                <label>Number of attendees</label>
+                <select formControlName="attendeeCount">
+                  <option *ngFor="let n of attendeeOptions()" [value]="n">{{ n }}</option>
+                </select>
+              </div>
+
+              <label>Message (optional)</label>
+              <textarea formControlName="message" [maxLength]="event.rsvp.maxMessageLength"></textarea>
+
+              <button type="submit" [disabled]="submitting()">Submit RSVP</button>
+            </form>
+
+            <p class="error" *ngIf="submitError()">{{ submitError() }}</p>
+          </ng-container>
+
+          <ng-template #thankYou>
+            <div class="thank-you">
+              <h3>Thank you!</h3>
+              <p class="thank-you-message">Your response has been recorded.</p>
+              
+              <div class="response-summary">
+                <div class="summary-item">
+                  <strong>Attending:</strong>
+                  <span>{{ submittedResponse()?.attending ? 'Yes' : 'No' }}</span>
+                </div>
+                
+                <div class="summary-item" *ngIf="submittedResponse()?.attending">
+                  <strong>Number of Guests:</strong>
+                  <span>{{ submittedResponse()?.attendeeCount }}</span>
+                </div>
+                
+                <div class="summary-item" *ngIf="submittedResponse()?.message">
+                  <strong>Message:</strong>
+                  <span>{{ submittedResponse()?.message }}</span>
+                </div>
+              </div>
             </div>
-
-            <div *ngIf="rsvpForm.value.attending === true">
-              <label>Number of attendees</label>
-              <select formControlName="attendeeCount">
-                <option *ngFor="let n of attendeeOptions()" [value]="n">{{ n }}</option>
-              </select>
-            </div>
-
-            <label>Message (optional)</label>
-            <textarea formControlName="message" [maxLength]="event.rsvp.maxMessageLength"></textarea>
-
-            <button type="submit" [disabled]="submitting()">Submit RSVP</button>
-          </form>
-
-          <p class="ok" *ngIf="submitSuccess()">RSVP submitted successfully.</p>
-          <p class="error" *ngIf="submitError()">{{ submitError() }}</p>
+          </ng-template>
         </section>
       </ng-template>
     </div>
@@ -101,6 +126,8 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   protected readonly submitting = signal(false);
   protected readonly submitSuccess = signal(false);
   protected readonly submitError = signal('');
+  protected readonly rsvpSubmitted = signal(false);
+  protected readonly submittedResponse = signal<RSVPSubmission | null>(null);
 
   private timer: ReturnType<typeof setInterval> | null = null;
   private readonly countdown = signal('');
@@ -135,6 +162,22 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     this.invitee.set(invitee);
     this.rsvpForm.patchValue({ attendeeCount: invitee.numberOfPeople });
     this.startCountdown();
+
+    // Load existing RSVP response if available
+    this.loadExistingResponse(invitee.id);
+  }
+
+  private async loadExistingResponse(inviteeId: string): Promise<void> {
+    try {
+      const existingResponse = await this.rsvpService.read(inviteeId, this.event.eventSlug);
+      if (existingResponse) {
+        this.submittedResponse.set(existingResponse);
+        this.rsvpSubmitted.set(true);
+      }
+    } catch (error) {
+      // Silently fail - if we can't load response, just show form
+      console.error('Error loading existing RSVP response:', error);
+    }
   }
 
   ngOnDestroy(): void {
@@ -186,6 +229,8 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
     try {
       await this.rsvpService.submit(payload);
+      this.submittedResponse.set(payload);
+      this.rsvpSubmitted.set(true);
       this.submitSuccess.set(true);
     } catch (error) {
       this.submitError.set('Failed to submit RSVP. Please try again.');
