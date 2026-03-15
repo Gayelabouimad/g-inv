@@ -1,5 +1,4 @@
-import { Component, Input, computed } from '@angular/core';
-import { signal } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, signal } from '@angular/core';
 
 @Component({
   selector: 'app-countdown-section',
@@ -44,22 +43,39 @@ import { signal } from '@angular/core';
     }
   `]
 })
-export class CountdownSectionComponent {
-  @Input() targetDate: Date | null = null;
+export class CountdownSectionComponent implements OnChanges, OnDestroy {
+  @Input() targetDate!: Date;
 
   private readonly countdown = signal('');
+  private timerId: ReturnType<typeof setInterval> | null = null;
 
-  readonly countdownDisplay = computed(() => {
-    if (!this.targetDate) return '';
-    return this.calculateCountdown(this.targetDate);
-  });
+  protected readonly countdownDisplay = this.countdown;
 
-  constructor() {
-    this.startCountdownTimer();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['targetDate']) {
+      this.startCountdownTimer();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
   }
 
   private startCountdownTimer(): void {
     if (typeof window === 'undefined') return;
+
+    if (this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
+
+    if (!this.targetDate || Number.isNaN(this.targetDate.getTime())) {
+      this.countdown.set('');
+      return;
+    }
 
     const update = () => {
       if (this.targetDate) {
@@ -86,11 +102,7 @@ export class CountdownSectionComponent {
     };
 
     update();
-    setInterval(update, 60000); // Update every minute
-  }
-
-  private calculateCountdown(targetDate: Date): string {
-    return this.countdown();
+    this.timerId = setInterval(update, 60000); // Update every minute
   }
 }
 

@@ -102,7 +102,7 @@ import { CommonModule } from '@angular/common';
 
     @media (max-width: 480px) {
       .intro-section {
-        padding: 2rem 1rem;
+        padding: 3rem 1rem;
       }
     }
   `]

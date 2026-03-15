@@ -34,11 +34,7 @@
                 @switch (slide.key) {
                   @case ('intro') {
                     <div class="intro-slide">
-                      <div class="hero-main">
-                        <h1 class="hero-title">{{ event.couple.primaryNames }}</h1>
-                        <p class="hero-subtitle">{{ event.couple.titleLine }}</p>
-                        <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
-                      </div>
+                      <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
                       <app-intro-section
                         [quote]="event.quote"
                         [coupleName]="event.couple.primaryNames"

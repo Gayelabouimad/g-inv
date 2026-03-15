@@ -18,7 +18,6 @@ import {CountdownSectionComponent} from "./countdown-section.component";
           <h1 class="couple-name">{{ coupleName }}</h1>
           <p class="subtitle">{{ titleLine }}</p>
           <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
-
           <div class="tap-hint">
             <span>Tap to begin</span>
           </div>
