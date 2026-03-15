@@ -63,7 +63,6 @@ import {CountdownSectionComponent} from "./countdown-section.component";
       z-index: 1;
       text-align: center;
       color: white;
-      padding: 2rem;
       animation: fadeInContent 0.8s ease-out 0.2s both;
     }
 
@@ -71,7 +70,7 @@ import {CountdownSectionComponent} from "./countdown-section.component";
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4rem;
+      gap: 2rem;
     }
 
     .couple-name {

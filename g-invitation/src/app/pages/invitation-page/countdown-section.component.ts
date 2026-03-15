@@ -112,14 +112,6 @@ interface CountdownParts {
       font-weight: 500;
     }
 
-    .countdown-footnote {
-      margin: 0.75rem 0 0;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      opacity: 0.62;
-    }
-
     @media (max-width: 768px) {
       .countdown-item {
         min-width: 64px;

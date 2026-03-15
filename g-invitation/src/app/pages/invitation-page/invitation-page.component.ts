@@ -35,7 +35,6 @@ interface InvitationSlide {
   imports: [
     CommonModule,
     OpeningScreenComponent,
-    CountdownSectionComponent,
     IntroSectionComponent,
     EventSectionComponent,
     TimelineSectionComponent,
