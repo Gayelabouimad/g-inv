@@ -21,8 +21,7 @@ import { Component, Input } from '@angular/core';
   `,
   styles: [`
     .registry-section {
-      padding: 2.5rem 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1.75rem 1.25rem;
     }
 
     .section-header {
@@ -31,11 +30,12 @@ import { Component, Input } from '@angular/core';
     }
 
     .section-title {
-      font-size: 1.8rem;
-      font-weight: 300;
-      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
       margin: 0;
-      font-family: 'Georgia', serif;
+      font-family: 'Limelight', sans-serif;
+      text-transform: uppercase;
     }
 
     .registry-content {
@@ -56,9 +56,9 @@ import { Component, Input } from '@angular/core';
 
     .registry-card {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       padding: 1.5rem 2rem;
-      border-radius: 8px;
+      border-radius: 14px;
       width: 100%;
       text-align: center;
       backdrop-filter: blur(10px);

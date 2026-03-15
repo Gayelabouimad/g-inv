@@ -34,76 +34,93 @@
                 @switch (slide.key) {
                   @case ('intro') {
                     <div class="intro-slide">
-                      <app-intro-section
-                        [quote]="event.quote"
-                        [coupleName]="event.couple.primaryNames"
-                        [quoteSource]="event.quoteSource"
-                        [families]="event.families"
-                        [introText]="event.introText"
-                      ></app-intro-section>
+                      <div class="slide-card intro-card">
+                        <app-intro-section
+                          [coupleName]="event.couple.primaryNames"
+                          [quote]="event.quote"
+                          [quoteSource]="event.quoteSource"
+                          [families]="event.families"
+                          [introText]="event.introText"
+                          [dateTimeImage]="event.dateTimeImage || '/assets/date-time.png'"
+                        ></app-intro-section>
+                      </div>
                       <p class="swipe-hint">↔ swipe to navigate</p>
                     </div>
                   }
 
                   @case ('gathering') {
-                    <app-event-section
-                      [title]="event.sections.gathering.title"
-                      [description]="event.sections.gathering.description"
-                      [items]="event.sections.gathering.items"
-                    ></app-event-section>
+                    <div class="slide-card">
+                      <app-event-section
+                        [title]="event.sections.gathering.title"
+                        [description]="event.sections.gathering.description"
+                        [items]="event.sections.gathering.items"
+                      ></app-event-section>
+                    </div>
                   }
 
                   @case ('ceremony') {
-                    <app-event-section
-                      [title]="event.sections.ceremony.title"
-                      [dateText]="event.sections.ceremony.dateText"
-                      [time]="event.sections.ceremony.time"
-                      [items]="ceremonyItems()"
-                    ></app-event-section>
+                    <div class="slide-card">
+                      <app-event-section
+                        [title]="event.sections.ceremony.title"
+                        [dateText]="event.sections.ceremony.dateText"
+                        [time]="event.sections.ceremony.time"
+                        [items]="ceremonyItems()"
+                      ></app-event-section>
+                    </div>
                   }
 
                   @case ('reception') {
-                    <app-event-section
-                      [title]="event.sections.reception.title"
-                      [dateText]="event.sections.reception.dateText"
-                      [time]="event.sections.reception.time"
-                      [items]="receptionItems()"
-                    ></app-event-section>
+                    <div class="slide-card">
+                      <app-event-section
+                        [title]="event.sections.reception.title"
+                        [dateText]="event.sections.reception.dateText"
+                        [time]="event.sections.reception.time"
+                        [items]="receptionItems()"
+                      ></app-event-section>
+                    </div>
                   }
 
                   @case ('timeline') {
-                    <app-timeline-section
-                      [title]="event.sections.timeline.title"
-                      [subtitle]="event.sections.timeline.subtitle"
-                      [image]="event.sections.timeline.image"
-                    ></app-timeline-section>
+                    <div class="slide-card">
+                      <app-timeline-section
+                        [title]="event.sections.timeline.title"
+                        [subtitle]="event.sections.timeline.subtitle"
+                        [image]="event.sections.timeline.image"
+                      ></app-timeline-section>
+                    </div>
                   }
 
                   @case ('registry') {
-                    <app-registry-section
-                      [title]="event.sections.registry.title"
-                      [text]="event.sections.registry.text"
-                      [name]="event.sections.registry.name"
-                      [accountNumber]="event.sections.registry.accountNumber"
-                    ></app-registry-section>
+                    <div class="slide-card">
+                      <app-registry-section
+                        [title]="event.sections.registry.title"
+                        [text]="event.sections.registry.text"
+                        [name]="event.sections.registry.name"
+                        [accountNumber]="event.sections.registry.accountNumber"
+                      ></app-registry-section>
+                    </div>
                   }
 
                   @case ('rsvp') {
-                    <app-rsvp-section
-                      [invitee]="invitee()"
-                      [deadlineText]="event.rsvp.deadlineText"
-                      [maxMessageLength]="event.rsvp.maxMessageLength"
-                      [accentColor]="event.branding.accentColor"
-                      (onRsvpSubmit)="onRsvpSubmit($event)"
-                    ></app-rsvp-section>
+                    <div class="slide-card">
+                      <app-rsvp-section
+                        [invitee]="invitee()"
+                        [deadlineText]="event.rsvp.deadlineText"
+                        [maxMessageLength]="event.rsvp.maxMessageLength"
+                        [accentColor]="event.branding.accentColor"
+                        (onRsvpSubmit)="onRsvpSubmit($event)"
+                      ></app-rsvp-section>
+                    </div>
                   }
 
                   @case ('thankyou') {
-                    <app-thank-you-section
-                      [attending]="submittedResponse()?.attending ?? false"
-                      [attendeeCount]="submittedResponse()?.attendeeCount ?? 0"
-                      [message]="submittedResponse()?.message ?? ''"
-                    ></app-thank-you-section>
+                    <div class="slide-card">
+                      <app-thank-you-section
+                        [attending]="submittedResponse()?.attending ?? false"
+                        [attendeeCount]="submittedResponse()?.attendeeCount ?? 0"
+                        [message]="submittedResponse()?.message ?? ''"
+                      ></app-thank-you-section>
+                    </div>
                   }
                 }
               </div>

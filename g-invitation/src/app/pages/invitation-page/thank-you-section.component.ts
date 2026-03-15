@@ -78,11 +78,12 @@ import { Component, Input } from '@angular/core';
     }
 
     h2 {
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 0.05em;
+      font-size: 1.2rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
       margin: 0 0 0.5rem 0;
-      font-family: 'Georgia', serif;
+      font-family: 'Limelight', sans-serif;
+      text-transform: uppercase;
     }
 
     .message {

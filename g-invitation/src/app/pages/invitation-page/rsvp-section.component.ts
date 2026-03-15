@@ -87,8 +87,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   `,
   styles: [`
     .rsvp-section {
-      padding: 2.5rem 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1.75rem 1.25rem;
     }
 
     .section-header {
@@ -97,11 +96,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .section-title {
-      font-size: 1.8rem;
-      font-weight: 300;
-      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
       margin: 0 0 0.5rem 0;
-      font-family: 'Georgia', serif;
+      font-family: 'Limelight', sans-serif;
+      text-transform: uppercase;
     }
 
     .deadline {

@@ -6,7 +6,6 @@ import { INVITEES } from '../../data/invitees.data';
 import { RsvpService } from '../../services/rsvp.service';
 import { Invitee, RSVPSubmission } from '../../models/invitation.models';
 import { OpeningScreenComponent } from './opening-screen.component';
-import { CountdownSectionComponent } from './countdown-section.component';
 import { IntroSectionComponent } from './intro-section.component';
 import { EventSectionComponent } from './event-section.component';
 import { TimelineSectionComponent } from './timeline-section.component';

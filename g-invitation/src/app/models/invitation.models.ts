@@ -76,6 +76,7 @@ export interface EventConfig {
   couple: Couple;
   date: string;
   countdownTarget: string;
+  dateTimeImage: string;
   quote: string;
   quoteSource: string;
   families: string[];

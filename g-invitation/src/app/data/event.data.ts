@@ -8,6 +8,7 @@ export const EVENT_CONFIG: EventConfig = {
   },
   date: '2026-08-16T17:30:00+03:00',
   countdownTarget: '2026-08-16T17:30:00+03:00',
+  dateTimeImage: '/assets/date-time.png',
   quote: 'Therefore what God has joined together, let no one separate.',
   quoteSource: 'Mark 10:9',
   families: [
@@ -56,7 +57,7 @@ export const EVENT_CONFIG: EventConfig = {
       enabled: true,
       title: 'Road to forever',
       subtitle: 'Wedding day Timeline',
-      image: '/assets/timeline.svg',
+      image: '/assets/timeline.png',
     },
     registry: {
       enabled: true,
@@ -72,7 +73,7 @@ export const EVENT_CONFIG: EventConfig = {
     maxMessageLength: 120,
   },
   branding: {
-    backgroundImage: 'assets/background.png',
+    backgroundImage: 'assets/background.jpg',
     overlayOpacity: 0.45,
     accentColor: '#d6c3a5',
     textColor: '#ffffff',

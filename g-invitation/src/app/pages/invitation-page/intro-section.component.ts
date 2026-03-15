@@ -21,20 +21,19 @@ import { CommonModule } from '@angular/common';
 
         <p class="intro-text">{{ introText }}</p>
       </div>
-
       <h1 class="couple-name">{{ coupleName }}</h1>
-
+      <img class="date-time-image" [src]="resolvedDateTimeImage()" alt="Wedding date and time" />
 
     </div>
   `,
   styles: [`
     .intro-section {
-      padding: 2rem 1.5rem 1.5rem;
+      padding: 1rem 1.25rem 1.25rem;
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
-      font-family: "Varela Round", sans-serif;
+      gap: 1.5rem;
+      font-family: 'Varela Round', sans-serif;
       font-size: 1rem;
     }
 
@@ -43,31 +42,33 @@ import { CommonModule } from '@angular/common';
     }
 
     .quote-text {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-style: italic;
       font-family: 'Georgia', serif;
       line-height: 1.6;
-      margin: 0 0 1rem 0;
+      margin: 0 0 0.75rem 0;
       font-weight: 300;
     }
 
     .quote-source {
-      font-size: 0.85rem;
-      opacity: 0.7;
+      font-size: 0.78rem;
+      opacity: 0.75;
       font-style: normal;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Limelight', sans-serif;
     }
 
     .family-request {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1rem;
     }
 
     .families-section {
       display: flex;
       flex-direction: row;
-      gap: 2rem;
+      gap: 1rem;
       justify-content: space-around;
     }
 
@@ -78,40 +79,81 @@ import { CommonModule } from '@angular/common';
       margin: 0;
       opacity: 0.9;
       max-width: 8rem;
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       line-height: 1.5;
+      text-transform: uppercase;
     }
 
     .intro-text {
       font-weight: 300;
       line-height: 1.6;
       margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+
+    .date-time-image {
+      width: min(360px, 88%);
+      margin: 0 auto;
+      display: block;
+      max-height: 120px;
+      object-fit: contain;
+      opacity: 0.98;
+      padding: 0.3rem 0.5rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.24));
     }
 
     .couple-name {
-      font-family: "Great Vibes", cursive;
-      font-size: 3rem;
+      margin: 0.25rem 0 0;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.4rem;
       font-weight: 300;
-      letter-spacing: 0.05em;
-      margin: 0;
+      letter-spacing: 0.04em;
       line-height: 1.2;
-      max-width: 70%;
-      animation: slideUp 0.8s ease-out 0.3s both;
-      align-self: center;
+      text-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     @media (max-width: 480px) {
       .intro-section {
-        padding: 3rem 1rem;
+        padding: 0.75rem 0.85rem 1rem;
+      }
+
+      .quote-text {
+        font-size: 1.05rem;
+      }
+
+      .date-time-image {
+        width: min(290px, 92%);
+      }
+
+      .couple-name {
+        font-size: 2rem;
       }
     }
   `]
 })
 export class IntroSectionComponent {
+  @Input() coupleName = '';
   @Input() quote = '';
   @Input() quoteSource = '';
   @Input() families: string[] = [];
   @Input() introText = '';
-  @Input() coupleName!: string;
+  @Input() dateTimeImage = '';
+
+  protected resolvedDateTimeImage(): string {
+    const path = this.dateTimeImage.trim();
+    if (!path) {
+      return '/assets/date-time.png';
+    }
+
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) {
+      return path;
+    }
+
+    return `/${path}`;
+  }
 }
 
