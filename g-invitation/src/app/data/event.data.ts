@@ -72,7 +72,7 @@ export const EVENT_CONFIG: EventConfig = {
     maxMessageLength: 120,
   },
   branding: {
-    backgroundImage: '/assets/background.jpg',
+    backgroundImage: 'assets/background.png',
     overlayOpacity: 0.45,
     accentColor: '#d6c3a5',
     textColor: '#ffffff',

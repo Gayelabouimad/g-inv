@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, Signal} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CountdownSectionComponent} from "./countdown-section.component";
 
 @Component({
@@ -10,9 +10,8 @@ import {CountdownSectionComponent} from "./countdown-section.component";
         [class.hidden]="!isVisible"
         (click)="onTap()"
     >
-      <div class="background-wrapper" [style]="backgroundStyle">
-        <div class="overlay"></div>
-      </div>
+      <!-- Dark overlay on top of the shared background -->
+      <div class="overlay" [style.background]="'rgba(0,0,0,' + overlayOpacity + ')'"></div>
 
       <div class="content">
         <div class="inner">
@@ -51,29 +50,18 @@ import {CountdownSectionComponent} from "./countdown-section.component";
       pointer-events: none;
     }
 
-    .background-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
     .overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, v-bind('overlayOpacity'));
+      z-index: 0;
     }
 
     .content {
       position: relative;
-      z-index: 10;
+      z-index: 1;
       text-align: center;
       color: white;
       padding: 2rem;
@@ -158,18 +146,12 @@ import {CountdownSectionComponent} from "./countdown-section.component";
 export class OpeningScreenComponent {
   @Input() coupleName = '';
   @Input() titleLine = '';
-  @Input() backgroundImage = '';
   @Input() overlayOpacity = 0.45;
   @Input() isVisible = true;
   @Input() targetDate!: Date;
 
   @Output() tapStart = new EventEmitter<void>();
 
-  get backgroundStyle() {
-    return {
-      'background-image': `url('${this.backgroundImage}')`
-    };
-  }
 
   onTap(): void {
     this.tapStart.emit();

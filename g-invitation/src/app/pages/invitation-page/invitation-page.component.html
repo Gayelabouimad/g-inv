@@ -1,11 +1,13 @@
 <div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
 
+  <!-- Persistent background — always rendered behind everything -->
+  <div class="page-background"></div>
+
   <!-- Opening Screen -->
   @if (showOpening()) {
     <app-opening-screen
       [coupleName]="event.couple.primaryNames"
       [titleLine]="event.couple.titleLine"
-      [backgroundImage]="event.branding.backgroundImage"
       [overlayOpacity]="event.branding.overlayOpacity"
       [isVisible]="showOpening()"
       [targetDate]="targetDate"
@@ -16,7 +18,6 @@
   <!-- Main Content -->
   @if (!showOpening()) {
     <div class="page-content">
-      <div class="page-background"></div>
 
       <div
         class="slides-shell"
