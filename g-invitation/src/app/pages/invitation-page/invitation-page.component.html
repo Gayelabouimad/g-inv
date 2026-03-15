@@ -33,13 +33,21 @@
               <div class="slide-scroll">
                 @switch (slide.key) {
                   @case ('intro') {
-                    <app-intro-section
-                      [coupleName]="event.couple.primaryNames"
-                      [quote]="event.quote"
-                      [quoteSource]="event.quoteSource"
-                      [families]="event.families"
-                      [introText]="event.introText"
-                    ></app-intro-section>
+                    <div class="intro-slide">
+                      <div class="hero-main">
+                        <h1 class="hero-title">{{ event.couple.primaryNames }}</h1>
+                        <p class="hero-subtitle">{{ event.couple.titleLine }}</p>
+                        <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
+                      </div>
+                      <app-intro-section
+                        [quote]="event.quote"
+                        [coupleName]="event.couple.primaryNames"
+                        [quoteSource]="event.quoteSource"
+                        [families]="event.families"
+                        [introText]="event.introText"
+                      ></app-intro-section>
+                      <p class="swipe-hint">↔ swipe to navigate</p>
+                    </div>
                   }
 
                   @case ('gathering') {
@@ -109,10 +117,6 @@
         </div>
 
         <div class="slide-controls">
-          <button class="nav-button" type="button" (click)="previousSlide()" [disabled]="currentSlideIndex() === 0">
-            Back
-          </button>
-
           <div class="slide-dots" aria-label="Invitation section navigation">
             @for (slide of slides(); track slide.key; let i = $index) {
               <button
@@ -124,15 +128,6 @@
               ></button>
             }
           </div>
-
-          <button
-            class="nav-button"
-            type="button"
-            (click)="nextSlide()"
-            [disabled]="currentSlideIndex() === slides().length - 1"
-          >
-            Next
-          </button>
         </div>
       </div>
     </div>

@@ -29,18 +29,17 @@ import { CommonModule } from '@angular/common';
   `,
   styles: [`
     .intro-section {
-      padding: 3rem 1.5rem;
+      padding: 2rem 1.5rem 1.5rem;
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 4rem;
-      height: 100%;
+      gap: 2rem;
       font-family: "Varela Round", sans-serif;
       font-size: 1rem;
     }
 
     .quote {
-      margin: 4rem 0 0 0;
+      margin: 0;
     }
 
     .quote-text {
@@ -78,14 +77,15 @@ import { CommonModule } from '@angular/common';
       letter-spacing: 0.05em;
       margin: 0;
       opacity: 0.9;
-      max-width: 7rem;
+      max-width: 8rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
 
     .intro-text {
       font-weight: 300;
       line-height: 1.6;
-      margin: 1rem 0 0 0;
-      letter-spacing: 0.03em;
+      margin: 0;
     }
 
     .couple-name {
@@ -100,11 +100,10 @@ import { CommonModule } from '@angular/common';
       align-self: center;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 480px) {
       .intro-section {
         padding: 2rem 1rem;
       }
-
     }
   `]
 })
