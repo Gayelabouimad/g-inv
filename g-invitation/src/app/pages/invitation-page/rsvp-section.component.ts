@@ -150,9 +150,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
     .choice-button {
       padding: 1rem 1.5rem;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.05);
-      color: inherit;
+      border: 1px solid rgba(112, 89, 101, 0.22);
+      background: rgba(255, 255, 255, 0.7);
+      color: #4b4150;
       cursor: pointer;
       border-radius: 6px;
       font-size: 0.9rem;
@@ -163,14 +163,19 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .choice-button:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 248, 238, 0.92);
+      border-color: rgba(112, 89, 101, 0.38);
     }
 
     .choice-button.active {
-      background: var(--accent-color, #d6c3a5);
-      border-color: var(--accent-color, #d6c3a5);
-      color: #000;
+      background: #9a768b;
+      border-color: #9a768b;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(114, 84, 104, 0.28);
+    }
+
+    .choice-button:active:not(:disabled) {
+      transform: translateY(1px);
     }
 
     .choice-button:disabled {
@@ -181,9 +186,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .form-select,
     .form-textarea {
       padding: 0.8rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.05);
-      color: inherit;
+      border: 1px solid rgba(112, 89, 101, 0.24);
+      background: rgba(255, 255, 255, 0.8);
+      color: #4b4150;
       border-radius: 6px;
       font-size: 0.95rem;
       font-family: inherit;
@@ -194,8 +199,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .form-select:focus,
     .form-textarea:focus {
       outline: none;
-      border-color: var(--accent-color, #d6c3a5);
-      background: rgba(255, 255, 255, 0.08);
+      border-color: #9a768b;
+      background: rgba(255, 255, 255, 0.95);
     }
 
     .form-select {
@@ -203,8 +208,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .form-select option {
-      background: #1a1a1a;
-      color: #fff;
+      background: #fffaf2;
+      color: #4b4150;
     }
 
     .form-textarea {

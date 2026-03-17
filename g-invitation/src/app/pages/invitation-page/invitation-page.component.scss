@@ -4,9 +4,12 @@
 
 :host {
   --bg-image: none;
-  --overlay-opacity: 0.45;
+  --overlay-opacity: 0.26;
   --accent-color: #d6c3a5;
-  --text-color: #ffffff;
+  --text-color: #f5efe6;
+  --card-bg: rgba(255, 252, 246, 0.82);
+  --card-border: rgba(255, 246, 232, 0.9);
+  --card-text: #4b4150;
   --viewport-height: 100vh;
   --controls-height: 48px;
 }
@@ -109,11 +112,30 @@
   max-height: 100%;
   overflow: hidden;
   border-radius: 20px;
-  background: linear-gradient(160deg, rgba(8, 8, 8, 0.38), rgba(34, 34, 34, 0.2));
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+  color: var(--card-text);
+  background: linear-gradient(
+    168deg,
+    rgba(255, 254, 250, 0.94) 0%,
+    var(--card-bg) 56%,
+    rgba(247, 238, 226, 0.8) 100%
+  );
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(7px) saturate(1.08);
+  -webkit-backdrop-filter: blur(7px) saturate(1.08);
+  box-shadow:
+    0 16px 44px rgba(38, 27, 32, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.slide-page.rsvp-slide .slide-scroll {
+  align-items: stretch;
+}
+
+.slide-page.rsvp-slide .slide-card.scrollable-card {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .intro-card {
@@ -139,11 +161,12 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(255, 249, 240, 0.35);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: 0 6px 18px rgba(30, 21, 25, 0.2);
 }
 
 .dot {
@@ -152,7 +175,7 @@
   border-radius: 999px;
   border: 0;
   padding: 0;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(86, 68, 78, 0.36);
   cursor: pointer;
   transition: transform 200ms ease, background-color 200ms ease, width 200ms ease;
   flex-shrink: 0;
@@ -166,7 +189,8 @@
 .swipe-hint {
   padding: 0.75rem 0 0.5rem;
   font-size: 0.78rem;
-  opacity: 0.75;
+  color: #f6eee1;
+  opacity: 0.84;
   letter-spacing: 0.06em;
   text-align: center;
   text-transform: uppercase;

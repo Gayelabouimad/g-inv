@@ -29,7 +29,7 @@
       >
         <div class="slides-track" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
           @for (slide of slides(); track slide.key) {
-            <section class="slide-page">
+            <section class="slide-page" [class.rsvp-slide]="slide.key === 'rsvp'">
               <div class="slide-scroll">
                 @switch (slide.key) {
                   @case ('intro') {
@@ -102,7 +102,7 @@
                   }
 
                   @case ('rsvp') {
-                    <div class="slide-card">
+                    <div class="slide-card scrollable-card">
                       <app-rsvp-section
                         [invitee]="invitee()"
                         [deadlineText]="event.rsvp.deadlineText"

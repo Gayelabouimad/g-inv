@@ -69,12 +69,12 @@ export const EVENT_CONFIG: EventConfig = {
   },
   rsvp: {
     enabled: true,
-    deadlineText: 'Confirmation before July 1, 2026',
+    deadlineText: 'Confirmation before June 1, 2026',
     maxMessageLength: 120,
   },
   branding: {
     backgroundImage: 'assets/background.jpg',
-    overlayOpacity: 0.45,
+    overlayOpacity: 0.20,
     accentColor: '#d6c3a5',
     textColor: '#ffffff',
   },
