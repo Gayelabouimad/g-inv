@@ -18,20 +18,23 @@ import { EventSectionItem } from '../../models/invitation.models';
       <div class="event-items">
         @for (item of items; track item.label) {
           <div class="event-item">
-            <div class="item-header">
-              <h3 class="item-label">{{ item.label }}</h3>
-              <a 
-                class="map-button" 
-                [href]="item.mapUrl" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="Open in maps"
-              >
-                View map
-              </a>
-            </div>
+            <h3 class="item-label">{{ item.label }}</h3>
             <p class="item-location">{{ item.locationName }}</p>
             <p class="item-time">{{ item.time }}</p>
+            <a 
+              class="map-button" 
+              [href]="item.mapUrl" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Open in maps"
+              aria-label="Open location in maps"
+            >
+              <svg aria-hidden="true" focusable="false" class="map-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 21s-7-4.35-7-11a7 7 0 1 1 14 0c0 6.65-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                <circle cx="12" cy="10" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+              </svg>
+              <span>View map</span>
+            </a>
           </div>
         }
       </div>
@@ -107,6 +110,12 @@ import { EventSectionItem } from '../../models/invitation.models';
     }
 
     .event-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      column-gap: 0.9rem;
+      row-gap: 0.25rem;
+      align-items: center;
       background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
       border: 1px solid rgba(255, 255, 255, 0.17);
       padding: 1rem;
@@ -122,32 +131,31 @@ import { EventSectionItem } from '../../models/invitation.models';
       transform: translateY(-2px);
     }
 
-    .item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      gap: 1rem;
-    }
-
     .item-label {
-      font-size: 1rem;
-      font-weight: 400;
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 1.15rem;
+      font-weight: 900;
       margin: 0;
       letter-spacing: 0.04em;
       flex: 1;
       text-align: left;
-      font-family: 'Limelight', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       text-transform: uppercase;
     }
 
     .map-button {
+      grid-column: 2;
+      grid-row: 1 / 4;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 34px;
-      padding: 0 0.7rem;
-      border-radius: 999px;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-height: 100%;
+      min-width: 88px;
+      padding: 0.7rem 0.9rem;
+      border-radius: 18px;
       border: 1px solid rgba(255, 255, 255, 0.28);
       background: rgba(255, 255, 255, 0.08);
       color: inherit;
@@ -160,12 +168,24 @@ import { EventSectionItem } from '../../models/invitation.models';
       flex-shrink: 0;
     }
 
+    .map-icon {
+      width: 1.8rem;
+      height: 1.8rem;
+      opacity: 0.96;
+    }
+
+    .map-button span {
+      line-height: 1;
+    }
+
     .map-button:hover {
       background: rgba(255, 255, 255, 0.16);
       border-color: rgba(255, 255, 255, 0.4);
     }
 
     .item-location {
+      grid-column: 1;
+      grid-row: 2;
       font-size: 0.94rem;
       opacity: 0.9;
       margin: 0 0 0.3rem 0;
@@ -173,6 +193,8 @@ import { EventSectionItem } from '../../models/invitation.models';
     }
 
     .item-time {
+      grid-column: 1;
+      grid-row: 3;
       font-size: 0.84rem;
       opacity: 0.78;
       margin: 0;
@@ -220,8 +242,13 @@ import { EventSectionItem } from '../../models/invitation.models';
         padding: 0.9rem;
       }
 
+      .event-item {
+        column-gap: 0.7rem;
+      }
+
       .item-label {
-        font-size: 0.82rem;
+        font-size: 1rem;
+        font-weight: 900;
       }
 
       .item-location {
@@ -243,14 +270,15 @@ import { EventSectionItem } from '../../models/invitation.models';
         padding: 0.9rem;
       }
 
-      .item-header {
-        gap: 0.6rem;
+      .map-button {
+        min-width: 78px;
+        font-size: 0.68rem;
+        padding: 0.55rem 0.62rem;
       }
 
-      .map-button {
-        min-height: 30px;
-        font-size: 0.68rem;
-        padding: 0 0.58rem;
+      .map-icon {
+        width: 1.6rem;
+        height: 1.6rem;
       }
     }
   `]
