@@ -77,7 +77,7 @@ dateTimeImage: '/assets/date-time.svg',
     overlayOpacity: 0.20,
     accentColor: '#d6c3a5',
     textColor: '#ffffff',
-    backgroundMusic: '/assets/Melhem Zein - Kawkabi.mp3',
+    backgroundMusic: '/assets/kawkabi-trimmed.mpeg',
   },
 };
 
