@@ -99,7 +99,7 @@ import { CommonModule } from '@angular/common';
       max-height: 120px;
       object-fit: contain;
       opacity: 0.98;
-      padding: 0.3rem 0.5rem;
+      padding: 0.9rem 0.5rem 0.3rem 0.5rem;
       border-radius: 10px;
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(255, 255, 255, 0.14);
@@ -144,16 +144,7 @@ export class IntroSectionComponent {
   @Input() dateTimeImage = '';
 
   protected resolvedDateTimeImage(): string {
-    const path = this.dateTimeImage.trim();
-    if (!path) {
-      return '/assets/date-time.png';
-    }
-
-    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('/')) {
-      return path;
-    }
-
-    return `/${path}`;
+    return this.dateTimeImage.trim();
   }
 }
 
