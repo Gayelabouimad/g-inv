@@ -64,7 +64,7 @@ dateTimeImage: '/assets/date-time.svg',
       title: 'Gift Registry',
       text: 'The greatest gift we could have is your presence. For those who wish, a wedding list will be available at',
       name: 'WHISH MONEY',
-      accountNumber: '30457905',
+      accountNumber: 'xxxxxxx',
     },
   },
   rsvp: {

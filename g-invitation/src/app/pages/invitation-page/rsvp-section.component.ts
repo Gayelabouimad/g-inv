@@ -87,7 +87,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   `,
   styles: [`
     .rsvp-section {
-      padding: 1.75rem 1.25rem;
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      box-sizing: border-box;
+      animation: fadeInContent 500ms ease-out both;
     }
 
     .section-header {
@@ -96,12 +104,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .section-title {
-      font-size: 1.1rem;
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 8vw, 3rem);
       font-weight: 400;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.01em;
       margin: 0 0 0.5rem 0;
-      font-family: 'Limelight', sans-serif;
-      text-transform: uppercase;
+      line-height: 1.1;
+      text-wrap: balance;
     }
 
     .deadline {
@@ -117,6 +126,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      width: 100%;
     }
 
     .form-group {
@@ -130,6 +140,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       font-weight: 500;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      opacity: 0.9;
     }
 
     .guest-names {
@@ -137,9 +148,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       opacity: 0.9;
       margin: 0;
       padding: 0.8rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.17);
+      border-radius: 16px;
+      backdrop-filter: blur(9px);
     }
 
     .button-group {
@@ -150,11 +162,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
     .choice-button {
       padding: 1rem 1.5rem;
-      border: 1px solid rgba(112, 89, 101, 0.22);
-      background: rgba(255, 255, 255, 0.7);
-      color: #4b4150;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      color: inherit;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 16px;
       font-size: 0.9rem;
       font-weight: 500;
       letter-spacing: 0.03em;
@@ -163,15 +175,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .choice-button:hover:not(:disabled) {
-      background: rgba(255, 248, 238, 0.92);
-      border-color: rgba(112, 89, 101, 0.38);
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     .choice-button.active {
-      background: #9a768b;
-      border-color: #9a768b;
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
       color: #fff;
-      box-shadow: 0 8px 18px rgba(114, 84, 104, 0.28);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
     .choice-button:active:not(:disabled) {
@@ -186,10 +198,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .form-select,
     .form-textarea {
       padding: 0.8rem 1rem;
-      border: 1px solid rgba(112, 89, 101, 0.24);
-      background: rgba(255, 255, 255, 0.8);
-      color: #4b4150;
-      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      color: inherit;
+      border-radius: 16px;
       font-size: 0.95rem;
       font-family: inherit;
       transition: all 0.3s ease;
@@ -199,8 +211,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .form-select:focus,
     .form-textarea:focus {
       outline: none;
-      border-color: #9a768b;
-      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .form-select {
@@ -208,8 +220,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .form-select option {
-      background: #fffaf2;
-      color: #4b4150;
+      background: #333;
+      color: #fff;
     }
 
     .form-textarea {
@@ -228,9 +240,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     .submit-button {
       padding: 1rem 2rem;
       background: var(--accent-color, #d6c3a5);
-      color: #000;
+      color: rgba(0, 0, 0, 0.7);
       border: none;
-      border-radius: 6px;
+      border-radius: 16px;
       font-size: 0.95rem;
       font-weight: 600;
       letter-spacing: 0.05em;
@@ -241,7 +253,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
     .submit-button:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(214, 195, 165, 0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
     .submit-button:disabled {
@@ -250,19 +262,30 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .error-message {
-      color: #ff6b6b;
+      color: rgba(255, 107, 107, 0.9);
       font-size: 0.9rem;
       margin: 0;
       text-align: center;
     }
 
+    @keyframes fadeInContent {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @media (max-width: 768px) {
       .rsvp-section {
-        padding: 1.5rem 1rem;
+        padding: 1rem;
       }
 
       .section-title {
-        font-size: 1.5rem;
+        margin-bottom: 0.4rem;
       }
 
       .button-group {
