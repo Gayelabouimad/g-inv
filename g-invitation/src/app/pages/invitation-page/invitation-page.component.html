@@ -1,7 +1,21 @@
 <div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
+  <!-- Background Music -->
+  @if (event.branding.backgroundMusic) {
+    <audio #bgMusic id="bg-music" [src]="event.branding.backgroundMusic" loop autoplay muted preload="auto" style="position: fixed; width: 0; height: 0; opacity: 0;"></audio>
+  }
 
   <!-- Persistent background — always rendered behind everything -->
   <div class="page-background"></div>
+
+  <!-- Persistent Music Control - Font Awesome SVG -->
+  <button 
+    class="music-control"
+    (click)="toggleBgMusic()"
+    [class.playing]="bgMusicPlaying()">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="music" class="svg-inline--fa fa-music w-6 h-6" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path fill="currentColor" d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
+    </svg>
+  </button>
 
   <!-- Opening Screen -->
   @if (showOpening()) {

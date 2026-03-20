@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, effect, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, effect, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EVENT_CONFIG } from '../../data/event.data';
@@ -57,7 +57,9 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   protected readonly submittedResponse = signal<RSVPSubmission | null>(null);
   protected readonly isSubmitting = signal(false);
   protected readonly submitError = signal('');
+  protected readonly bgMusicPlaying = signal(false);
   protected readonly currentSlideIndex = signal(0);
+  @ViewChild('bgMusic') bgMusicRef!: ElementRef<HTMLAudioElement>;
   protected readonly targetDate = new Date(this.event.countdownTarget);
   protected readonly ceremonyItems = computed(() => [
     {
@@ -121,6 +123,14 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     const eventSlug = this.route.snapshot.paramMap.get('eventSlug');
     const guestId = this.route.snapshot.paramMap.get('guestId');
 
+    // Init background music if available (browser only)
+    if (isPlatformBrowser(this.platformId) && this.event.branding.backgroundMusic) {
+      // Autoplay will start muted
+      setTimeout(() => {
+        const audio = document.getElementById('bg-music') as HTMLAudioElement;
+      }, 100);
+    }
+
     if (!eventSlug && !guestId) {
       this.router.navigateByUrl(`/${this.event.eventSlug}/${INVITEES[0].id}`);
       return;
@@ -165,8 +175,23 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   }
 
   protected onOpeningTap(): void {
+    this.toggleBgMusic();
     this.showOpening.set(false);
     this.currentSlideIndex.set(0);
+  }
+
+  protected toggleBgMusic(): void {
+    const audio = this.bgMusicRef?.nativeElement || document.getElementById('bg-music') as HTMLAudioElement;
+    if (!audio) return;
+
+    if (audio.paused || audio.ended) {
+      audio.muted = false;
+      audio.play().catch(e => console.error('Audio play failed:', e));
+      this.bgMusicPlaying.set(true);
+    } else {
+      audio.pause();
+      this.bgMusicPlaying.set(false);
+    }
   }
 
   protected nextSlide(): void {

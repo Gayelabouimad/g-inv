@@ -61,6 +61,7 @@ export interface Branding {
   overlayOpacity: number;
   accentColor: string;
   textColor: string;
+  backgroundMusic?: string;
 }
 
 export interface EventSections {

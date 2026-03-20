@@ -155,6 +155,26 @@
   background: transparent;
 }
 
+.music-control {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+}
+
 .slide-dots {
   display: flex;
   justify-content: center;
