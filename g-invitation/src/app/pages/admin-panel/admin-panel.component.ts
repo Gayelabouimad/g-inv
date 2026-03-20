@@ -88,7 +88,6 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
       ...allRsvps.map((r) => ({ ...r, isResponded: true } as AdminRsvpRow)),
       ...INVITEES.filter(inv => !submittedIds.has(inv.id)).map(inv => ({
         inviteeId: inv.id,
-        accessToken: inv.accessToken,
         eventSlug: this.event.eventSlug,
         guestNames: inv.guestNames,
         guestNamesDisplay: inv.guestNames.join(' & '),
@@ -96,7 +95,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
         attending: false,
         attendeeCount: 0,
         message: '',
-        submittedFromRoute: inv.routeSlug,
+        submittedFromRoute: inv.id,
         isResponded: false,
       } as AdminRsvpRow),
       )
@@ -198,8 +197,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected getInvitationLink(routeSlug: string): string {
-    return `/${this.event.eventSlug}/${routeSlug}`;
+  protected getInvitationLink(inviteeId: string): string {
+    return `/${this.event.eventSlug}/${inviteeId}`;
   }
 
   protected filterStatus(event: MatSelectChange): void {

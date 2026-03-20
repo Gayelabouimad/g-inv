@@ -2,25 +2,19 @@ import { Invitee } from '../models/invitation.models';
 
 export const INVITEES: Invitee[] = [
   {
-    id: 'gayel-elia',
+    id: 'guest_001',
     guestNames: ['Gayel Abou Imad', 'Elia El Hage'],
     numberOfPeople: 2,
-    routeSlug: 'gayel-elia',
-    accessToken: 'guest_001',
   },
   {
-    id: 'john-jane',
+    id: 'guest_002',
     guestNames: ['John Doe', 'Jane Doe'],
     numberOfPeople: 2,
-    routeSlug: 'john-jane',
-    accessToken: 'guest_002',
   },
   {
-    id: 'alice-bob',
+    id: 'guest_003',
     guestNames: ['Alice Smith', 'Bob Smith'],
     numberOfPeople: 2,
-    routeSlug: 'alice-bob',
-    accessToken: 'guest_003',
   },
 ];
 

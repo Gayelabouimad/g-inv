@@ -90,13 +90,10 @@ export interface Invitee {
   id: string;
   guestNames: string[];
   numberOfPeople: number;
-  routeSlug: string;
-  accessToken: string;
 }
 
 export interface RSVPSubmission {
   inviteeId: string;
-  accessToken: string;
   eventSlug: string;
   guestNames: string[];
   guestNamesDisplay: string;

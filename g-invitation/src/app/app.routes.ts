@@ -7,6 +7,6 @@ export const routes: Routes = [
   { path: 'admin', component: AdminPanelComponent },
   { path: '', component: InvitationPageComponent },
   { path: ':eventSlug', component: InvitationPageComponent },
-  { path: ':eventSlug/:routeSlug', component: InvitationPageComponent },
+  { path: ':eventSlug/:guestId', component: InvitationPageComponent },
   { path: '**', component: NotFoundComponent },
 ];

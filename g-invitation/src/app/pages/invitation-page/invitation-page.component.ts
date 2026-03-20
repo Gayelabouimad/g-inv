@@ -119,19 +119,19 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const eventSlug = this.route.snapshot.paramMap.get('eventSlug');
-    const routeSlug = this.route.snapshot.paramMap.get('routeSlug');
+    const guestId = this.route.snapshot.paramMap.get('guestId');
 
-    if (!eventSlug && !routeSlug) {
-      this.router.navigateByUrl(`/${this.event.eventSlug}/${INVITEES[0].routeSlug}`);
+    if (!eventSlug && !guestId) {
+      this.router.navigateByUrl(`/${this.event.eventSlug}/${INVITEES[0].id}`);
       return;
     }
 
-    if (eventSlug !== this.event.eventSlug || !routeSlug) {
+    if (eventSlug !== this.event.eventSlug || !guestId) {
       this.router.navigateByUrl('/not-found');
       return;
     }
 
-    const invitee = INVITEES.find((item) => item.routeSlug === routeSlug) ?? null;
+    const invitee = INVITEES.find((item) => item.id === guestId) ?? null;
     if (!invitee) {
       this.router.navigateByUrl('/not-found');
       return;
@@ -303,7 +303,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     try {
       const payload: RSVPSubmission = {
         inviteeId: invitee.id,
-        accessToken: invitee.accessToken,
         eventSlug: this.event.eventSlug,
         guestNames: invitee.guestNames,
         guestNamesDisplay: invitee.guestNames.join(' & '),
@@ -311,7 +310,7 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
         attending: formData.attending,
         attendeeCount: formData.attendeeCount,
         message: formData.message,
-        submittedFromRoute: invitee.routeSlug,
+        submittedFromRoute: invitee.id,
       };
 
       await this.rsvpService.submit(payload);
