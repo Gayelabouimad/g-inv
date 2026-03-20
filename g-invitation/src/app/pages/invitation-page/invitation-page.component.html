@@ -1,7 +1,7 @@
 <div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
   <!-- Background Music -->
   @if (event.branding.backgroundMusic) {
-    <audio #bgMusic id="bg-music" [src]="event.branding.backgroundMusic" loop autoplay muted preload="auto" style="position: fixed; width: 0; height: 0; opacity: 0;"></audio>
+    <audio #bgMusic id="bg-music" [src]="event.branding.backgroundMusic" loop autoplay preload="auto" style="position: fixed; width: 0; height: 0; opacity: 0;"></audio>
   }
 
   <!-- Persistent background — always rendered behind everything -->

@@ -123,14 +123,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     const eventSlug = this.route.snapshot.paramMap.get('eventSlug');
     const guestId = this.route.snapshot.paramMap.get('guestId');
 
-    // Init background music if available (browser only)
-    if (isPlatformBrowser(this.platformId) && this.event.branding.backgroundMusic) {
-      // Autoplay will start muted
-      setTimeout(() => {
-        const audio = document.getElementById('bg-music') as HTMLAudioElement;
-      }, 100);
-    }
-
     if (!eventSlug && !guestId) {
       this.router.navigateByUrl(`/${this.event.eventSlug}/${INVITEES[0].id}`);
       return;
@@ -175,14 +167,16 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   }
 
   protected onOpeningTap(): void {
-    this.toggleBgMusic();
+    this.startBgMusicFromUserGesture();
     this.showOpening.set(false);
     this.currentSlideIndex.set(0);
   }
 
   protected toggleBgMusic(): void {
-    const audio = this.bgMusicRef?.nativeElement || document.getElementById('bg-music') as HTMLAudioElement;
-    if (!audio) return;
+    const audio = this.getBgMusicElement();
+    if (!audio) {
+      return;
+    }
 
     if (audio.paused || audio.ended) {
       audio.muted = false;
@@ -192,6 +186,30 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
       audio.pause();
       this.bgMusicPlaying.set(false);
     }
+  }
+
+  private startBgMusicFromUserGesture(): void {
+    const audio = this.getBgMusicElement();
+    if (!audio) {
+      return;
+    }
+
+    // Mobile browsers require an explicit user gesture to start audio with sound.
+    audio.muted = false;
+    audio.play()
+      .then(() => this.bgMusicPlaying.set(true))
+      .catch((error) => {
+        console.error('Audio play failed:', error);
+        this.bgMusicPlaying.set(false);
+      });
+  }
+
+  private getBgMusicElement(): HTMLAudioElement | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    return this.bgMusicRef?.nativeElement ?? (document.getElementById('bg-music') as HTMLAudioElement | null);
   }
 
   protected nextSlide(): void {
