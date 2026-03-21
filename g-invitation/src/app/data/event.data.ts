@@ -51,7 +51,7 @@ dateTimeImage: '/assets/date-time.svg',
       dateText: 'Saturday, July 18, 2026',
       time: '7:15 pm',
       locationName: 'Domaine de Bherdok - Beit Chabab',
-      mapUrl: 'https://share.google/PieZO79LWukHXyhGq',
+      mapUrl: 'https://maps.app.goo.gl/Smwcp9TGd1uvfkpz8',
     },
     timeline: {
       enabled: true,
