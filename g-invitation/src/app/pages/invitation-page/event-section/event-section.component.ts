@@ -7,6 +7,7 @@ import { EventSectionItem } from '../../../models/invitation.models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './event-section.component.html',
+  styleUrl: './event-section.component.css',
 })
 export class EventSectionComponent {
   @Input() title = '';

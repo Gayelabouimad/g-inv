@@ -1,31 +1,31 @@
-<div class="flex min-h-[50vh] items-center justify-center px-4 py-6 text-center md:min-h-[60vh] md:py-8">
-  <div class="animate-[thankYouSlideUp_0.6s_ease-out]">
-    <div class="mb-4 text-5xl animate-[checkmark_0.6s_ease-out]">✓</div>
-    <h2 class="m-0 mb-2 text-[1.2rem] font-normal uppercase tracking-[0.1em] [font-family:'Limelight',sans-serif] md:text-[1.5rem]">Thank You!</h2>
-    <p class="m-0 mb-8 text-[0.95rem] tracking-[0.03em] opacity-90 md:text-base">Your response has been recorded.</p>
+<div class="thank-you-section">
+  <div class="content">
+    <div class="icon">✓</div>
+    <h2>Thank You!</h2>
+    <p class="message">Your response has been recorded.</p>
 
-    <div class="my-6 rounded-lg border border-white/10 bg-white/5 p-6 backdrop-blur-[0.625rem]">
-      <div class="flex flex-col items-start justify-between gap-[0.3rem] py-[0.8rem] text-[0.95rem] md:flex-row md:items-center md:gap-0 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-white/5">
-        <span class="font-normal opacity-70">Attending:</span>
-        <span class="font-normal">{{ attending ? 'Yes' : 'No' }}</span>
+    <div class="response-summary">
+      <div class="summary-item">
+        <span class="label">Attending:</span>
+        <span class="value">{{ attending ? 'Yes' : 'No' }}</span>
       </div>
 
       @if (attending && attendeeCount) {
-        <div class="flex flex-col items-start justify-between gap-[0.3rem] py-[0.8rem] text-[0.95rem] md:flex-row md:items-center md:gap-0 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-white/5">
-          <span class="font-normal opacity-70">Number of Guests:</span>
-          <span class="w-full font-normal md:w-auto">{{ attendeeCount }}</span>
+        <div class="summary-item">
+          <span class="label">Number of Guests:</span>
+          <span class="value">{{ attendeeCount }}</span>
         </div>
       }
 
       @if (message) {
-        <div class="flex flex-col items-start justify-between gap-[0.3rem] py-[0.8rem] text-[0.95rem] md:flex-row md:items-center md:gap-0 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-white/5">
-          <span class="font-normal opacity-70">Your Message:</span>
-          <span class="mt-2 block w-full break-words text-center font-normal italic opacity-85 md:mt-0 md:w-auto">{{ message }}</span>
+        <div class="summary-item">
+          <span class="label">Your Message:</span>
+          <span class="value message-text">{{ message }}</span>
         </div>
       }
     </div>
 
-    <p class="mt-8 text-base italic opacity-80">We look forward to celebrating with you!</p>
+    <p class="closing">We look forward to celebrating with you!</p>
   </div>
 </div>
 

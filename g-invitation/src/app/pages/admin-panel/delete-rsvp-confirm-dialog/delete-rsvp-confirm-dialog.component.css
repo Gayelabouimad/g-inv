@@ -1,2 +1,4 @@
-/* Tailwind utility classes handle this component's styling. */
+:host {
+  display: block;
+}
 

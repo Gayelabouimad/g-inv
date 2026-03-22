@@ -1,12 +1,12 @@
-<h2 mat-dialog-title class="text-xl font-semibold">Delete RSVP Response</h2>
-<div mat-dialog-content class="space-y-3 text-[0.95rem] leading-relaxed text-[#444]">
+<h2 mat-dialog-title>Delete RSVP Response</h2>
+<div mat-dialog-content>
   <p>
     Delete RSVP response for
-    <strong class="font-semibold">{{ data.guestNamesDisplay }}</strong>?
+    <strong>{{ data.guestNamesDisplay }}</strong>?
   </p>
   <p>This action cannot be undone.</p>
 </div>
-<div mat-dialog-actions align="end" class="mt-2 gap-2">
+<div mat-dialog-actions align="end">
   <button mat-button (click)="close(false)">Cancel</button>
   <button mat-flat-button color="warn" (click)="close(true)">Delete</button>
 </div>

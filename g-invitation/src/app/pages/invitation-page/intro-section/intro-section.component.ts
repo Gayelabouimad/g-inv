@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './intro-section.component.html',
+  styleUrl: './intro-section.component.css',
 })
 export class IntroSectionComponent {
   @Input() coupleName = '';

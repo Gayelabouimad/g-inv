@@ -10,6 +10,7 @@ interface CountdownParts {
   selector: 'app-countdown-section',
   standalone: true,
   templateUrl: './countdown-section.component.html',
+  styleUrl: './countdown-section.component.css',
 })
 export class CountdownSectionComponent implements OnChanges, OnDestroy {
   @Input() targetDate!: Date;

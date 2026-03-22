@@ -1,19 +1,19 @@
-<div class="flex flex-col gap-6 px-[0.85rem] pt-3 pb-4 text-center text-base [font-family:'Varela_Round',sans-serif] sm:px-5 sm:pt-4 sm:pb-5">
-  <blockquote class="m-0">
-    <p class="m-0 mb-3 text-[1.05rem] leading-[1.6] font-light italic [font-family:Georgia,serif] sm:text-[1.2rem]">"{{ quote }}"</p>
-    <footer class="text-[0.78rem] uppercase tracking-[0.08em] opacity-75 [font-family:'Limelight',sans-serif]">- {{ quoteSource }}</footer>
+<div class="intro-section">
+  <blockquote class="quote">
+    <p class="quote-text">"{{ quote }}"</p>
+    <footer class="quote-source">- {{ quoteSource }}</footer>
   </blockquote>
 
-  <div class="flex flex-col gap-4">
-    <div class="flex flex-row justify-around gap-4">
+  <div class="family-request">
+    <div class="families-section">
       @for (family of families; track family) {
-        <p class="m-0 max-w-32 text-[0.82rem] leading-[1.5] font-normal uppercase tracking-[0.05em] opacity-90">{{ family }}</p>
+        <p class="family-name">{{ family }}</p>
       }
     </div>
 
-    <p class="m-0 text-[0.95rem] leading-[1.6] font-light opacity-95">{{ introText }}</p>
+    <p class="intro-text">{{ introText }}</p>
   </div>
-  <h1 class="mt-1 mr-0 mb-0 ml-0 text-[2rem] leading-[1.2] font-light tracking-[0.04em] text-shadow-[0_0.5rem_1.25rem_rgba(0,0,0,0.3)] sm:text-[2.4rem] [font-family:'Great_Vibes',cursive]">{{ coupleName }}</h1>
-  <img class="mx-auto block max-h-[7.5rem] w-[min(18.125rem,92%)] rounded-[0.625rem] border border-white/15 bg-black/20 px-2 py-[0.9rem] pb-[0.3rem] object-contain opacity-100 drop-shadow-[0_0.625rem_1.5rem_rgba(0,0,0,0.24)] sm:w-[min(22.5rem,88%)]" [src]="resolvedDateTimeImage()" alt="Wedding date and time" />
+  <h1 class="couple-name">{{ coupleName }}</h1>
+  <img class="date-time-image" [src]="resolvedDateTimeImage()" alt="Wedding date and time" />
 </div>
 

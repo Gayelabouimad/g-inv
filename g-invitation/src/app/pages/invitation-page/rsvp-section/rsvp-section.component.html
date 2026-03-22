@@ -1,22 +1,22 @@
-<section class="flex min-h-full w-full animate-[sectionFadeIn_500ms_ease-out_both] flex-col justify-center gap-4 p-4 md:p-5">
-  <div class="mb-8 text-center">
-    <h2 class="m-0 mb-2 text-[clamp(2rem,8vw,3rem)] leading-[1.1] font-normal tracking-[0.01em] text-balance [font-family:'Great_Vibes',cursive]">RSVP</h2>
-    <p class="m-0 text-[0.9rem] tracking-[0.03em] opacity-80">{{ deadlineText }}</p>
+<section class="rsvp-section">
+  <div class="section-header">
+    <h2 class="section-title">RSVP</h2>
+    <p class="deadline">{{ deadlineText }}</p>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mx-auto flex w-full max-w-[31.25rem] flex-col gap-4 md:gap-6">
-    <div class="flex flex-col gap-[0.6rem] md:gap-[0.8rem]">
-      <label class="text-[0.95rem] font-medium uppercase tracking-[0.05em] opacity-90">Guest Names</label>
-      <p class="m-0 rounded-2xl border border-white/20 bg-[linear-gradient(160deg,rgba(255,255,255,0.11),rgba(255,255,255,0.04))] px-0 py-[0.8rem] text-center text-[1.25rem] font-black opacity-90 backdrop-blur-[0.5625rem] [font-family:'Quicksand',sans-serif]">{{ invitee?.guestNames.join(' & ') }}</p>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rsvp-form">
+    <div class="form-group">
+      <label class="form-label">Guest Names</label>
+      <p class="guest-names">{{ invitee?.guestNames.join(' & ') }}</p>
     </div>
 
-    <div class="flex flex-col gap-[0.6rem] md:gap-[0.8rem]">
-      <label class="text-[0.95rem] font-medium uppercase tracking-[0.05em] opacity-90">Will you attend?</label>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div class="form-group">
+      <label class="form-label">Will you attend?</label>
+      <div class="button-group">
         <button
           type="button"
-          class="h-[3.25rem] cursor-pointer rounded-2xl border border-[#4b4150]/30 bg-white/10 px-4 py-[0.8rem] text-[0.85rem] leading-[1.2] font-medium tracking-[0.03em] text-inherit backdrop-blur-[0.625rem] transition-[background-color,border-color,box-shadow,color,filter] duration-200 ease-out hover:border-white/40 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#897682]/45 md:px-6 md:py-4 md:text-[0.9rem] disabled:cursor-not-allowed disabled:opacity-60"
-          [ngClass]="form.get('attending')?.value === true ? ['shadow-[0_0.5rem_1.25rem_rgba(0,0,0,0.16)]','[background-color:var(--accent-color,#d6c3a5)]','[color:rgba(0,0,0,0.7)]','border-transparent','active:brightness-95'] : []"
+          class="choice-button"
+          [class.active]="form.get('attending')?.value === true"
           (click)="setAttending(true)"
           [disabled]="submittingState()"
         >
@@ -24,8 +24,8 @@
         </button>
         <button
           type="button"
-          class="h-[3.25rem] cursor-pointer rounded-2xl border border-[#4b4150]/30 bg-white/10 px-4 py-[0.8rem] text-[0.85rem] leading-[1.2] font-medium tracking-[0.03em] text-inherit backdrop-blur-[0.625rem] transition-[background-color,border-color,box-shadow,color,filter] duration-200 ease-out hover:border-white/40 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#897682]/45 md:px-6 md:py-4 md:text-[0.9rem] disabled:cursor-not-allowed disabled:opacity-60"
-          [ngClass]="form.get('attending')?.value === false ? ['shadow-[0_0.5rem_1.25rem_rgba(0,0,0,0.16)]','[background-color:var(--accent-color,#d6c3a5)]','[color:rgba(0,0,0,0.7)]','border-transparent','active:brightness-95'] : []"
+          class="choice-button"
+          [class.active]="form.get('attending')?.value === false"
           (click)="setAttending(false)"
           [disabled]="submittingState()"
         >
@@ -35,9 +35,9 @@
     </div>
 
     @if (form.get('attending')?.value === true) {
-      <div class="flex flex-col gap-[0.6rem] md:gap-[0.8rem]">
-        <label class="text-[0.95rem] font-medium uppercase tracking-[0.05em] opacity-90">Number of attendees</label>
-        <select formControlName="attendeeCount" class="cursor-pointer rounded-2xl border border-white/30 bg-white/10 px-4 py-[0.8rem] text-[0.95rem] text-inherit backdrop-blur-[0.625rem] transition-all duration-300 ease-out focus:border-white/50 focus:bg-white/15 focus:outline-none">
+      <div class="form-group">
+        <label class="form-label">Number of attendees</label>
+        <select formControlName="attendeeCount" class="form-select">
           @for (n of attendeeOptions(); track n) {
             <option [value]="n">{{ n }} {{ n === 1 ? 'person' : 'people' }}</option>
           }
@@ -45,22 +45,22 @@
       </div>
     }
 
-    <div class="flex flex-col gap-[0.6rem] md:gap-[0.8rem]">
-      <label class="text-[0.95rem] font-medium uppercase tracking-[0.05em] opacity-90">Message (optional)</label>
+    <div class="form-group">
+      <label class="form-label">Message (optional)</label>
       <textarea
         formControlName="message"
-        class="min-h-[6.25rem] max-h-[9.375rem] resize-y rounded-2xl border border-white/30 bg-white/10 px-4 py-[0.8rem] text-[0.95rem] text-inherit backdrop-blur-[0.625rem] transition-all duration-300 ease-out focus:border-white/50 focus:bg-white/15 focus:outline-none"
+        class="form-textarea"
         [attr.maxlength]="maxMessageLength"
         placeholder="Share your wishes or any special notes..."
       ></textarea>
-      <p class="m-0 text-right text-[0.8rem] opacity-60">
+      <p class="char-count">
         {{ (form.get('message')?.value?.length ?? 0) }} / {{ maxMessageLength }}
       </p>
     </div>
 
     <button
       type="submit"
-      class="mt-2 h-[3.25rem] cursor-pointer rounded-2xl border-0 px-8 py-4 text-[0.95rem] leading-[1.2] font-semibold tracking-[0.05em] [background-color:var(--accent-color,#d6c3a5)] [color:rgba(0,0,0,0.7)] transition-[box-shadow,filter] duration-300 ease-out hover:shadow-[0_0.5rem_1.25rem_rgba(0,0,0,0.25)] hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
+      class="submit-button"
       [disabled]="!form.valid || submittingState()"
     >
       @if (submittingState()) {
@@ -71,7 +71,7 @@
     </button>
 
     @if (errorState()) {
-      <p class="m-0 text-center text-[0.9rem] text-[rgba(255,107,107,0.9)]">{{ errorState() }}</p>
+      <p class="error-message">{{ errorState() }}</p>
     }
   </form>
 </section>

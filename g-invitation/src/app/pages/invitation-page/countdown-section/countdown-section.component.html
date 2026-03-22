@@ -1,29 +1,29 @@
-<div class="my-2 w-full px-0 py-4 text-center">
-  <h2 class="mb-3 text-[0.78rem] font-medium uppercase tracking-[0.16em] opacity-80">Counting down to forever</h2>
+<div class="countdown-container">
+  <h2 class="countdown-label">Counting down to forever</h2>
 
   @if (!isComplete()) {
-    <div class="inline-flex max-w-full items-stretch justify-center gap-2" aria-label="Countdown until wedding day">
-      <div class="flex min-w-16 flex-col items-center justify-center rounded-xl border border-white/20 bg-white/10 px-2 py-[0.45rem] shadow-[0_0.5rem_1.5rem_rgba(0,0,0,0.16)] backdrop-blur-[0.5rem] md:min-w-[4.625rem] md:px-[0.6rem] md:py-[0.55rem]">
-        <span class="text-[1.15rem] leading-none font-semibold tracking-[0.04em] tabular-nums md:text-[1.4rem]">{{ countdownParts().days }}</span>
-        <span class="mt-[0.35rem] text-[0.62rem] uppercase tracking-[0.12em] opacity-75 md:text-[0.68rem]">Days</span>
+    <div class="countdown-grid" aria-label="Countdown until wedding day">
+      <div class="countdown-item">
+        <span class="countdown-value">{{ countdownParts().days }}</span>
+        <span class="countdown-unit">Days</span>
       </div>
 
-      <div class="flex -translate-y-[0.1875rem] items-center justify-center text-base opacity-50 md:text-xl">:</div>
+      <div class="countdown-separator">:</div>
 
-      <div class="flex min-w-16 flex-col items-center justify-center rounded-xl border border-white/20 bg-white/10 px-2 py-[0.45rem] shadow-[0_0.5rem_1.5rem_rgba(0,0,0,0.16)] backdrop-blur-[0.5rem] md:min-w-[4.625rem] md:px-[0.6rem] md:py-[0.55rem]">
-        <span class="text-[1.15rem] leading-none font-semibold tracking-[0.04em] tabular-nums md:text-[1.4rem]">{{ twoDigit(countdownParts().hours) }}</span>
-        <span class="mt-[0.35rem] text-[0.62rem] uppercase tracking-[0.12em] opacity-75 md:text-[0.68rem]">Hours</span>
+      <div class="countdown-item">
+        <span class="countdown-value">{{ twoDigit(countdownParts().hours) }}</span>
+        <span class="countdown-unit">Hours</span>
       </div>
 
-      <div class="flex -translate-y-[0.1875rem] items-center justify-center text-base opacity-50 md:text-xl">:</div>
+      <div class="countdown-separator">:</div>
 
-      <div class="flex min-w-16 flex-col items-center justify-center rounded-xl border border-white/20 bg-white/10 px-2 py-[0.45rem] shadow-[0_0.5rem_1.5rem_rgba(0,0,0,0.16)] backdrop-blur-[0.5rem] md:min-w-[4.625rem] md:px-[0.6rem] md:py-[0.55rem]">
-        <span class="text-[1.15rem] leading-none font-semibold tracking-[0.04em] tabular-nums md:text-[1.4rem]">{{ twoDigit(countdownParts().minutes) }}</span>
-        <span class="mt-[0.35rem] text-[0.62rem] uppercase tracking-[0.12em] opacity-75 md:text-[0.68rem]">Minutes</span>
+      <div class="countdown-item">
+        <span class="countdown-value">{{ twoDigit(countdownParts().minutes) }}</span>
+        <span class="countdown-unit">Minutes</span>
       </div>
     </div>
   } @else {
-    <p class="m-0 text-[1.05rem] font-medium tracking-[0.05em]">Today is the day!</p>
+    <p class="countdown-complete">Today is the day!</p>
   }
 </div>
 

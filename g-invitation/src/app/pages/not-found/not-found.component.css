@@ -1,2 +1,12 @@
-/* Tailwind utility classes handle this component's styling. */
+.wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+}
+
+a {
+  color: #d6c3a5;
+}
 
