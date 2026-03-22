@@ -144,10 +144,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .guest-names {
-      font-size: 1rem;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
       opacity: 0.9;
       margin: 0;
-      padding: 0.8rem;
+      padding: 0.8rem 0;
+      text-align: center;
       background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
       border: 1px solid rgba(255, 255, 255, 0.17);
       border-radius: 16px;
@@ -161,8 +164,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .choice-button {
+      height: 52px;
       padding: 1rem 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-sizing: border-box;
+      line-height: 1.2;
+      border: 1px solid rgba(75, 65, 80, 0.28);
       background: rgba(255, 255, 255, 0.08);
       color: inherit;
       cursor: pointer;
@@ -170,24 +176,42 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       font-size: 0.9rem;
       font-weight: 500;
       letter-spacing: 0.03em;
-      transition: all 0.3s ease;
+      transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
       backdrop-filter: blur(10px);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
-    .choice-button:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.4);
+    @media (hover: hover) and (pointer: fine) {
+      .choice-button:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    .choice-button:focus-visible {
+      outline: 2px solid rgba(137, 118, 130, 0.45);
+      outline-offset: 2px;
     }
 
     .choice-button.active {
-      background: rgba(255, 255, 255, 0.25);
-      border-color: rgba(255, 255, 255, 0.5);
-      color: #fff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: var(--accent-color, #d6c3a5);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.7);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
     }
 
     .choice-button:active:not(:disabled) {
-      transform: translateY(1px);
+      background: var(--accent-color, #d6c3a5);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    .choice-button.active:active:not(:disabled) {
+      background: var(--accent-color, #d6c3a5);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.7);
+      filter: brightness(0.97);
     }
 
     .choice-button:disabled {
@@ -238,7 +262,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     }
 
     .submit-button {
+      height: 52px;
       padding: 1rem 2rem;
+      box-sizing: border-box;
+      line-height: 1.2;
       background: var(--accent-color, #d6c3a5);
       color: rgba(0, 0, 0, 0.7);
       border: none;
@@ -247,13 +274,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       font-weight: 600;
       letter-spacing: 0.05em;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: box-shadow 0.3s ease, filter 0.3s ease;
       margin-top: 0.5rem;
     }
 
     .submit-button:hover:not(:disabled) {
-      transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      filter: brightness(0.98);
     }
 
     .submit-button:disabled {
@@ -293,6 +320,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       }
 
       .choice-button {
+        height: 52px;
         padding: 0.8rem 1rem;
         font-size: 0.85rem;
       }
@@ -324,28 +352,51 @@ export class RsvpSectionComponent implements OnInit {
 
   form = this.fb.nonNullable.group({
     attending: [null as boolean | null, Validators.required],
-    attendeeCount: [1, [Validators.required, Validators.min(1)]],
+    attendeeCount: [1],
     message: ['', [Validators.maxLength(this.maxMessageLength)]],
   });
 
   protected attendeeOptions(): number[] {
-    const max = this.invitee?.numberOfPeople ?? 1;
+    const max = this.getMaxAttendeeCount();
     return Array.from({ length: max }, (_, i) => i + 1);
   }
 
+  private getMaxAttendeeCount(): number {
+    return Math.max(1, this.invitee?.numberOfPeople ?? 1);
+  }
+
   ngOnInit(): void {
+    this.updateAttendeeValidation(this.form.get('attending')?.value ?? null);
+
     if (this.invitee?.numberOfPeople) {
       this.form.patchValue({
-        attendeeCount: Math.min(1, this.invitee.numberOfPeople),
+        attendeeCount: this.getMaxAttendeeCount(),
       });
     }
   }
 
+  private updateAttendeeValidation(attending: boolean | null): void {
+    const attendeeCountControl = this.form.get('attendeeCount');
+    if (!attendeeCountControl) {
+      return;
+    }
+
+    if (attending === true) {
+      attendeeCountControl.setValidators([Validators.required, Validators.min(1)]);
+      if ((attendeeCountControl.value ?? 0) < 1) {
+        attendeeCountControl.setValue(this.getMaxAttendeeCount());
+      }
+    } else {
+      attendeeCountControl.clearValidators();
+      attendeeCountControl.setValue(0);
+    }
+
+    attendeeCountControl.updateValueAndValidity();
+  }
+
   protected setAttending(attending: boolean): void {
     this.form.patchValue({ attending });
-    if (!attending) {
-      this.form.patchValue({ attendeeCount: 0 });
-    }
+    this.updateAttendeeValidation(attending);
   }
 
   protected onSubmit(): void {
@@ -359,4 +410,3 @@ export class RsvpSectionComponent implements OnInit {
     });
   }
 }
-

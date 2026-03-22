@@ -27,7 +27,7 @@ dateTimeImage: '/assets/date-time.svg',
           label: "Bride's Place",
           locationName: 'Cornet Chahwane',
           time: 'Starting 2:30 pm',
-          mapUrl: 'https://maps.app.goo.gl/yCVqgtoLRVWvkQm16',
+          mapUrl: 'https://maps.app.goo.gl/Rug3WohGEXzp2jDj6',
         },
         {
           label: "Groom's Place",
