@@ -1,0 +1,31 @@
+<div class="thank-you-section">
+  <div class="content">
+    <div class="icon">✓</div>
+    <h2>Thank You!</h2>
+    <p class="message">Your response has been recorded.</p>
+
+    <div class="response-summary">
+      <div class="summary-item">
+        <span class="label">Attending:</span>
+        <span class="value">{{ attending ? 'Yes' : 'No' }}</span>
+      </div>
+
+      @if (attending && attendeeCount) {
+        <div class="summary-item">
+          <span class="label">Number of Guests:</span>
+          <span class="value">{{ attendeeCount }}</span>
+        </div>
+      }
+
+      @if (message) {
+        <div class="summary-item">
+          <span class="label">Your Message:</span>
+          <span class="value message-text">{{ message }}</span>
+        </div>
+      }
+    </div>
+
+    <p class="closing">We look forward to celebrating with you!</p>
+  </div>
+</div>
+

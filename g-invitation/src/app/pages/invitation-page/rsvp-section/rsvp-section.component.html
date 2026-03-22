@@ -1,0 +1,78 @@
+<section class="rsvp-section">
+  <div class="section-header">
+    <h2 class="section-title">RSVP</h2>
+    <p class="deadline">{{ deadlineText }}</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rsvp-form">
+    <div class="form-group">
+      <label class="form-label">Guest Names</label>
+      <p class="guest-names">{{ invitee?.guestNames.join(' & ') }}</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Will you attend?</label>
+      <div class="button-group">
+        <button
+          type="button"
+          class="choice-button"
+          [class.active]="form.get('attending')?.value === true"
+          (click)="setAttending(true)"
+          [disabled]="submittingState()"
+        >
+          Yes, I'll be there ✓
+        </button>
+        <button
+          type="button"
+          class="choice-button"
+          [class.active]="form.get('attending')?.value === false"
+          (click)="setAttending(false)"
+          [disabled]="submittingState()"
+        >
+          Sorry, can't make it
+        </button>
+      </div>
+    </div>
+
+    @if (form.get('attending')?.value === true) {
+      <div class="form-group">
+        <label class="form-label">Number of attendees</label>
+        <select formControlName="attendeeCount" class="form-select">
+          @for (n of attendeeOptions(); track n) {
+            <option [value]="n">{{ n }} {{ n === 1 ? 'person' : 'people' }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    <div class="form-group">
+      <label class="form-label">Message (optional)</label>
+      <textarea
+        formControlName="message"
+        class="form-textarea"
+        [attr.maxlength]="maxMessageLength"
+        placeholder="Share your wishes or any special notes..."
+      ></textarea>
+      <p class="char-count">
+        {{ (form.get('message')?.value?.length ?? 0) }} / {{ maxMessageLength }}
+      </p>
+    </div>
+
+    <button
+      type="submit"
+      class="submit-button"
+      [disabled]="!form.valid || submittingState()"
+    >
+      @if (submittingState()) {
+        Submitting...
+      } @else {
+        Submit RSVP
+      }
+    </button>
+
+    @if (errorState()) {
+      <p class="error-message">{{ errorState() }}</p>
+    }
+  </form>
+</section>
+

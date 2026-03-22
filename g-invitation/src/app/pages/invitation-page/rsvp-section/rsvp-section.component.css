@@ -1,0 +1,248 @@
+.rsvp-section {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  animation: fadeInContent 500ms ease-out both;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.deadline {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.rsvp-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.guest-names {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  opacity: 0.9;
+  margin: 0;
+  padding: 0.8rem 0;
+  text-align: center;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 16px;
+  backdrop-filter: blur(9px);
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.choice-button {
+  height: 52px;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+  line-height: 1.2;
+  border: 1px solid rgba(75, 65, 80, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  cursor: pointer;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  backdrop-filter: blur(10px);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .choice-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.choice-button:focus-visible {
+  outline: 2px solid rgba(137, 118, 130, 0.45);
+  outline-offset: 2px;
+}
+
+.choice-button.active {
+  background: var(--accent-color, #d6c3a5);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+.choice-button:active:not(:disabled) {
+  background: var(--accent-color, #d6c3a5);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.choice-button.active:active:not(:disabled) {
+  background: var(--accent-color, #d6c3a5);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+  filter: brightness(0.97);
+}
+
+.choice-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-select,
+.form-textarea {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.form-select option {
+  background: #333;
+  color: #fff;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.char-count {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin: 0;
+  text-align: right;
+}
+
+.submit-button {
+  height: 52px;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+  line-height: 1.2;
+  background: var(--accent-color, #d6c3a5);
+  color: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  filter: brightness(0.98);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: rgba(255, 107, 107, 0.9);
+  font-size: 0.9rem;
+  margin: 0;
+  text-align: center;
+}
+
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .rsvp-section {
+    padding: 1rem;
+  }
+
+  .section-title {
+    margin-bottom: 0.4rem;
+  }
+
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+
+  .choice-button {
+    height: 52px;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .rsvp-form {
+    gap: 1rem;
+  }
+
+  .form-group {
+    gap: 0.6rem;
+  }
+}
+

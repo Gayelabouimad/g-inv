@@ -1,17 +1,17 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, effect, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, computed, effect, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EVENT_CONFIG } from '../../data/event.data';
-import { INVITEES } from '../../data/invitees.data';
-import { RsvpService } from '../../services/rsvp.service';
-import { Invitee, RSVPSubmission } from '../../models/invitation.models';
-import { OpeningScreenComponent } from './opening-screen.component';
-import { IntroSectionComponent } from './intro-section.component';
-import { EventSectionComponent } from './event-section.component';
-import { TimelineSectionComponent } from './timeline-section.component';
-import { RegistrySectionComponent } from './registry-section.component';
-import { RsvpSectionComponent } from './rsvp-section.component';
-import { ThankYouSectionComponent } from './thank-you-section.component';
+import { EVENT_CONFIG } from '../../../data/event.data';
+import { INVITEES } from '../../../data/invitees.data';
+import { Invitee, RSVPSubmission } from '../../../models/invitation.models';
+import { RsvpService } from '../../../services/rsvp.service';
+import { EventSectionComponent } from '../event-section/event-section.component';
+import { IntroSectionComponent } from '../intro-section/intro-section.component';
+import { OpeningScreenComponent } from '../opening-screen/opening-screen.component';
+import { RegistrySectionComponent } from '../registry-section/registry-section.component';
+import { RsvpSectionComponent } from '../rsvp-section/rsvp-section.component';
+import { ThankYouSectionComponent } from '../thank-you-section/thank-you-section.component';
+import { TimelineSectionComponent } from '../timeline-section/timeline-section.component';
 
 type SlideKey =
   | 'intro'
@@ -42,7 +42,7 @@ interface InvitationSlide {
     ThankYouSectionComponent,
   ],
   templateUrl: './invitation-page.component.html',
-  styleUrl: './invitation-page.component.scss',
+  styleUrl: './invitation-page.component.css',
 })
 export class InvitationPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
@@ -78,9 +78,7 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     },
   ]);
   protected readonly slides = computed<InvitationSlide[]>(() => {
-    const list: InvitationSlide[] = [
-      { key: 'intro', label: 'Our Story' },
-    ];
+    const list: InvitationSlide[] = [{ key: 'intro', label: 'Our Story' }];
 
     if (this.event.sections.gathering.enabled) {
       list.push({ key: 'gathering', label: this.event.sections.gathering.title });
@@ -141,7 +139,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
     this.invitee.set(invitee);
 
-    // Load existing RSVP response if available (only in browser)
     if (isPlatformBrowser(this.platformId)) {
       this.loadExistingResponse(invitee.id);
     }
@@ -180,7 +177,7 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
     if (audio.paused || audio.ended) {
       audio.muted = false;
-      audio.play().catch(e => console.error('Audio play failed:', e));
+      audio.play().catch((e) => console.error('Audio play failed:', e));
       this.bgMusicPlaying.set(true);
     } else {
       audio.pause();
@@ -194,7 +191,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Mobile browsers require an explicit user gesture to start audio with sound.
     audio.muted = false;
     audio.play()
       .then(() => this.bgMusicPlaying.set(true))
@@ -293,12 +289,10 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     const absY = Math.abs(deltaY);
     const threshold = 45;
 
-
     if (absX < threshold && absY < threshold) {
       return;
     }
 
-    // Support both horizontal and vertical gestures for previous/next navigation.
     if (absX >= absY) {
       if (deltaX < 0) {
         this.nextSlide();
@@ -358,7 +352,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
       await this.rsvpService.submit(payload);
 
-      // Reload to get the updated response with timestamps
       const updated = await this.rsvpService.read(invitee.id, this.event.eventSlug);
       if (updated) {
         this.submittedResponse.set(updated);

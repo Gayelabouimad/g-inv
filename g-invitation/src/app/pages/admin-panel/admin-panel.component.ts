@@ -10,8 +10,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { DeleteRsvpConfirmDialogComponent } from './delete-rsvp-confirm-dialog/delete-rsvp-confirm-dialog.component';
 import { EVENT_CONFIG } from '../../data/event.data';
 import { INVITEES } from '../../data/invitees.data';
 import { RSVPSubmission } from '../../models/invitation.models';
@@ -19,33 +20,6 @@ import { RsvpService } from '../../services/rsvp.service';
 
 type AdminRsvpRow = RSVPSubmission & { isResponded: boolean };
 
-@Component({
-  selector: 'app-delete-rsvp-confirm-dialog',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule],
-  template: `
-    <h2 mat-dialog-title>Delete RSVP Response</h2>
-    <div mat-dialog-content>
-      <p>
-        Delete RSVP response for
-        <strong>{{ data.guestNamesDisplay }}</strong>?
-      </p>
-      <p>This action cannot be undone.</p>
-    </div>
-    <div mat-dialog-actions align="end">
-      <button mat-button (click)="close(false)">Cancel</button>
-      <button mat-flat-button color="warn" (click)="close(true)">Delete</button>
-    </div>
-  `,
-})
-export class DeleteRsvpConfirmDialogComponent {
-  readonly data = inject<{ guestNamesDisplay: string }>(MAT_DIALOG_DATA);
-  private readonly dialogRef = inject(MatDialogRef<DeleteRsvpConfirmDialogComponent>);
-
-  close(result: boolean): void {
-    this.dialogRef.close(result);
-  }
-}
 
 @Component({
   selector: 'app-admin-panel',

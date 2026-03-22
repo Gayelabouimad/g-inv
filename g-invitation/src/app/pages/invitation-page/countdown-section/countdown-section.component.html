@@ -1,0 +1,29 @@
+<div class="countdown-container">
+  <h2 class="countdown-label">Counting down to forever</h2>
+
+  @if (!isComplete()) {
+    <div class="countdown-grid" aria-label="Countdown until wedding day">
+      <div class="countdown-item">
+        <span class="countdown-value">{{ countdownParts().days }}</span>
+        <span class="countdown-unit">Days</span>
+      </div>
+
+      <div class="countdown-separator">:</div>
+
+      <div class="countdown-item">
+        <span class="countdown-value">{{ twoDigit(countdownParts().hours) }}</span>
+        <span class="countdown-unit">Hours</span>
+      </div>
+
+      <div class="countdown-separator">:</div>
+
+      <div class="countdown-item">
+        <span class="countdown-value">{{ twoDigit(countdownParts().minutes) }}</span>
+        <span class="countdown-unit">Minutes</span>
+      </div>
+    </div>
+  } @else {
+    <p class="countdown-complete">Today is the day!</p>
+  }
+</div>
+

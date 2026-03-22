@@ -1,0 +1,19 @@
+<div
+  class="opening-screen"
+  [class.hidden]="!isVisible"
+  (click)="onTap()"
+>
+  <div class="overlay" [style.background]="'rgba(0,0,0,' + overlayOpacity + ')'" ></div>
+
+  <div class="content">
+    <div class="inner">
+      <h1 class="couple-name">{{ coupleName }}</h1>
+      <p class="subtitle">{{ titleLine }}</p>
+      <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
+      <div class="tap-hint">
+        <span>Tap to begin</span>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,19 @@
+<div class="intro-section">
+  <blockquote class="quote">
+    <p class="quote-text">"{{ quote }}"</p>
+    <footer class="quote-source">- {{ quoteSource }}</footer>
+  </blockquote>
+
+  <div class="family-request">
+    <div class="families-section">
+      @for (family of families; track family) {
+        <p class="family-name">{{ family }}</p>
+      }
+    </div>
+
+    <p class="intro-text">{{ introText }}</p>
+  </div>
+  <h1 class="couple-name">{{ coupleName }}</h1>
+  <img class="date-time-image" [src]="resolvedDateTimeImage()" alt="Wedding date and time" />
+</div>
+

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { InvitationPageComponent } from './pages/invitation-page/invitation-page.component';
+import { InvitationPageComponent } from './pages/invitation-page/invitation-page/invitation-page.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
-import { NotFoundComponent } from './pages/not-found.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'admin', component: AdminPanelComponent },
