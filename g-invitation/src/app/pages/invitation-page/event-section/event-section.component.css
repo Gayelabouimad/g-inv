@@ -1,55 +1,3 @@
-.event-section {
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  animation: fadeInContent 500ms ease-out both;
-}
-
-.section-header {
-  margin-bottom: 0.4rem;
-  text-align: center;
-}
-
-.section-kicker {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  padding: 0.25rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.07);
-  font-family: 'Limelight', sans-serif;
-  font-size: 0.58rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-
-.section-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(2rem, 8vw, 3rem);
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-
-.section-description {
-  max-width: 38ch;
-  margin: 0 auto;
-  font-size: 0.92rem;
-  opacity: 0.85;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
 .event-date {
   text-align: center;
   margin: 0 auto;
@@ -74,22 +22,10 @@
   row-gap: 0.25rem;
   align-items: center;
   min-height: 0;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.17);
   padding: 1rem;
-  border-radius: 16px;
-  backdrop-filter: blur(9px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .event-item:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-
   .map-button:hover {
     background: rgba(255, 255, 255, 0.16);
     border-color: rgba(255, 255, 255, 0.4);
@@ -105,7 +41,7 @@
   letter-spacing: 0.04em;
   flex: 1;
   text-align: left;
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-highlight, 'Quicksand', sans-serif);
   text-transform: uppercase;
 }
 
@@ -170,9 +106,7 @@
   font-size: 0.94rem;
   font-weight: 400;
   margin: 0 0 0.3rem 0;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-family: 'Limelight', sans-serif;
+  letter-spacing: 0.09em;
 }
 
 .time-label {
@@ -182,27 +116,7 @@
   font-style: italic;
 }
 
-@keyframes fadeInContent {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 768px) {
-  .event-section {
-    gap: 0.9rem;
-    padding: 1rem;
-  }
-
-  .section-title {
-    margin-bottom: 0.4rem;
-  }
-
   .event-item {
     padding: 0.9rem;
   }
@@ -227,13 +141,6 @@
 }
 
 @media (max-width: 420px) {
-  .section-kicker {
-    font-size: 0.54rem;
-  }
-
-  .event-section {
-    padding: 0.9rem;
-  }
 
   .map-button {
     min-width: 78px;

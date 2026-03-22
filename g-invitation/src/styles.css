@@ -1,25 +1,175 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --font-body: 'Varela Round', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-display: 'Great Vibes', cursive;
+  --font-accent: 'Quicksand', sans-serif;
+  --font-highlight: 'Quicksand', sans-serif;
+  --font-quote: 'Georgia', serif;
+  --surface-glass: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+  --surface-border: 1px solid rgba(255, 255, 255, 0.17);
+  --surface-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
 
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 body {
   background-color: #f5f5f5;
 }
 
-/* Remove default margins and paddings */
-/*h1, h2, h3, h4, h5, h6, p {*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*}*/
-
-/* Smooth transitions */
 * {
   transition-property: background-color, border-color, color, box-shadow;
   transition-duration: 0.3s;
   transition-timing-function: ease;
 }
+
+@keyframes invitationFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.invitation-page {
+  --slide-padding: 1.25rem;
+  --slide-gap: 1rem;
+}
+
+.invitation-page .event-section,
+.invitation-page .registry-section,
+.invitation-page .rsvp-section,
+.invitation-page .thank-you-section,
+.invitation-page .timeline-section {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--slide-gap);
+  padding: var(--slide-padding);
+  box-sizing: border-box;
+  animation: invitationFadeInUp 500ms ease-out both;
+}
+
+.invitation-page .section-header {
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.invitation-page .section-title {
+  font-family: var(--font-display, cursive);
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+  text-wrap: balance;
+}
+
+.invitation-page .section-description {
+  max-width: 38ch;
+  margin: 0 auto;
+  font-size: 0.92rem;
+  opacity: 0.85;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.invitation-page .section-kicker,
+.invitation-page .deadline,
+.invitation-page .form-label,
+.invitation-page .date-label,
+.invitation-page .countdown-label,
+.invitation-page .countdown-unit {
+  font-family: var(--font-accent, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.invitation-page .section-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.58rem;
+  opacity: 0.9;
+}
+
+.invitation-page .event-item,
+.invitation-page .registry-card,
+.invitation-page .response-summary,
+.invitation-page .countdown-item,
+.invitation-page .timeline-image-wrapper {
+  background: var(--surface-glass);
+  border: var(--surface-border);
+  border-radius: 16px;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  box-shadow: var(--surface-shadow);
+}
+
+.invitation-page .event-item,
+.invitation-page .registry-card,
+.invitation-page .choice-button,
+.invitation-page .map-button,
+.invitation-page .copy-button {
+  transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.invitation-page .map-button,
+.invitation-page .copy-button,
+.invitation-page .choice-button,
+.invitation-page .submit-button,
+.invitation-page .form-select,
+.invitation-page .form-textarea {
+  border-radius: 16px;
+}
+
+.invitation-page .map-button,
+.invitation-page .copy-button,
+.invitation-page .choice-button,
+.invitation-page .form-select,
+.invitation-page .form-textarea {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+
+.invitation-page .submit-button {
+  font-family: var(--font-body, sans-serif);
+  font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .invitation-page .event-item:hover,
+  .invitation-page .registry-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .invitation-page {
+    --slide-padding: 1rem;
+    --slide-gap: 0.9rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .invitation-page .section-kicker {
+    font-size: 0.54rem;
+  }
+}
+

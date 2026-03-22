@@ -1,35 +1,7 @@
-.rsvp-section {
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  animation: fadeInContent 500ms ease-out both;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(2rem, 8vw, 3rem);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-
 .deadline {
   font-size: 0.9rem;
   opacity: 0.8;
   margin: 0;
-  letter-spacing: 0.03em;
 }
 
 .rsvp-form {
@@ -50,23 +22,17 @@
 .form-label {
   font-size: 0.95rem;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   opacity: 0.9;
 }
 
 .guest-names {
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-highlight, 'Quicksand', sans-serif);
   font-size: 1.25rem;
   font-weight: 900;
   opacity: 0.9;
   margin: 0;
   padding: 0.8rem 0;
   text-align: center;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.17);
-  border-radius: 16px;
-  backdrop-filter: blur(9px);
 }
 
 .button-group {
@@ -207,25 +173,7 @@
   text-align: center;
 }
 
-@keyframes fadeInContent {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 768px) {
-  .rsvp-section {
-    padding: 1rem;
-  }
-
-  .section-title {
-    margin-bottom: 0.4rem;
-  }
 
   .button-group {
     grid-template-columns: 1fr;
