@@ -57,6 +57,13 @@ export interface RSVPConfig {
 }
 
 export interface Branding {
+  fonts: {
+    body: string;
+    display: string;
+    accent: string;
+    highlight: string;
+    quote: string;
+  };
   backgroundImage: string;
   overlayOpacity: number;
   accentColor: string;

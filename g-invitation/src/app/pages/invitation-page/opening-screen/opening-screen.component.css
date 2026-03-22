@@ -43,7 +43,7 @@
 }
 
 .couple-name {
-  font-family: 'Great Vibes', cursive;
+  font-family: var(--font-display), cursive;
   font-size: 4rem;
   font-weight: 300;
   letter-spacing: 0.05em;
@@ -54,7 +54,7 @@
 }
 
 .subtitle {
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-accent), sans-serif;
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -64,7 +64,7 @@
 }
 
 .tap-hint {
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-accent), sans-serif;
   margin-top: 3rem;
   font-size: 0.9rem;
   letter-spacing: 0.05em;

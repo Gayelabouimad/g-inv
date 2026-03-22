@@ -22,7 +22,7 @@
   height: var(--viewport-height);
   background-color: #0a0a0a;
   color: var(--text-color);
-  font-family: var(--font-body, 'Varela Round', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+  font-family: var(--font-body, sans-serif);
   line-height: 1.6;
   overflow: hidden;
 }

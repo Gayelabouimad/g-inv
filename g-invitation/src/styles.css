@@ -1,9 +1,9 @@
 :root {
-  --font-body: 'Varela Round', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --font-display: 'Great Vibes', cursive;
-  --font-accent: 'Quicksand', sans-serif;
-  --font-highlight: 'Quicksand', sans-serif;
-  --font-quote: 'Georgia', serif;
+  --font-body: sans-serif;
+  --font-display: cursive;
+  --font-accent: sans-serif;
+  --font-highlight: sans-serif;
+  --font-quote: serif;
   --surface-glass: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
   --surface-border: 1px solid rgba(255, 255, 255, 0.17);
   --surface-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);

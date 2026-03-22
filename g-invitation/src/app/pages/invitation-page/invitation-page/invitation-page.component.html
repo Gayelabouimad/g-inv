@@ -1,4 +1,15 @@
-<div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
+<div
+  class="invitation-page"
+  [style.--font-body]="event.branding.fonts.body"
+  [style.--font-display]="event.branding.fonts.display"
+  [style.--font-accent]="event.branding.fonts.accent"
+  [style.--font-highlight]="event.branding.fonts.highlight"
+  [style.--font-quote]="event.branding.fonts.quote"
+  [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'"
+  [style.--overlay-opacity]="event.branding.overlayOpacity"
+  [style.--accent-color]="event.branding.accentColor"
+  [style.--text-color]="event.branding.textColor"
+>
   @if (event.branding.backgroundMusic) {
     <audio #bgMusic id="bg-music" [src]="event.branding.backgroundMusic" loop autoplay preload="auto" style="position: fixed; width: 0; height: 0; opacity: 0;"></audio>
   }

@@ -73,6 +73,13 @@ dateTimeImage: '/assets/date-time.svg',
     maxMessageLength: 120,
   },
   branding: {
+    fonts: {
+      body: "'Varela Round', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      display: "'Great Vibes', cursive",
+      accent: "'Quicksand', sans-serif",
+      highlight: "'Quicksand', sans-serif",
+      quote: "'Georgia', serif",
+    },
     backgroundImage: 'assets/background.jpg',
     overlayOpacity: 0.20,
     accentColor: '#d6c3a5',
