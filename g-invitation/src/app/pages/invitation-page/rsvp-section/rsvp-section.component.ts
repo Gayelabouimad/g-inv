@@ -7,7 +7,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './rsvp-section.component.html',
-  styleUrl: './rsvp-section.component.css',
   host: {
     '[style.--accent-color]': 'accentColor',
   },

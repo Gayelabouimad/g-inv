@@ -8,7 +8,6 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatDialogModule],
   templateUrl: './delete-rsvp-confirm-dialog.component.html',
-  styleUrl: './delete-rsvp-confirm-dialog.component.css',
 })
 export class DeleteRsvpConfirmDialogComponent {
   readonly data = inject<{ guestNamesDisplay: string }>(MAT_DIALOG_DATA);

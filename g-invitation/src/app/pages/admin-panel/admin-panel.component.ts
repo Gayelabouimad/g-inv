@@ -38,8 +38,7 @@ type AdminRsvpRow = RSVPSubmission & { isResponded: boolean };
     MatDialogModule,
     MatSnackBarModule,
   ],
-  templateUrl: './admin-panel.component.html',
-  styleUrl: './admin-panel.component.css'
+  templateUrl: './admin-panel.component.html'
 })
 export class AdminPanelComponent implements OnInit, OnDestroy {
   protected readonly event = EVENT_CONFIG;

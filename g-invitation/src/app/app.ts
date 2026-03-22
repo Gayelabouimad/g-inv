@@ -6,8 +6,7 @@ import { EVENT_CONFIG } from './data/event.data';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.html'
 })
 export class App {
   private readonly title = inject(Title);

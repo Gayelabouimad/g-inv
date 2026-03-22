@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
   selector: 'app-timeline-section',
   standalone: true,
   templateUrl: './timeline-section.component.html',
-  styleUrl: './timeline-section.component.css',
 })
 export class TimelineSectionComponent {
   @Input() title = '';

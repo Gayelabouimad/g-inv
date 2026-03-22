@@ -1,30 +1,30 @@
-<section class="event-section">
-  <div class="section-header">
-    <h2 class="section-title">{{ title }}</h2>
+<section class="flex min-h-full w-full animate-[sectionFadeIn_500ms_ease-out_both] flex-col gap-[0.9rem] p-4 md:gap-4 md:p-5">
+  <div class="mb-[0.4rem] text-center">
+    <h2 class="m-0 mb-2 text-[clamp(2rem,8vw,3rem)] leading-[1.1] font-light tracking-[0.01em] text-balance [font-family:'Great_Vibes',cursive]">{{ title }}</h2>
     @if (description) {
-      <p class="section-description">{{ description }}</p>
+      <p class="mx-auto max-w-[38ch] text-[0.92rem] leading-[1.55] opacity-85 text-pretty">{{ description }}</p>
     }
   </div>
 
-  <div class="event-items">
+  <div class="grid grid-cols-1 gap-[0.85rem]">
     @for (item of items; track item.label) {
-      <div class="event-item">
-        <h3 class="item-label">{{ item.label }}</h3>
-        <p class="item-location">{{ item.locationName }}</p>
-        <p class="item-time">{{ item.time }}</p>
+      <div class="grid min-h-0 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto_auto] items-center gap-y-1 rounded-2xl border border-white/20 bg-[linear-gradient(160deg,rgba(255,255,255,0.11),rgba(255,255,255,0.04))] p-[0.9rem] shadow-[0_0.5rem_1.25rem_rgba(0,0,0,0.2)] backdrop-blur-[0.5625rem] transition-[transform,border-color,background-color] duration-200 ease-out md:gap-x-[0.9rem] md:p-4 hover:bg-white/15 hover:border-white/35 hover:-translate-y-[0.125rem]">
+        <h3 class="col-[1] row-[1] m-0 flex-1 text-left text-base font-black uppercase tracking-[0.04em] [font-family:'Quicksand',sans-serif] md:text-[1.15rem]">{{ item.label }}</h3>
+        <p class="col-[1] row-[2] m-0 mb-[0.3rem] text-[0.88rem] leading-[1.35] opacity-90 md:text-[0.94rem]">{{ item.locationName }}</p>
+        <p class="col-[1] row-[3] m-0 text-[0.84rem] italic opacity-80">{{ item.time }}</p>
         <a
-          class="map-button"
+          class="col-[2] row-[1/4] inline-flex min-w-[4.875rem] shrink-0 flex-col items-center justify-center self-stretch gap-[0.35rem] rounded-[1.125rem] border border-white/30 bg-white/10 px-[0.62rem] py-[0.55rem] text-[0.68rem] font-semibold uppercase tracking-[0.06em] no-underline transition-[background-color,border-color] duration-200 ease-out md:min-w-[5.5rem] md:px-[0.9rem] md:py-[0.7rem] md:text-[0.74rem] hover:bg-white/20 hover:border-white/40 active:bg-white/20 active:border-white/40"
           [href]="item.mapUrl"
           target="_blank"
           rel="noopener noreferrer"
           title="Open in maps"
           aria-label="Open location in maps"
         >
-          <svg aria-hidden="true" focusable="false" class="map-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" class="h-[1.6rem] w-[1.6rem] opacity-95 md:h-[1.8rem] md:w-[1.8rem]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M12 21s-7-4.35-7-11a7 7 0 1 1 14 0c0 6.65-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
             <circle cx="12" cy="10" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
           </svg>
-          <span>View map</span>
+          <span class="leading-none">View map</span>
         </a>
       </div>
     }

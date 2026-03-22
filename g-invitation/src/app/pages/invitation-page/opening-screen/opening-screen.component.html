@@ -1,16 +1,17 @@
 <div
-  class="opening-screen"
-  [class.hidden]="!isVisible"
+  class="fixed inset-0 z-[1000] flex cursor-pointer items-center justify-center opacity-100 transition-opacity duration-[600ms] ease-in-out"
+  [class.opacity-0]="!isVisible"
+  [class.pointer-events-none]="!isVisible"
   (click)="onTap()"
 >
-  <div class="overlay" [style.background]="'rgba(0,0,0,' + overlayOpacity + ')'" ></div>
+  <div class="absolute inset-0 z-0" [style.background]="'rgba(0,0,0,' + overlayOpacity + ')'" ></div>
 
-  <div class="content">
-    <div class="inner">
-      <h1 class="couple-name">{{ coupleName }}</h1>
-      <p class="subtitle">{{ titleLine }}</p>
+  <div class="relative z-10 animate-[fadeInContent_0.8s_ease-out_0.2s_both] text-center text-white">
+    <div class="flex flex-col items-center gap-8">
+      <h1 class="m-0 max-w-[50%] animate-[slideUp_0.8s_ease-out_0.3s_both] text-[4rem] leading-[1.2] font-light tracking-[0.05em] [font-family:'Great_Vibes',cursive]">{{ coupleName }}</h1>
+      <p class="animate-[slideUp_0.8s_ease-out_0.4s_both] text-base font-normal uppercase tracking-[0.1em] opacity-90 [font-family:'Limelight',sans-serif]">{{ titleLine }}</p>
       <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
-      <div class="tap-hint">
+      <div class="mt-8 animate-[pulse_2s_ease-in-out_0.8s_infinite] text-[0.8rem] tracking-[0.05em] opacity-80 md:mt-12 md:text-[0.9rem] [font-family:'Limelight',sans-serif]">
         <span>Tap to begin</span>
       </div>
     </div>

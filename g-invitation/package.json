@@ -46,6 +46,7 @@
     "@types/express": "5.0.1",
     "@types/node": "20.17.19",
     "jsdom": "27.1.0",
+    "tailwindcss": "^4.1.13",
     "typescript": "5.9.2",
     "vitest": "4.0.8"
   }

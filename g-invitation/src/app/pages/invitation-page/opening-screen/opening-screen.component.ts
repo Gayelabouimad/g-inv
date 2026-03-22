@@ -6,7 +6,6 @@ import { CountdownSectionComponent } from '../countdown-section/countdown-sectio
   standalone: true,
   imports: [CountdownSectionComponent],
   templateUrl: './opening-screen.component.html',
-  styleUrl: './opening-screen.component.css',
 })
 export class OpeningScreenComponent {
   @Input() coupleName = '';

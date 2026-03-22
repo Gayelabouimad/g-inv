@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './registry-section.component.html',
-  styleUrl: './registry-section.component.css',
 })
 export class RegistrySectionComponent {
   @Input() title = '';

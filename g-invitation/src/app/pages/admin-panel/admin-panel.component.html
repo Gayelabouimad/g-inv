@@ -1,88 +1,88 @@
-<div class="admin-wrapper">
+<div class="p-3 md:p-8">
   <!-- Header -->
-  <mat-card class="admin-header">
+  <mat-card class="mb-8">
     <mat-card-content>
       <h1 class="mat-headline-medium">{{ event.couple.primaryNames }}</h1>
-      <p class="mat-body-small">RSVP Management Console</p>
-      <div class="header-meta">
-        <span>Event: <strong>{{ event.eventSlug }}</strong></span>
-        <span>Collection: <strong>rsvp-{{ event.eventSlug }}</strong></span>
+      <p class="mat-body-small text-[#666]">RSVP Management Console</p>
+      <div class="flex flex-col gap-2 text-[0.875rem] text-[#666] md:flex-row md:gap-[1.875rem]">
+        <span>Event: <strong class="font-semibold text-[#1976d2]">{{ event.eventSlug }}</strong></span>
+        <span>Collection: <strong class="font-semibold text-[#1976d2]">rsvp-{{ event.eventSlug }}</strong></span>
       </div>
     </mat-card-content>
   </mat-card>
 
   <!-- Controls -->
-  <div class="controls-section">
-    <div class="button-group">
-      <button mat-raised-button color="primary" (click)="loadRsvps()" [disabled]="loading()">
+  <div class="mb-8 flex flex-col items-stretch justify-between gap-5 md:flex-row md:items-center">
+    <div class="flex w-full gap-4 md:w-auto">
+      <button class="flex-1 md:flex-none" mat-raised-button color="primary" (click)="loadRsvps()" [disabled]="loading()">
         <mat-icon>{{ loading() ? 'hourglass_top' : 'refresh' }}</mat-icon>
         {{ loading() ? 'Loading...' : 'Refresh RSVPs' }}
       </button>
-      <button mat-raised-button color="accent" (click)="exportToCSV()" [disabled]="filteredRsvps().length === 0">
+      <button class="flex-1 md:flex-none" mat-raised-button color="accent" (click)="exportToCSV()" [disabled]="filteredRsvps().length === 0">
         <mat-icon>download</mat-icon>
         Export to CSV
       </button>
     </div>
-    <div class="last-loaded">
-      Last updated: <span>{{ lastLoaded() }}</span>
+    <div class="text-[0.8125rem] text-[#666]">
+      Last updated: <span class="font-semibold text-[#1976d2]">{{ lastLoaded() }}</span>
     </div>
   </div>
 
   <!-- Statistics Cards -->
-  <div class="stats-grid">
-    <mat-card class="stat-card">
+  <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-[repeat(auto-fit,minmax(12.5rem,1fr))]">
+    <mat-card class="transition-all duration-300 ease-out hover:-translate-y-1">
       <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">📋</span>
-          <h3 class="mat-body-small">Total Invitations</h3>
-            <p class="stat-value">{{ totalInvitations }}</p>
+        <div class="flex max-h-12 items-center justify-between gap-2">
+          <span class="text-[2rem] leading-none">📋</span>
+          <h3 class="mat-body-small text-[#999] uppercase tracking-[0.03125rem] font-semibold">Total Invitations</h3>
+          <p class="text-[2rem] font-bold text-[#333]">{{ totalInvitations }}</p>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-yes">
+    <mat-card class="border-l-4 border-l-[#4caf50] transition-all duration-300 ease-out hover:-translate-y-1">
       <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">✅</span>
-          <h3 class="mat-body-small">Confirmed</h3>
-            <p class="stat-value">{{ confirmedCount() }}</p>
+        <div class="flex max-h-12 items-center justify-between gap-2">
+          <span class="text-[2rem] leading-none">✅</span>
+          <h3 class="mat-body-small text-[#999] uppercase tracking-[0.03125rem] font-semibold">Confirmed</h3>
+          <p class="text-[2rem] font-bold text-[#333]">{{ confirmedCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-no">
+    <mat-card class="border-l-4 border-l-[#f44336] transition-all duration-300 ease-out hover:-translate-y-1">
       <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">❌</span>
-          <h3 class="mat-body-small">Declined</h3>
-            <p class="stat-value">{{ declinedCount() }}</p>
+        <div class="flex max-h-12 items-center justify-between gap-2">
+          <span class="text-[2rem] leading-none">❌</span>
+          <h3 class="mat-body-small text-[#999] uppercase tracking-[0.03125rem] font-semibold">Declined</h3>
+          <p class="text-[2rem] font-bold text-[#333]">{{ declinedCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-info">
+    <mat-card class="border-l-4 border-l-[#2196f3] transition-all duration-300 ease-out hover:-translate-y-1">
       <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">👥</span>
-          <h3 class="mat-body-small">Total Attendees</h3>
-            <p class="stat-value">{{ totalAttendees() }}</p>
+        <div class="flex max-h-12 items-center justify-between gap-2">
+          <span class="text-[2rem] leading-none">👥</span>
+          <h3 class="mat-body-small text-[#999] uppercase tracking-[0.03125rem] font-semibold">Total Attendees</h3>
+          <p class="text-[2rem] font-bold text-[#333]">{{ totalAttendees() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-pending">
+    <mat-card class="border-l-4 border-l-[#ff9800] transition-all duration-300 ease-out hover:-translate-y-1">
       <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">⏳</span>
-          <h3 class="mat-body-small">No Response</h3>
-            <p class="stat-value">{{ pendingCount() }}</p>
+        <div class="flex max-h-12 items-center justify-between gap-2">
+          <span class="text-[2rem] leading-none">⏳</span>
+          <h3 class="mat-body-small text-[#999] uppercase tracking-[0.03125rem] font-semibold">No Response</h3>
+          <p class="text-[2rem] font-bold text-[#333]">{{ pendingCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 
   <!-- Filters -->
-  <mat-card class="filters-section">
+  <mat-card class="mb-8">
     <mat-card-content>
       <mat-form-field appearance="outline">
         <mat-label>Filter by Status</mat-label>
@@ -97,11 +97,11 @@
   </mat-card>
 
   <!-- Table -->
-  <mat-card class="table-card">
+  <mat-card class="mb-4 overflow-auto">
     <mat-card-content>
       @if (!loading()) {
-        <div class="table-container">
-          <table mat-table [dataSource]="filteredRsvps()" [trackBy]="trackByInviteeId" class="rsvp-table">
+        <div class="max-w-full overflow-x-auto">
+          <table mat-table [dataSource]="filteredRsvps()" [trackBy]="trackByInviteeId" class="w-full min-w-[56.25rem]">
             <!-- Guest Names Column -->
             <ng-container matColumnDef="guestNames">
               <th mat-header-cell *matHeaderCellDef>Guest Names</th>
@@ -177,19 +177,19 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="'row-status-' + (row.attending ? 'yes' : (row.isResponded ? 'no' : 'pending'))"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="row.attending ? 'bg-[rgba(76,175,80,0.05)] hover:bg-[rgba(76,175,80,0.1)] transition-colors duration-200' : (row.isResponded ? 'bg-[rgba(244,67,54,0.05)] hover:bg-[rgba(244,67,54,0.1)] transition-colors duration-200' : 'bg-[rgba(255,152,0,0.05)] hover:bg-[rgba(255,152,0,0.1)] transition-colors duration-200')"></tr>
           </table>
         </div>
       } @else {
-        <div class="loading-state">
+        <div class="flex flex-col items-center justify-center gap-4 px-5 py-[3.75rem]">
           <mat-spinner diameter="50"></mat-spinner>
           <p class="mat-body-medium">Loading RSVPs from Firestore...</p>
         </div>
       }
 
       @if (!loading() && filteredRsvps().length === 0) {
-        <div class="empty-state">
-          <mat-icon class="empty-icon">inbox</mat-icon>
+        <div class="flex flex-col items-center justify-center px-5 py-[3.75rem] text-[#999]">
+          <mat-icon class="mb-4 h-12 w-12 text-5xl text-[#ccc]">inbox</mat-icon>
           <p class="mat-body-medium">No RSVPs found matching the selected filter</p>
         </div>
       }

@@ -42,7 +42,6 @@ interface InvitationSlide {
     ThankYouSectionComponent,
   ],
   templateUrl: './invitation-page.component.html',
-  styleUrl: './invitation-page.component.css',
 })
 export class InvitationPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);

@@ -1,15 +1,19 @@
-<div class="invitation-page" [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'" [style.--overlay-opacity]="event.branding.overlayOpacity" [style.--accent-color]="event.branding.accentColor" [style.--text-color]="event.branding.textColor">
+<div
+  class="relative h-dvh w-full overflow-hidden bg-[#0a0a0a] leading-[1.6] [font-family:'Varela_Round','Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]"
+  [style.--accent-color]="event.branding.accentColor"
+  [style.color]="event.branding.textColor"
+>
   @if (event.branding.backgroundMusic) {
     <audio #bgMusic id="bg-music" [src]="event.branding.backgroundMusic" loop autoplay preload="auto" style="position: fixed; width: 0; height: 0; opacity: 0;"></audio>
   }
 
-  <div class="page-background"></div>
+  <div class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat" [style.background-image]="'url(' + event.branding.backgroundImage + ')'" aria-hidden="true"></div>
 
   <button
-    class="music-control"
+    class="absolute bottom-5 left-5 z-[1001] flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
     (click)="toggleBgMusic()"
     [class.playing]="bgMusicPlaying()">
-    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="music" class="svg-inline--fa fa-music w-6 h-6" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="music" class="h-6 w-6 opacity-90" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path fill="currentColor" d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
     </svg>
   </button>
@@ -26,23 +30,24 @@
   }
 
   @if (!showOpening()) {
-    <div class="page-content">
+    <div class="relative h-dvh w-full overflow-hidden">
+      <div class="pointer-events-none fixed inset-0 z-10" [style.background]="'rgba(0,0,0,' + event.branding.overlayOpacity + ')'" aria-hidden="true"></div>
       <div
-        class="slides-shell"
+        class="relative z-20 h-dvh w-full overflow-hidden overscroll-none select-none"
         (pointerdown)="onPointerDown($event)"
         (pointerup)="onPointerUp($event)"
         (touchstart)="onTouchStart($event)"
         (touchend)="onTouchEnd($event)"
         (wheel)="onWheel($event)"
       >
-        <div class="slides-track" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
+        <div class="flex h-full w-full transition-transform duration-[420ms] ease-out will-change-transform" [style.height]="'calc(100dvh - 3rem - env(safe-area-inset-bottom, 0px))'" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
           @for (slide of slides(); track slide.key) {
-            <section class="slide-page" [class.rsvp-slide]="slide.key === 'rsvp'">
-              <div class="slide-scroll">
+            <section class="flex h-full w-full shrink-0 grow-0 basis-full justify-center">
+              <div class="flex h-full w-[min(42.5rem,100%)] items-center justify-center overflow-hidden p-2 md:p-3" [class.items-stretch]="slide.key === 'rsvp'">
                 @switch (slide.key) {
                   @case ('intro') {
-                    <div class="intro-slide">
-                      <div class="slide-card intro-card">
+                    <div class="flex min-h-full w-full flex-col items-center justify-center px-3 py-5 text-center sm:px-4 sm:py-6">
+                      <div class="flex w-full max-w-[40rem] flex-col justify-center overflow-hidden rounded-[0.875rem] border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] py-3 text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                         <app-intro-section
                           [coupleName]="event.couple.primaryNames"
                           [quote]="event.quote"
@@ -52,12 +57,12 @@
                           [dateTimeImage]="event.dateTimeImage || '/assets/date-time.svg'"
                         ></app-intro-section>
                       </div>
-                      <p class="swipe-hint"><- -> swipe to navigate</p>
+                      <p class="shrink-0 px-0 pt-3 pb-2 text-center text-[0.78rem] uppercase tracking-[0.06em] text-[#f6eee1] opacity-85"><- -> swipe to navigate</p>
                     </div>
                   }
 
                   @case ('gathering') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-event-section
                         [title]="event.sections.gathering.title"
                         [description]="event.sections.gathering.description"
@@ -67,7 +72,7 @@
                   }
 
                   @case ('ceremony') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-event-section
                         [title]="event.sections.ceremony.title"
                         [dateText]="event.sections.ceremony.dateText"
@@ -78,7 +83,7 @@
                   }
 
                   @case ('reception') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-event-section
                         [title]="event.sections.reception.title"
                         [dateText]="event.sections.reception.dateText"
@@ -89,7 +94,7 @@
                   }
 
                   @case ('timeline') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-timeline-section
                         [title]="event.sections.timeline.title"
                         [subtitle]="event.sections.timeline.subtitle"
@@ -99,7 +104,7 @@
                   }
 
                   @case ('registry') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-registry-section
                         [title]="event.sections.registry.title"
                         [text]="event.sections.registry.text"
@@ -110,7 +115,7 @@
                   }
 
                   @case ('rsvp') {
-                    <div class="slide-card scrollable-card">
+                    <div class="h-full w-full max-w-[40rem] overflow-y-auto rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem] [overscroll-behavior:contain] [-webkit-overflow-scrolling:touch]">
                       <app-rsvp-section
                         [invitee]="invitee()"
                         [deadlineText]="event.rsvp.deadlineText"
@@ -122,7 +127,7 @@
                   }
 
                   @case ('thankyou') {
-                    <div class="slide-card">
+                    <div class="w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[rgba(255,246,232,0.9)] bg-[linear-gradient(168deg,rgba(255,254,250,0.94)_0%,rgba(255,252,246,0.82)_56%,rgba(247,238,226,0.8)_100%)] text-[#4b4150] shadow-[0_1rem_2.75rem_rgba(38,27,32,0.24),inset_0_1px_0_rgba(255,255,255,0.88)] backdrop-blur-[0.4375rem]">
                       <app-thank-you-section
                         [attending]="submittedResponse()?.attending ?? false"
                         [attendeeCount]="submittedResponse()?.attendeeCount ?? 0"
@@ -136,13 +141,14 @@
           }
         </div>
 
-        <div class="slide-controls">
-          <div class="slide-dots" aria-label="Invitation section navigation">
+        <div class="flex items-center justify-center bg-transparent pb-[env(safe-area-inset-bottom,0px)]" [style.height]="'calc(3rem + env(safe-area-inset-bottom, 0px))'">
+          <div class="flex items-center justify-center gap-2 rounded-full border border-white/45 bg-[rgba(255,249,240,0.35)] px-4 py-2 shadow-[0_0.375rem_1.125rem_rgba(30,21,25,0.2)] backdrop-blur-[0.5rem]" aria-label="Invitation section navigation">
             @for (slide of slides(); track slide.key; let i = $index) {
               <button
                 type="button"
-                class="dot"
-                [class.active]="i === currentSlideIndex()"
+                class="h-2 shrink-0 cursor-pointer rounded-full border-0 bg-[rgba(86,68,78,0.36)] p-0 transition-[transform,background-color,width] duration-200 ease-out"
+                [style.background-color]="i === currentSlideIndex() ? event.branding.accentColor : 'rgba(86, 68, 78, 0.36)'"
+                [style.width]="i === currentSlideIndex() ? '1.375rem' : '0.5rem'"
                 [attr.aria-label]="'Go to ' + slide.label"
                 (click)="goToSlide(i)"
               ></button>
