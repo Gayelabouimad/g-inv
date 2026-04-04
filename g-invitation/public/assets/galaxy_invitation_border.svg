@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" fill="none">
+  <title>Galaxy invitation border mobile</title>
+  <desc>Minimal continuous line art galaxy border for mobile invitation background. Color can be changed via CSS using currentColor.</desc>
+  <g stroke="currentColor" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- top flowing line -->
+    <path d="M 0 118
+             C 95 55, 185 150, 280 105
+             S 480 85, 590 118
+             S 810 145, 930 96
+             S 1020 110, 1080 84" />
+    <!-- left flowing line -->
+    <path d="M 58 220
+             C 18 320, 74 388, 48 486
+             S 82 670, 42 778
+             S 95 972, 52 1090
+             S 86 1276, 38 1394
+             S 82 1608, 28 1730" />
+    <!-- right flowing line -->
+    <path d="M 1028 228
+             C 1070 330, 1018 398, 1040 500
+             S 1004 690, 1046 802
+             S 996 1008, 1038 1122
+             S 1002 1318, 1048 1442
+             S 996 1640, 1054 1758" />
+    <!-- bottom flowing line -->
+    <path d="M 0 1816
+             C 120 1752, 220 1860, 340 1814
+             S 560 1766, 700 1816
+             S 904 1852, 1080 1796" />
+
+    <!-- top-left moon -->
+    <path d="M 92 88
+             C 54 114, 34 160, 34 208
+             C 34 294, 104 360, 192 346
+             C 132 324, 94 270, 94 204
+             C 94 158, 114 116, 152 86
+             C 132 82, 110 82, 92 88 Z"/>
+    <!-- bottom-right moon -->
+    <path d="M 886 1718
+             C 846 1748, 824 1796, 826 1848
+             C 828 1910, 862 1920, 944 1920
+             C 886 1898, 850 1848, 850 1788
+             C 850 1748, 866 1714, 898 1690
+             C 894 1698, 890 1708, 886 1718 Z"/>
+
+    <!-- shooting stars -->
+    <path d="M 838 188 L 878 170" />
+    <path d="M 846 198 L 890 178" />
+    <path d="M 214 1716 L 258 1698" />
+    <path d="M 224 1728 L 270 1708" />
+  </g>
+
+  <g fill="currentColor">
+    <!-- sparkle stars -->
+    <path d="M 220 106 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 306 154 l 6 18 l 18 6 l -18 6 l -6 18 l -6 -18 l -18 -6 l 18 -6 z"/>
+    <path d="M 408 118 l 9 28 l 28 9 l -28 9 l -9 28 l -9 -28 l -28 -9 l 28 -9 z"/>
+    <path d="M 570 90 l 6 18 l 18 6 l -18 6 l -6 18 l -6 -18 l -18 -6 l 18 -6 z"/>
+    <path d="M 720 132 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 896 112 l 7 22 l 22 7 l -22 7 l -7 22 l -7 -22 l -22 -7 l 22 -7 z"/>
+
+    <path d="M 116 404 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 84 604 l 5 16 l 16 5 l -16 5 l -5 16 l -5 -16 l -16 -5 l 16 -5 z"/>
+    <path d="M 132 840 l 10 30 l 30 10 l -30 10 l -10 30 l -10 -30 l -30 -10 l 30 -10 z"/>
+    <path d="M 88 1116 l 6 18 l 18 6 l -18 6 l -6 18 l -6 -18 l -18 -6 l 18 -6 z"/>
+    <path d="M 130 1370 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 178 1620 l 10 30 l 30 10 l -30 10 l -10 30 l -10 -30 l -30 -10 l 30 -10 z"/>
+
+    <path d="M 960 432 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 1002 646 l 6 18 l 18 6 l -18 6 l -6 18 l -6 -18 l -18 -6 l 18 -6 z"/>
+    <path d="M 942 886 l 10 30 l 30 10 l -30 10 l -10 30 l -10 -30 l -30 -10 l 30 -10 z"/>
+    <path d="M 998 1170 l 7 22 l 22 7 l -22 7 l -7 22 l -7 -22 l -22 -7 l 22 -7 z"/>
+    <path d="M 946 1428 l 9 28 l 28 9 l -28 9 l -9 28 l -9 -28 l -28 -9 l 28 -9 z"/>
+    <path d="M 894 1656 l 7 22 l 22 7 l -22 7 l -7 22 l -7 -22 l -22 -7 l 22 -7 z"/>
+
+    <path d="M 324 1796 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+    <path d="M 500 1832 l 6 18 l 18 6 l -18 6 l -6 18 l -6 -18 l -18 -6 l 18 -6 z"/>
+    <path d="M 660 1788 l 10 30 l 30 10 l -30 10 l -10 30 l -10 -30 l -30 -10 l 30 -10 z"/>
+    <path d="M 808 1828 l 8 24 l 24 8 l -24 8 l -8 24 l -8 -24 l -24 -8 l 24 -8 z"/>
+
+    <!-- small dots -->
+    <circle cx="170" cy="180" r="2.5"/>
+    <circle cx="260" cy="92" r="2.5"/>
+    <circle cx="350" cy="194" r="2.5"/>
+    <circle cx="454" cy="92" r="2.5"/>
+    <circle cx="650" cy="156" r="2.5"/>
+    <circle cx="784" cy="84" r="2.5"/>
+    <circle cx="930" cy="184" r="2.5"/>
+
+    <circle cx="92" cy="516" r="2.5"/>
+    <circle cx="144" cy="728" r="2.5"/>
+    <circle cx="76" cy="956" r="2.5"/>
+    <circle cx="146" cy="1206" r="2.5"/>
+    <circle cx="90" cy="1492" r="2.5"/>
+    <circle cx="226" cy="1714" r="2.5"/>
+
+    <circle cx="988" cy="514" r="2.5"/>
+    <circle cx="936" cy="772" r="2.5"/>
+    <circle cx="1006" cy="1032" r="2.5"/>
+    <circle cx="938" cy="1296" r="2.5"/>
+    <circle cx="998" cy="1554" r="2.5"/>
+    <circle cx="856" cy="1734" r="2.5"/>
+
+    <circle cx="278" cy="1868" r="2.5"/>
+    <circle cx="430" cy="1770" r="2.5"/>
+    <circle cx="582" cy="1868" r="2.5"/>
+    <circle cx="756" cy="1768" r="2.5"/>
+  </g>
+</svg>
