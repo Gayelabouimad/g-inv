@@ -1,5 +1,9 @@
+.timeline-section {
+  gap: 0rem;
+}
+
 .timeline-image {
-  height: 80%;
+  height: 70%;
   display: block;
   margin: 0 auto;
   opacity: 0.95;
