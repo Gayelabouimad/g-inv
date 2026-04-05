@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" fill="none">
   <title>Galaxy invitation border mobile</title>
-  <desc>Minimal continuous line art galaxy border for mobile invitation background. Color can be changed via CSS using currentColor.</desc>
+  <desc>Minimal continuous line art galaxy border for mobile invitation background. Color is controlled via currentColor.</desc>
   <g stroke="currentColor" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
     <!-- top flowing line -->
     <path d="M 0 118

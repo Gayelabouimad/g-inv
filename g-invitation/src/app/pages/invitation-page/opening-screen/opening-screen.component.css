@@ -20,18 +20,16 @@
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
   z-index: 0;
 }
 
 .content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
-  color: white;
+  color: #5a6168;
   animation: fadeInContent 0.8s ease-out 0.2s both;
 }
 
@@ -43,32 +41,36 @@
 }
 
 .couple-name {
-  font-family: var(--font-display), cursive;
-  font-size: 4rem;
+  font-family: var(--font-display, cursive), cursive;
+  font-size: clamp(3.1rem, 10vw, 4.4rem);
   font-weight: 300;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   margin: 0;
   line-height: 1.2;
-  max-width: 50%;
+  max-width: 70%;
+  color: #4f555c;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.75);
   animation: slideUp 0.8s ease-out 0.3s both;
 }
 
 .subtitle {
-  font-family: var(--font-accent), sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  font-family: var(--font-accent, sans-serif), sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.9;
+  color: #7d858d;
   animation: slideUp 0.8s ease-out 0.4s both;
 }
 
 .tap-hint {
-  font-family: var(--font-accent), sans-serif;
-  margin-top: 3rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-  opacity: 0.8;
+  font-family: var(--font-accent, sans-serif), sans-serif;
+  margin-top: 2.2rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8d959d;
+  opacity: 0.92;
   animation: pulse 2s ease-in-out 0.8s infinite;
 }
 
@@ -95,17 +97,20 @@
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.8;
+    opacity: 0.92;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.45;
   }
 }
 
 @media (max-width: 768px) {
   .tap-hint {
-    margin-top: 2rem;
-    font-size: 0.8rem;
+    margin-top: 1.8rem;
+    font-size: 0.74rem;
+  }
+
+  .couple-name {
+    max-width: 82%;
   }
 }
-

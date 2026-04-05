@@ -4,25 +4,25 @@
   --font-accent: sans-serif;
   --font-highlight: sans-serif;
   --font-quote: serif;
-  --surface-glass: linear-gradient(160deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
-  --surface-border: 1px solid rgba(255, 255, 255, 0.17);
-  --surface-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  --surface-glass: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(250, 251, 252, 0.92));
+  --surface-border: 1px solid rgba(216, 222, 228, 0.88);
+  --surface-shadow: 0 10px 24px rgba(36, 44, 55, 0.08);
 }
 
 html,
 body {
   height: 100%;
   margin: 0;
-  font-family: var(--font-body, sans-serif);
+  font-family: var(--font-body, sans-serif), sans-serif;
 }
 
 body {
-  background-color: #f5f5f5;
+  background-color: #fcfdff;
 }
 
 * {
   transition-property: background-color, border-color, color, box-shadow;
-  transition-duration: 0.3s;
+  transition-duration: 0.28s;
   transition-timing-function: ease;
 }
 
@@ -40,6 +40,8 @@ body {
 .invitation-page {
   --slide-padding: 1.25rem;
   --slide-gap: 1rem;
+  --content-primary: #4b525a;
+  --content-soft: rgba(75, 82, 90, 0.78);
 }
 
 .invitation-page .event-section,
@@ -56,6 +58,7 @@ body {
   padding: var(--slide-padding);
   box-sizing: border-box;
   animation: invitationFadeInUp 500ms ease-out both;
+  color: var(--content-primary);
 }
 
 .invitation-page .section-header {
@@ -64,20 +67,21 @@ body {
 }
 
 .invitation-page .section-title {
-  font-family: var(--font-display, cursive);
+  font-family: var(--font-display, cursive), cursive;
   font-size: clamp(2rem, 8vw, 3rem);
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.1;
   margin: 0 0 0.5rem;
   text-wrap: balance;
+  color: #495058;
 }
 
 .invitation-page .section-description {
   max-width: 38ch;
   margin: 0 auto;
   font-size: 0.92rem;
-  opacity: 0.85;
+  color: var(--content-soft);
   line-height: 1.55;
   text-wrap: pretty;
 }
@@ -88,7 +92,7 @@ body {
 .invitation-page .date-label,
 .invitation-page .countdown-label,
 .invitation-page .countdown-unit {
-  font-family: var(--font-accent, sans-serif);
+  font-family: var(--font-accent, sans-serif), sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.09em;
 }
@@ -100,10 +104,10 @@ body {
   min-height: 30px;
   padding: 0.25rem 0.8rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(216, 222, 228, 0.9);
+  background: #ffffff;
   font-size: 0.58rem;
-  opacity: 0.9;
+  color: #6e767f;
 }
 
 .invitation-page .event-item,
@@ -112,10 +116,7 @@ body {
 .invitation-page .countdown-item,
 .invitation-page .timeline-image-wrapper {
   background: var(--surface-glass);
-  border: var(--surface-border);
   border-radius: 16px;
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
   box-shadow: var(--surface-shadow);
 }
 
@@ -141,21 +142,21 @@ body {
 .invitation-page .choice-button,
 .invitation-page .form-select,
 .invitation-page .form-textarea {
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.08);
-  color: inherit;
+  /*border: 1px solid rgba(216, 222, 228, 0.95);*/
+  background: #ffffff;
+  color: var(--content-primary);
 }
 
 .invitation-page .submit-button {
-  font-family: var(--font-body, sans-serif);
-  font-weight: 600;
+  font-family: var(--font-body, sans-serif), sans-serif;
+  font-weight: 700;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .invitation-page .event-item:hover,
   .invitation-page .registry-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #ffffff;
+    border-color: rgba(201, 209, 217, 0.95);
     transform: translateY(-2px);
   }
 }
@@ -172,4 +173,3 @@ body {
     font-size: 0.54rem;
   }
 }
-

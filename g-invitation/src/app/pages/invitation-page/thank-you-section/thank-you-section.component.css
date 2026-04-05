@@ -22,6 +22,8 @@
 .icon {
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: #8c949d;
+  text-shadow: none;
   animation: checkmark 0.6s ease-out;
 }
 
@@ -38,7 +40,7 @@
 
 .message {
   font-size: 1rem;
-  opacity: 0.9;
+  color: rgba(89, 96, 104, 0.88);
   margin: 0;
   letter-spacing: 0.03em;
 }
@@ -54,19 +56,20 @@
   align-items: center;
   padding: 0.8rem 0;
   font-size: 0.95rem;
+  color: #596068;
 }
 
 .summary-item:not(:last-child) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(216, 222, 228, 0.9);
 }
 
 .label {
-  opacity: 0.7;
-  font-weight: 400;
+  color: rgba(108, 116, 124, 0.82);
+  font-weight: 500;
 }
 
 .value {
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .message-text {
@@ -74,14 +77,14 @@
   margin-top: 0.5rem;
   text-align: center;
   font-style: italic;
-  opacity: 0.85;
+  color: rgba(89, 96, 104, 0.86);
   word-break: break-word;
 }
 
 .closing {
   font-size: 1rem;
   margin-top: 2rem;
-  opacity: 0.8;
+  color: rgba(89, 96, 104, 0.86);
   font-style: italic;
 }
 
@@ -101,4 +104,3 @@
     width: 100%;
   }
 }
-

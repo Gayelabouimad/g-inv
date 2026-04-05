@@ -1,13 +1,13 @@
 :host {
-  --bg-image: none;
-  --overlay-opacity: 0.26;
-  --accent-color: #d6c3a5;
-  --text-color: #f5efe6;
-  --card-bg: rgba(255, 252, 246, 0.82);
-  --card-border: rgba(255, 246, 232, 0.9);
-  --card-text: #4b4150;
+  --svg-frame-image: none;
+  --svg-frame-color: #d7dde3;
+  --accent-color: #d7dde3;
+  --text-color: #4f555b;
+  --card-bg: rgba(255, 255, 255, 0.96);
+  --card-border: rgba(212, 218, 225, 0.92);
+  --card-text: #4c5259;
   --viewport-height: 100vh;
-  --controls-height: 48px;
+  --controls-height: 50px;
 }
 
 @supports (height: 100dvh) {
@@ -20,11 +20,27 @@
   position: relative;
   width: 100%;
   height: var(--viewport-height);
-  background-color: #0a0a0a;
+  background: #fcfdff;
   color: var(--text-color);
-  font-family: var(--font-body, sans-serif);
+  font-family: var(--font-body, sans-serif), sans-serif;
   line-height: 1.6;
   overflow: hidden;
+}
+
+.page-background {
+  position: fixed;
+  inset: 0;
+  color: var(--svg-frame-color);
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg-frame-image);
+  mask-image: var(--svg-frame-image);
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  z-index: 0;
 }
 
 .page-content {
@@ -32,36 +48,13 @@
   width: 100%;
   height: var(--viewport-height);
   overflow: hidden;
+  z-index: 2;
 }
 
-.page-content::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, var(--overlay-opacity));
-  z-index: 1;
-  pointer-events: none;
-}
-
-.page-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
-}
 
 .slides-shell {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   height: var(--viewport-height);
   overflow: hidden;
@@ -88,35 +81,26 @@
 }
 
 .slide-scroll {
-  width: min(680px, 100%);
+  width: min(700px, 100%);
   height: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem;
+  padding: 0.8rem;
   box-sizing: border-box;
 }
 
 .slide-card {
   width: 100%;
-  max-width: 640px;
+  max-width: 650px;
   max-height: 100%;
   overflow: hidden;
   border-radius: 20px;
   color: var(--card-text);
-  background: linear-gradient(
-    168deg,
-    rgba(255, 254, 250, 0.94) 0%,
-    var(--card-bg) 56%,
-    rgba(247, 238, 226, 0.8) 100%
-  );
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
-  backdrop-filter: blur(7px) saturate(1.08);
-  -webkit-backdrop-filter: blur(7px) saturate(1.08);
-  box-shadow:
-    0 16px 44px rgba(38, 27, 32, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(36, 44, 55, 0.08);
 }
 
 .slide-page.rsvp-slide .slide-scroll {
@@ -134,7 +118,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0.75rem 0;
+  padding: 0.85rem 0;
 }
 
 .slide-controls {
@@ -144,6 +128,8 @@
   justify-content: center;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background: transparent;
+  position: relative;
+  z-index: 3;
 }
 
 .music-control {
@@ -151,19 +137,27 @@
   bottom: 1.25rem;
   left: 1.25rem;
   z-index: 1001;
-  background: none;
-  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(212, 218, 225, 0.95);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 6px 18px rgba(36, 44, 55, 0.12);
 }
 
 .music-control svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--text-color);
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #8e959e;
   opacity: 0.9;
+}
+
+.music-control.playing {
+  border-color: #bfc7d0;
 }
 
 .slide-dots {
@@ -172,12 +166,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255, 249, 240, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.94);
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  box-shadow: 0 6px 18px rgba(30, 21, 25, 0.2);
+  border: 1px solid rgba(212, 218, 225, 0.9);
+  box-shadow: 0 6px 18px rgba(36, 44, 55, 0.1);
 }
 
 .dot {
@@ -186,23 +178,23 @@
   border-radius: 999px;
   border: 0;
   padding: 0;
-  background: rgba(86, 68, 78, 0.36);
+  background: #c7ced6;
   cursor: pointer;
   transition: transform 200ms ease, background-color 200ms ease, width 200ms ease;
   flex-shrink: 0;
 }
 
 .dot.active {
-  background: var(--accent-color);
+  background: #aab3be;
   width: 22px;
 }
 
 .swipe-hint {
   padding: 0.75rem 0 0.5rem;
-  font-size: 0.78rem;
-  color: #f6eee1;
-  opacity: 0.84;
-  letter-spacing: 0.06em;
+  font-size: 0.74rem;
+  color: #8c949d;
+  opacity: 0.95;
+  letter-spacing: 0.07em;
   text-align: center;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -219,48 +211,6 @@
   text-align: center;
   box-sizing: border-box;
   gap: 0;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 768px) {
@@ -305,7 +255,11 @@
 
 @media (prefers-contrast: more) {
   .invitation-page {
-    color: #fff;
+    color: #2b2f33;
+  }
+
+  .slide-card {
+    border-width: 2px;
   }
 }
 
@@ -319,8 +273,7 @@
 
 @media (prefers-color-scheme: dark) {
   .invitation-page {
-    background-color: #0a0a0a;
-    color: #ffffff;
+    background-color: #f6f7f9;
+    color: #3f464d;
   }
 }
-

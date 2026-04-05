@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  font-family: var(--font-body, sans-serif);
+  font-family: var(--font-body, sans-serif), sans-serif;
   font-size: 1rem;
 }
 
@@ -15,16 +15,17 @@
 .quote-text {
   font-size: 1.2rem;
   font-style: italic;
-  font-family: var(--font-quote, serif);
+  font-family: var(--font-quote, serif), serif;
   line-height: 1.6;
   margin: 0 0 0.75rem 0;
   font-weight: 300;
+  color: #565d64;
 }
 
 .quote-source {
   font-size: 0.78rem;
-  opacity: 0.75;
-  font-family: var(--font-body, sans-serif);
+  color: rgba(86, 93, 100, 0.74);
+  font-family: var(--font-body, sans-serif), sans-serif;
   font-style: italic;
   letter-spacing: 0.03em;
   text-transform: none;
@@ -44,11 +45,11 @@
 }
 
 .family-name {
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   letter-spacing: 0.05em;
   margin: 0;
-  opacity: 0.9;
+  color: rgba(79, 86, 93, 0.88);
   max-width: 8rem;
   font-size: 0.82rem;
   line-height: 1.5;
@@ -56,11 +57,11 @@
 }
 
 .intro-text {
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   margin: 0;
   font-size: 0.95rem;
-  opacity: 0.95;
+  color: rgba(79, 86, 93, 0.92);
 }
 
 .date-time-image {
@@ -71,20 +72,20 @@
   object-fit: contain;
   opacity: 0.98;
   padding: 0.9rem 0.5rem 0.3rem 0.5rem;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.24));
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(247, 249, 251, 0.86));
+  filter: drop-shadow(0 10px 24px rgba(36, 44, 55, 0.12));
 }
 
 .couple-name {
   margin: 0.25rem 0 0;
-  font-family: var(--font-display, cursive);
-  font-size: 2.4rem;
+  font-family: var(--font-display, cursive), cursive;
+  font-size: 2.45rem;
   font-weight: 300;
   letter-spacing: 0.04em;
   line-height: 1.2;
-  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: #4f555c;
+  text-shadow: 0 4px 10px rgba(255, 255, 255, 0.75);
 }
 
 @media (max-width: 480px) {
@@ -104,4 +105,3 @@
     font-size: 2rem;
   }
 }
-

@@ -5,8 +5,8 @@
   [style.--font-accent]="event.branding.fonts.accent"
   [style.--font-highlight]="event.branding.fonts.highlight"
   [style.--font-quote]="event.branding.fonts.quote"
-  [style.--bg-image]="'url(' + event.branding.backgroundImage + ')'"
-  [style.--overlay-opacity]="event.branding.overlayOpacity"
+  [style.--svg-frame-image]="'url(' + event.branding.backgroundImage + ')'"
+  [style.--svg-frame-color]="event.branding.accentColor"
   [style.--accent-color]="event.branding.accentColor"
   [style.--text-color]="event.branding.textColor"
 >
@@ -29,7 +29,6 @@
     <app-opening-screen
       [coupleName]="event.couple.primaryNames"
       [titleLine]="event.couple.titleLine"
-      [overlayOpacity]="event.branding.overlayOpacity"
       [isVisible]="showOpening()"
       [targetDate]="targetDate"
       (tapStart)="onOpeningTap()"

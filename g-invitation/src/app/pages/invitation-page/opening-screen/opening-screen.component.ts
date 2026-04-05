@@ -11,7 +11,6 @@ import { CountdownSectionComponent } from '../countdown-section/countdown-sectio
 export class OpeningScreenComponent {
   @Input() coupleName = '';
   @Input() titleLine = '';
-  @Input() overlayOpacity = 0.45;
   @Input() isVisible = true;
   @Input() targetDate!: Date;
 
