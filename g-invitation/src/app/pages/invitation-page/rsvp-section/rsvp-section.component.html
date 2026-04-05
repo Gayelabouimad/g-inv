@@ -38,11 +38,31 @@
       <div class="form-group attendee-count-slot">
         <div class="attendee-count-content" [class.is-disabled]="form.get('attendeeCount')?.disabled">
           <label class="form-label">Number of attendees</label>
-          <select formControlName="attendeeCount" class="form-select">
-            @for (n of attendeeOptions(); track n) {
-              <option [value]="n">{{ n }} {{ n === 1 ? 'person' : 'people' }}</option>
-            }
-          </select>
+          <button
+            type="button"
+            class="form-select custom-select-trigger"
+            [disabled]="form.get('attendeeCount')?.disabled"
+            [attr.aria-expanded]="attendeeMenuOpen()"
+            aria-haspopup="listbox"
+            (click)="toggleAttendeeMenu()"
+          >
+            {{ attendeeCountLabel() }}
+          </button>
+
+          @if (attendeeMenuOpen()) {
+            <div class="custom-select-menu" role="listbox" aria-label="Number of attendees options">
+              @for (n of attendeeOptions(); track n) {
+                <button
+                  type="button"
+                  class="custom-select-option"
+                  [class.active]="(form.get('attendeeCount')?.value ?? 1) === n"
+                  (click)="selectAttendeeCount(n)"
+                >
+                  {{ n }} {{ n === 1 ? 'person' : 'people' }}
+                </button>
+              }
+            </div>
+          }
         </div>
       </div>
     } @else {

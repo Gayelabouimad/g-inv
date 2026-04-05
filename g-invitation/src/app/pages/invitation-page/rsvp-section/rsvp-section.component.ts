@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject, signal } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Invitee } from '../../../models/invitation.models';
@@ -21,9 +21,11 @@ export class RsvpSectionComponent implements OnInit {
   @Output() onRsvpSubmit = new EventEmitter<any>();
 
   private readonly fb = inject(FormBuilder);
+  private readonly host = inject(ElementRef<HTMLElement>);
 
   protected readonly submittingState = signal(false);
   protected readonly errorState = signal('');
+  protected readonly attendeeMenuOpen = signal(false);
 
   form = this.fb.nonNullable.group({
     attending: [null as boolean | null, Validators.required],
@@ -34,6 +36,35 @@ export class RsvpSectionComponent implements OnInit {
   protected attendeeOptions(): number[] {
     const max = this.getMaxAttendeeCount();
     return Array.from({ length: max }, (_, i) => i + 1);
+  }
+
+  protected attendeeCountLabel(): string {
+    const count = this.form.get('attendeeCount')?.value ?? 1;
+    return `${count} ${count === 1 ? 'person' : 'people'}`;
+  }
+
+  protected toggleAttendeeMenu(): void {
+    const attendeeCountControl = this.form.get('attendeeCount');
+    if (!attendeeCountControl || attendeeCountControl.disabled) {
+      return;
+    }
+
+    this.attendeeMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  protected selectAttendeeCount(count: number): void {
+    this.form.patchValue({ attendeeCount: count });
+    this.attendeeMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as Node | null;
+    if (!target || this.host.nativeElement.contains(target)) {
+      return;
+    }
+
+    this.attendeeMenuOpen.set(false);
   }
 
   private getMaxAttendeeCount(): number {
@@ -66,6 +97,7 @@ export class RsvpSectionComponent implements OnInit {
       attendeeCountControl.setValue(0, { emitEvent: false });
       attendeeCountControl.clearValidators();
       attendeeCountControl.disable({ emitEvent: false });
+      this.attendeeMenuOpen.set(false);
     } else {
       attendeeCountControl.enable({ emitEvent: false });
       attendeeCountControl.clearValidators();
