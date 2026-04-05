@@ -57,7 +57,7 @@ dateTimeImage: '/assets/date-time.svg',
       enabled: true,
       title: 'Road to forever',
       subtitle: 'Wedding Timeline',
-      image: '/assets/timeline.png',
+      image: '/assets/timeline.svg',
     },
     registry: {
       enabled: true,
