@@ -8,20 +8,20 @@
 
     <div class="response-summary">
       <div class="summary-item">
-        <span class="label">Attending:</span>
+        <span class="label">Attending</span>
         <span class="value">{{ attending ? 'Yes' : 'No' }}</span>
       </div>
 
       @if (attending && attendeeCount) {
         <div class="summary-item">
-          <span class="label">Number of Guests:</span>
+          <span class="label">Number of Guests</span>
           <span class="value">{{ attendeeCount }}</span>
         </div>
       }
 
       @if (message) {
         <div class="summary-item">
-          <span class="label">Your Message:</span>
+          <span class="label">Your Message</span>
           <span class="value message-text">{{ message }}</span>
         </div>
       }

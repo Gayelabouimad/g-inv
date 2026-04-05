@@ -74,7 +74,6 @@
 
 .message-text {
   display: block;
-  margin-top: 0.5rem;
   text-align: center;
   font-style: italic;
   color: rgba(89, 96, 104, 0.86);
@@ -95,8 +94,8 @@
   }
 
   .summary-item {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 0.3rem;
   }
 
