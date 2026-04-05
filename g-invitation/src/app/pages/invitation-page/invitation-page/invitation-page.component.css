@@ -43,6 +43,20 @@
   z-index: 0;
 }
 
+@media (min-width: 1024px) and (orientation: landscape) {
+  .page-background {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: 100vh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+}
+
 .page-content {
   position: relative;
   width: 100%;
