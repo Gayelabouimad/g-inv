@@ -7,7 +7,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rsvp-form">
     <div class="form-group">
       <label class="form-label">Guest Names</label>
-      <p class="guest-names">{{ invitee?.guestNames.join(' & ') }}</p>
+      <p class="guest-names">{{ invitee?.guestNames?.join(' & ') }}</p>
     </div>
 
     <div class="form-group">
@@ -34,14 +34,23 @@
       </div>
     </div>
 
-    @if (form.get('attending')?.value === true) {
-      <div class="form-group">
-        <label class="form-label">Number of attendees</label>
-        <select formControlName="attendeeCount" class="form-select">
-          @for (n of attendeeOptions(); track n) {
-            <option [value]="n">{{ n }} {{ n === 1 ? 'person' : 'people' }}</option>
-          }
-        </select>
+    @if ((invitee?.numberOfPeople ?? 1) > 1) {
+      <div class="form-group attendee-count-slot">
+        <div class="attendee-count-content" [class.is-disabled]="form.get('attendeeCount')?.disabled">
+          <label class="form-label">Number of attendees</label>
+          <select formControlName="attendeeCount" class="form-select">
+            @for (n of attendeeOptions(); track n) {
+              <option [value]="n">{{ n }} {{ n === 1 ? 'person' : 'people' }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    } @else {
+      <div class="form-group attendee-count-slot">
+        <div class="attendee-count-content" [class.is-disabled]="form.get('attendeeCount')?.disabled">
+          <label class="form-label">Number of attendees</label>
+          <p class="attendee-count-static" [class.is-disabled]="form.get('attendeeCount')?.disabled">1 Person</p>
+        </div>
       </div>
     }
 

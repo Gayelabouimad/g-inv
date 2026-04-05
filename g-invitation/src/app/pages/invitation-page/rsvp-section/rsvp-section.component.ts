@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Invitee } from '../../../models/invitation.models';
 
 @Component({
   selector: 'app-rsvp-section',
@@ -13,7 +14,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   },
 })
 export class RsvpSectionComponent implements OnInit {
-  @Input() invitee: any;
+  @Input() invitee: Invitee | null = null;
   @Input() deadlineText = '';
   @Input() maxMessageLength = 120;
   @Input() accentColor = '#d6c3a5';
@@ -56,13 +57,18 @@ export class RsvpSectionComponent implements OnInit {
     }
 
     if (attending === true) {
+      attendeeCountControl.enable({ emitEvent: false });
       attendeeCountControl.setValidators([Validators.required, Validators.min(1)]);
       if ((attendeeCountControl.value ?? 0) < 1) {
         attendeeCountControl.setValue(this.getMaxAttendeeCount());
       }
-    } else {
+    } else if (attending === false) {
+      attendeeCountControl.setValue(0, { emitEvent: false });
       attendeeCountControl.clearValidators();
-      attendeeCountControl.setValue(0);
+      attendeeCountControl.disable({ emitEvent: false });
+    } else {
+      attendeeCountControl.enable({ emitEvent: false });
+      attendeeCountControl.clearValidators();
     }
 
     attendeeCountControl.updateValueAndValidity();

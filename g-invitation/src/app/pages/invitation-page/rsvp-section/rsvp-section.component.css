@@ -41,6 +41,20 @@
   gap: 1rem;
 }
 
+.attendee-count-slot {
+  min-height: 98px;
+}
+
+.attendee-count-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.attendee-count-content.is-disabled {
+  opacity: 0.62;
+}
+
 .choice-button {
   height: 52px;
   padding: 1rem 1.5rem;
@@ -108,6 +122,23 @@
   font-family: inherit;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+}
+
+.attendee-count-static {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(216, 222, 228, 0.95);
+  background: #ffffff;
+  color: rgba(79, 86, 93, 0.95);
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  min-height: 20px;
+}
+
+.attendee-count-static.is-disabled {
+  background: #f5f7f9;
+  color: rgba(126, 134, 142, 0.95);
 }
 
 .form-select:focus,
