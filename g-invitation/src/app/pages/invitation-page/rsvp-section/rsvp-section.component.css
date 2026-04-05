@@ -1,3 +1,7 @@
+.rsvp-section {
+  gap: 0;
+}
+
 .deadline {
   font-size: 0.9rem;
   color: rgba(102, 110, 118, 0.8);
@@ -231,8 +235,8 @@
 
 .form-textarea {
   resize: vertical;
-  min-height: 100px;
-  max-height: 150px;
+  min-height: 60px;
+  max-height: 120px;
 }
 
 .char-count {
@@ -256,7 +260,7 @@
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: box-shadow 0.3s ease, filter 0.3s ease;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0 2rem 0;
 }
 
 .submit-button:hover:not(:disabled) {
@@ -267,6 +271,28 @@
 .submit-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(79, 86, 93, 0.2);
+  border-top-color: #4f565d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .error-message {

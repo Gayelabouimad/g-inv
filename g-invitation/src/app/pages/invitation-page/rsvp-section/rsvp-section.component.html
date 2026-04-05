@@ -18,7 +18,7 @@
           class="choice-button"
           [class.active]="form.get('attending')?.value === true"
           (click)="setAttending(true)"
-          [disabled]="submittingState()"
+          [disabled]="isSubmitting"
         >
           Yes, I'll be there ✓
         </button>
@@ -27,7 +27,7 @@
           class="choice-button"
           [class.active]="form.get('attending')?.value === false"
           (click)="setAttending(false)"
-          [disabled]="submittingState()"
+          [disabled]="isSubmitting"
         >
           Sorry, can't make it
         </button>
@@ -90,10 +90,13 @@
     <button
       type="submit"
       class="submit-button"
-      [disabled]="!form.valid || submittingState()"
+      [disabled]="!form.valid || isSubmitting"
     >
-      @if (submittingState()) {
-        Submitting...
+      @if (isSubmitting) {
+        <span class="loading-content">
+          <span class="spinner"></span>
+          <span>Submitting...</span>
+        </span>
       } @else {
         Submit RSVP
       }

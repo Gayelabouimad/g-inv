@@ -18,12 +18,12 @@ export class RsvpSectionComponent implements OnInit {
   @Input() deadlineText = '';
   @Input() maxMessageLength = 120;
   @Input() accentColor = '#d6c3a5';
+  @Input() isSubmitting = false;
   @Output() onRsvpSubmit = new EventEmitter<any>();
 
   private readonly fb = inject(FormBuilder);
   private readonly host = inject(ElementRef<HTMLElement>);
 
-  protected readonly submittingState = signal(false);
   protected readonly errorState = signal('');
   protected readonly attendeeMenuOpen = signal(false);
 

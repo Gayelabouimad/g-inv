@@ -123,6 +123,7 @@
                         [deadlineText]="event.rsvp.deadlineText"
                         [maxMessageLength]="event.rsvp.maxMessageLength"
                         [accentColor]="event.branding.accentColor"
+                        [isSubmitting]="isSubmitting()"
                         (onRsvpSubmit)="onRsvpSubmit($event)"
                       ></app-rsvp-section>
                     </div>
