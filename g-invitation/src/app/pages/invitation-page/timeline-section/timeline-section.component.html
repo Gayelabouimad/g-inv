@@ -1,4 +1,10 @@
 <section class="timeline-section">
+    <div class="section-header">
+        <h2 class="section-title">{{ title }}</h2>
+        @if (subtitle) {
+            <p class="section-description">{{ subtitle }}</p>
+        }
+    </div>
     <img [src]="image" [alt]="title" class="timeline-image" />
 </section>
 

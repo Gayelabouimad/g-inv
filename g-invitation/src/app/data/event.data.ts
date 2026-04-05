@@ -56,7 +56,7 @@ dateTimeImage: '/assets/date-time.svg',
     timeline: {
       enabled: true,
       title: 'Road to forever',
-      subtitle: 'Wedding day Timeline',
+      subtitle: 'Wedding Timeline',
       image: '/assets/timeline.png',
     },
     registry: {
@@ -64,7 +64,7 @@ dateTimeImage: '/assets/date-time.svg',
       title: 'Gift Registry',
       text: 'The greatest gift we could have is your presence. For those who wish, a wedding list will be available at',
       name: 'WHISH MONEY',
-      accountNumber: 'xxxxxxx',
+      accountNumber: '20998174',
     },
   },
   rsvp: {

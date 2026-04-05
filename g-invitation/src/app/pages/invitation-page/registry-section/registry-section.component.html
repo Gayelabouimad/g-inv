@@ -1,12 +1,14 @@
 <section class="registry-section">
   <div class="section-header">
     <h2 class="section-title">{{ title }}</h2>
+      @if (text) {
+          <p class="section-description">{{ text }}</p>
+      }
   </div>
 
-  <div class="registry-content">
-    <p class="registry-text">{{ text }}</p>
+  <div class="event-items">
 
-    <div class="registry-card">
+    <div class="event-item">
       <p class="registry-name">{{ name }}</p>
       <div class="account-number-container">
         <p class="registry-number">{{ accountNumber }}</p>
