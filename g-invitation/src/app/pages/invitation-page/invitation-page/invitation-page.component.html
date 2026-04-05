@@ -48,21 +48,18 @@
         <div class="slides-track" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
           @for (slide of slides(); track slide.key) {
             <section class="slide-page" [class.rsvp-slide]="slide.key === 'rsvp'">
-              <div class="slide-scroll">
+              <div class="slide-scroll" [class.intro-scroll]="slide.key === 'intro'">
                 @switch (slide.key) {
                   @case ('intro') {
-                    <div class="intro-slide">
-                      <div class="slide-card intro-card">
-                        <app-intro-section
-                          [coupleName]="event.couple.primaryNames"
-                          [quote]="event.quote"
-                          [quoteSource]="event.quoteSource"
-                          [families]="event.families"
-                          [introText]="event.introText"
-                          [dateTimeImage]="event.dateTimeImage || '/assets/date-time.svg'"
-                        ></app-intro-section>
-                      </div>
-                      <p class="swipe-hint"><- -> swipe to navigate</p>
+                    <div class="slide-card intro-card">
+                      <app-intro-section
+                        [coupleName]="event.couple.primaryNames"
+                        [quote]="event.quote"
+                        [quoteSource]="event.quoteSource"
+                        [families]="event.families"
+                        [introText]="event.introText"
+                        [dateTimeImage]="event.dateTimeImage || '/assets/date-time.svg'"
+                      ></app-intro-section>
                     </div>
                   }
 

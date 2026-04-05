@@ -44,6 +44,7 @@ body {
   --content-soft: rgba(75, 82, 90, 0.78);
 }
 
+.invitation-page .intro-section,
 .invitation-page .event-section,
 .invitation-page .registry-section,
 .invitation-page .rsvp-section,

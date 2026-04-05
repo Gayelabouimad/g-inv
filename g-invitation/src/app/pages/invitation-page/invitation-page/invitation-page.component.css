@@ -105,6 +105,11 @@
   box-sizing: border-box;
 }
 
+.slide-scroll.intro-scroll {
+  flex-direction: row;
+  gap: 0;
+}
+
 .slide-card {
   width: 100%;
   max-width: 650px;
@@ -129,10 +134,7 @@
 }
 
 .intro-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0.85rem 0;
+  padding: 0;
 }
 
 .slide-controls {
@@ -214,22 +216,18 @@
   flex-shrink: 0;
 }
 
-.intro-slide {
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem 1rem;
-  text-align: center;
-  box-sizing: border-box;
-  gap: 0;
-}
-
 @media (max-width: 768px) {
-  .intro-slide {
-    padding: 1.5rem 1rem 0.75rem;
+  .slide-page.rsvp-slide .slide-scroll {
+    align-items: center;
+  }
+
+  .slide-card,
+  .slide-page.rsvp-slide .slide-card.scrollable-card {
+    height: 70%;
+    max-height: 70%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .slide-card {
@@ -238,10 +236,6 @@
 }
 
 @media (max-width: 480px) {
-  .intro-slide {
-    padding: 1.25rem 0.75rem 0.5rem;
-    justify-content: center;
-  }
 
   .dot {
     width: 6px;
