@@ -6,9 +6,9 @@ export const EVENT_CONFIG: EventConfig = {
     titleLine: 'Are getting married',
     primaryNames: 'Elia & Gayel',
   },
-  date: '2026-08-16T17:30:00+03:00',
-  countdownTarget: '2026-08-16T17:30:00+03:00',
-dateTimeImage: '/assets/date-time.svg',
+  date: '2026-06-18T17:30:00+03:00',
+  countdownTarget: '2026-06-18T17:30:00+03:00',
+  dateTimeImage: '/assets/date-time.svg',
   quote: 'Therefore what God has joined together, let no one separate.',
   quoteSource: 'Mark 10:9',
   families: [

@@ -13,12 +13,12 @@ export const INVITEES: Invitee[] = [
   },
   {
     id: 'guest_003',
-    guestNames: ['Elissa Keyrouz'],
+    guestNames: ['Myriam Chahine', 'Wissam Zoghaib'],
     numberOfPeople: 2,
   },
   {
     id: 'guest_004',
-    guestNames: ['Myriam Chahine', 'Wissam Zoghaib'],
+    guestNames: ['Elissa Keyrouz'],
     numberOfPeople: 2,
   },
 ];
