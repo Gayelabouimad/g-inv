@@ -1,3 +1,7 @@
+html {
+  scrollbar-gutter: stable;
+}
+
 :host {
   --svg-frame-image: none;
   --svg-frame-color: #d7dde3;
@@ -223,8 +227,8 @@
 
   .slide-card,
   .slide-page.rsvp-slide .slide-card.scrollable-card {
-    height: 70%;
-    max-height: 70%;
+    height: 80%;
+    max-height: 80%;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
