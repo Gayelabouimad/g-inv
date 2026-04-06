@@ -131,7 +131,7 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const invitee = INVITEES.find((item) => item.id === guestId) ?? null;
+    const invitee = INVITEES.find((item: Invitee) => item.id === guestId) ?? null;
     if (!invitee) {
       this.router.navigateByUrl('/not-found');
       return;

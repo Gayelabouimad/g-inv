@@ -65,10 +65,10 @@
 }
 
 .date-time-image {
-  width: min(360px, 88%);
+  width: min(300px, 80%);
   margin: 0 auto;
   display: block;
-  max-height: 130px;
+  max-height: 100px;
 }
 
 .couple-name {

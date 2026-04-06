@@ -4,7 +4,7 @@ export interface Invitee {
   numberOfPeople: number;
 }
 
-export const INVITEES_DATA: Invitee[] = [
+export const INVITEES: Invitee[] = [
   {
     id: 'Imad_Itab_Abou_Imad',
     guestNames: ['Imad', 'Itab Abou Imad'],

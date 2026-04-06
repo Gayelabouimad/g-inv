@@ -14,7 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DeleteRsvpConfirmDialogComponent } from './delete-rsvp-confirm-dialog/delete-rsvp-confirm-dialog.component';
 import { EVENT_CONFIG } from '../../data/event.data';
-import { INVITEES } from '../../data/invitees.data';
+import { INVITEES, Invitee } from '../../data/invitees.data';
 import { RSVPSubmission } from '../../models/invitation.models';
 import { RsvpService } from '../../services/rsvp.service';
 
@@ -60,7 +60,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     // Get all items (submitted + non-submitted)
     const allItems = [
       ...allRsvps.map((r) => ({ ...r, isResponded: true } as AdminRsvpRow)),
-      ...INVITEES.filter(inv => !submittedIds.has(inv.id)).map(inv => ({
+      ...INVITEES.filter((inv: Invitee) => !submittedIds.has(inv.id)).map((inv: Invitee) => ({
         inviteeId: inv.id,
         eventSlug: this.event.eventSlug,
         guestNames: inv.guestNames,
@@ -110,7 +110,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
 
   protected readonly pendingCount = computed(() => {
     const submittedIds = new Set(this.rsvps().map(r => r.inviteeId));
-    return INVITEES.filter(inv => !submittedIds.has(inv.id)).length;
+    return INVITEES.filter((inv: Invitee) => !submittedIds.has(inv.id)).length;
   });
 
   private readonly rsvpService = inject(RsvpService);

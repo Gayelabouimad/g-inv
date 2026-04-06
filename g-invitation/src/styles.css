@@ -85,11 +85,11 @@ body {
 
 .invitation-page .section-title {
   font-family: var(--font-display, cursive), cursive;
-  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.1;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.3rem;
   text-wrap: balance;
   color: #495058;
 }
@@ -196,13 +196,13 @@ body {
 
 @media (max-width: 768px) {
   .invitation-page {
-    --slide-padding: 1rem;
-    --slide-gap: 0.9rem;
+    --slide-padding: 0.7rem;
+    --slide-gap: 0.5rem;
   }
 
   .event-item {
-    padding: 0.9rem;
-    column-gap: 0.7rem;
+    padding: 0.6rem;
+    column-gap: 0.6rem;
   }
 }
 

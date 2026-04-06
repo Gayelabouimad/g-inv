@@ -1,12 +1,21 @@
 .timeline-section {
   gap: 0rem;
+  justify-content: center;
+}
+
+.section-header {
+  margin-bottom: 0.5rem;
 }
 
 .timeline-image {
-  height: 70%;
+  width: 90%;
+  height: auto;
+  max-height: 75%;
   display: block;
   margin: 0 auto;
   opacity: 0.95;
   transition: opacity 0.3s ease;
+  object-fit: contain;
+  flex-shrink: 1;
 }
 
