@@ -7,8 +7,6 @@
   width: min(400px, 100%);
 }
 
-
-
 @media (hover: hover) and (pointer: fine) {
   .map-button:hover {
     background: rgba(255, 255, 255, 0.88);

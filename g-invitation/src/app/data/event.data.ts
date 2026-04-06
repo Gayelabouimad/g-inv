@@ -35,6 +35,12 @@ export const EVENT_CONFIG: EventConfig = {
           time: 'Starting 2:30 pm',
           mapUrl: 'https://maps.app.goo.gl/go4kGfbhJdwhY7Qm9',
         },
+        {
+          label: 'Ceremony and Dinner',
+          time: '6:00 pm',
+          locationName: 'Domaine de Bherdok - Beit Chabab',
+          mapUrl: 'https://maps.app.goo.gl/Smwcp9TGd1uvfkpz8',
+        }
       ],
     },
     ceremony: {
@@ -46,7 +52,7 @@ export const EVENT_CONFIG: EventConfig = {
       mapUrl: 'https://maps.google.com',
     },
     reception: {
-      enabled: true,
+      enabled: false,
       title: 'Ceremony and Dinner',
       dateText: 'Saturday, July 18, 2026',
       time: '7:15 pm',

@@ -117,8 +117,8 @@ html {
 .slide-card {
   width: 100%;
   max-width: 800px;
-  height: 92%;
-  max-height: 92%;
+  height: 90%;
+  max-height: 90%;
   overflow: hidden;
   border-radius: 20px;
   color: var(--card-text);
@@ -262,7 +262,7 @@ html {
   }
 
   .slide-scroll {
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
   .slide-card {
