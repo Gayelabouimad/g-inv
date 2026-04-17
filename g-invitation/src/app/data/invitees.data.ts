@@ -461,22 +461,22 @@ export const INVITEES: Invitee[] = [
     numberOfPeople: 1,
   },
   {
-    id: 'PLACEHOLDER_ANTHONY',
+    id: 'PLACEHOLDER_ANTHONY 1',
     guestNames: ['PLACEHOLDER ANTHONY'],
     numberOfPeople: 1,
   },
   {
-    id: 'PLACEHOLDER_ANTHONY',
+    id: 'PLACEHOLDER_ANTHONY 2',
     guestNames: ['PLACEHOLDER ANTHONY'],
     numberOfPeople: 1,
   },
   {
-    id: 'PLACEHOLDER_ANTHONY',
+    id: 'PLACEHOLDER_ANTHONY 3',
     guestNames: ['PLACEHOLDER ANTHONY'],
     numberOfPeople: 1,
   },
   {
-    id: 'PLACEHOLDER_ANTHONY',
+    id: 'PLACEHOLDER_ANTHONY 4',
     guestNames: ['PLACEHOLDER ANTHONY'],
     numberOfPeople: 1,
   },

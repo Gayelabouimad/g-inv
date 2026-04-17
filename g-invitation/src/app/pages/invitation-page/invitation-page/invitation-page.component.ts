@@ -1,10 +1,9 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, computed, effect, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EVENT_CONFIG } from '../../../data/event.data';
-import { INVITEES } from '../../../data/invitees.data';
-import { Invitee, RSVPSubmission } from '../../../models/invitation.models';
-import { RsvpService } from '../../../services/rsvp.service';
+import { InviteeRecord } from '../../../models/invitation.models';
+import { InviteeService } from '../../../services/invitee.service';
 import { EventSectionComponent } from '../event-section/event-section.component';
 import { IntroSectionComponent } from '../intro-section/intro-section.component';
 import { OpeningScreenComponent } from '../opening-screen/opening-screen.component';
@@ -46,14 +45,14 @@ interface InvitationSlide {
 })
 export class InvitationPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly rsvpService = inject(RsvpService);
+  private readonly inviteeService = inject(InviteeService);
   private readonly platformId = inject(PLATFORM_ID);
 
   protected readonly event = EVENT_CONFIG;
-  protected readonly invitee = signal<Invitee | null>(null);
+  protected readonly invitee = signal<InviteeRecord | null>(null);
   protected readonly showOpening = signal(true);
   protected readonly rsvpSubmitted = signal(false);
-  protected readonly submittedResponse = signal<RSVPSubmission | null>(null);
+  protected readonly submittedResponse = signal<InviteeRecord | null>(null);
   protected readonly isSubmitting = signal(false);
   protected readonly submitError = signal('');
   protected readonly bgMusicPlaying = signal(false);
@@ -125,18 +124,30 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Look up the invitee by guestId
-    const invitee = INVITEES.find((item: Invitee) => item.id === guestId) ?? null;
-    if (!invitee) {
-      // Invalid guestId - set invitee to null to show a generic/error state
-      this.invitee.set(null);
-      return;
-    }
-
-    this.invitee.set(invitee);
-
+    // Load invitee from Firestore
     if (isPlatformBrowser(this.platformId)) {
-      this.loadExistingResponse(invitee.id);
+      this.loadInvitee(guestId);
+    }
+  }
+
+  private async loadInvitee(guestId: string): Promise<void> {
+    try {
+      const invitee = await this.inviteeService.getInvitee(guestId, this.event.eventSlug);
+      if (!invitee) {
+        this.invitee.set(null);
+        return;
+      }
+
+      this.invitee.set(invitee);
+
+      // Check if they've already submitted RSVP
+      if (invitee.attending !== undefined && invitee.attending !== null) {
+        this.submittedResponse.set(invitee);
+        this.rsvpSubmitted.set(true);
+      }
+    } catch (error) {
+      console.error('Error loading invitee:', error);
+      this.invitee.set(null);
     }
   }
 
@@ -144,18 +155,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     if (this.timer) {
       clearInterval(this.timer);
       this.timer = null;
-    }
-  }
-
-  private async loadExistingResponse(inviteeId: string): Promise<void> {
-    try {
-      const existingResponse = await this.rsvpService.read(inviteeId, this.event.eventSlug);
-      if (existingResponse) {
-        this.submittedResponse.set(existingResponse);
-        this.rsvpSubmitted.set(true);
-      }
-    } catch (error) {
-      console.error('Error loading existing RSVP response:', error);
     }
   }
 
@@ -334,22 +333,16 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     this.submitError.set('');
 
     try {
-      const payload: RSVPSubmission = {
-        inviteeId: invitee.id,
-        eventSlug: this.event.eventSlug,
-        guestNames: invitee.guestNames,
-        guestNamesDisplay: invitee.guestNames.join(' & '),
-        allowedPeople: invitee.numberOfPeople,
+      await this.inviteeService.submitRsvp(invitee.id, this.event.eventSlug, {
         attending: formData.attending,
         attendeeCount: formData.attendeeCount,
         message: formData.message,
-        submittedFromRoute: invitee.id,
-      };
+      });
 
-      await this.rsvpService.submit(payload);
-
-      const updated = await this.rsvpService.read(invitee.id, this.event.eventSlug);
+      // Reload the invitee to get the updated RSVP data
+      const updated = await this.inviteeService.getInvitee(invitee.id, this.event.eventSlug);
       if (updated) {
+        this.invitee.set(updated);
         this.submittedResponse.set(updated);
       }
       this.rsvpSubmitted.set(true);

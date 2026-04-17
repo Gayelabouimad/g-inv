@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Invitee } from '../../../models/invitation.models';
+import { InviteeRecord } from '../../../models/invitation.models';
 
 @Component({
   selector: 'app-rsvp-section',
@@ -14,7 +14,7 @@ import { Invitee } from '../../../models/invitation.models';
   },
 })
 export class RsvpSectionComponent implements OnInit {
-  @Input() invitee: Invitee | null = null;
+  @Input() invitee: InviteeRecord | null = null;
   @Input() deadlineText = '';
   @Input() maxMessageLength = 120;
   @Input() accentColor = '#d6c3a5';

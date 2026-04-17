@@ -12,13 +12,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AddInvitationDialogComponent } from './add-invitation-dialog/add-invitation-dialog.component';
 import { DeleteRsvpConfirmDialogComponent } from './delete-rsvp-confirm-dialog/delete-rsvp-confirm-dialog.component';
 import { EVENT_CONFIG } from '../../data/event.data';
-import { INVITEES, Invitee } from '../../data/invitees.data';
-import { RSVPSubmission } from '../../models/invitation.models';
-import { RsvpService } from '../../services/rsvp.service';
+import { INVITEES } from '../../data/invitees.data';
+import { InviteeRecord } from '../../models/invitation.models';
+import { InviteeService } from '../../services/invitee.service';
 
-type AdminRsvpRow = RSVPSubmission & { isResponded: boolean };
+type AdminRsvpRow = InviteeRecord & { isResponded: boolean; guestNamesDisplay: string };
 
 
 @Component({
@@ -44,36 +45,26 @@ type AdminRsvpRow = RSVPSubmission & { isResponded: boolean };
 export class AdminPanelComponent implements OnInit, OnDestroy {
   protected readonly event = EVENT_CONFIG;
   protected readonly loading = signal(false);
-  protected readonly rsvps = signal<RSVPSubmission[]>([]);
+  protected readonly uploadingInvitees = signal(false);
+  protected readonly invitees = signal<InviteeRecord[]>([]);
   protected readonly filter = signal<string>('');
 
   displayedColumns: string[] = ['guestNames', 'attending', 'attendees', 'message', 'submitted', 'updated', 'invitation', 'delete'];
   lastLoaded = signal('Never');
-  totalInvitations = INVITEES.length;
+
+  protected readonly totalInvitations = computed(() => this.invitees().length);
 
   // Computed signals to prevent unnecessary re-renders
   protected readonly filteredRsvps = computed(() => {
     const filterValue = this.filter();
-    const allRsvps = this.rsvps();
-    const submittedIds = new Set(allRsvps.map(r => r.inviteeId));
+    const allInvitees = this.invitees();
 
-    // Get all items (submitted + non-submitted)
-    const allItems = [
-      ...allRsvps.map((r) => ({ ...r, isResponded: true } as AdminRsvpRow)),
-      ...INVITEES.filter((inv: Invitee) => !submittedIds.has(inv.id)).map((inv: Invitee) => ({
-        inviteeId: inv.id,
-        eventSlug: this.event.eventSlug,
-        guestNames: inv.guestNames,
-        guestNamesDisplay: inv.guestNames.join(' & '),
-        allowedPeople: inv.numberOfPeople,
-        attending: false,
-        attendeeCount: 0,
-        message: '',
-        submittedFromRoute: inv.id,
-        isResponded: false,
-      } as AdminRsvpRow),
-      )
-    ];
+    // Transform all invitees to admin rows
+    const allItems = allInvitees.map((inv) => ({
+      ...inv,
+      isResponded: inv.attending !== undefined && inv.attending !== null,
+      guestNamesDisplay: inv.guestNames.join(' & '),
+    } as AdminRsvpRow));
 
     // Apply filters
     if (!filterValue) {
@@ -91,17 +82,17 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     return allItems;
   });
 
-  protected readonly confirmedCount = computed(() => 
-    this.rsvps().filter(r => r.attending).length
+  protected readonly confirmedCount = computed(() =>
+    this.invitees().filter(r => r.attending === true).length
   );
 
-  protected readonly declinedCount = computed(() => 
-    this.rsvps().filter(r => !r.attending).length
+  protected readonly declinedCount = computed(() =>
+    this.invitees().filter(r => r.attending === false).length
   );
 
-  protected readonly totalAttendees = computed(() => 
-    this.rsvps()
-      .filter(r => r.attending)
+  protected readonly totalAttendees = computed(() =>
+    this.invitees()
+      .filter(r => r.attending === true)
       .reduce((sum, r) => {
         const count = Number(r.attendeeCount);
         return sum + (Number.isFinite(count) ? count : 0);
@@ -109,18 +100,18 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   );
 
   protected readonly totalInviteesCount = computed(() =>
-    INVITEES.reduce((sum, inv: Invitee) => sum + inv.numberOfPeople, 0)
+    this.invitees().reduce((sum, inv) => sum + inv.numberOfPeople, 0)
   );
 
-  private readonly rsvpService = inject(RsvpService);
+  private readonly inviteeService = inject(InviteeService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit(): void {
-    // Only load RSVPs in the browser, not on the server
+    // Only load data in the browser, not on the server
     if (isPlatformBrowser(this.platformId)) {
-      this.loadRsvps();
+      this.loadInvitees();
     }
   }
 
@@ -128,33 +119,20 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     // Cleanup if needed
   }
 
-  async loadRsvps(): Promise<void> {
+  async loadInvitees(): Promise<void> {
     this.loading.set(true);
     try {
-      const allRsvps: RSVPSubmission[] = [];
-      
-      // Load all RSVPs for this event
-      for (const invitee of INVITEES) {
-        const rsvp = await this.rsvpService.read(invitee.id, this.event.eventSlug);
-        if (rsvp) {
-          allRsvps.push(rsvp);
-        }
-      }
-
-      // Sort by most recent update
-      allRsvps.sort((a, b) => {
-        const dateA = new Date(a.updatedAt || a.createdAt || '').getTime();
-        const dateB = new Date(b.updatedAt || b.createdAt || '').getTime();
-        return dateB - dateA;
-      });
-
-      this.rsvps.set(allRsvps);
+      const invitees = await this.inviteeService.getAllInvitees(this.event.eventSlug);
+      this.invitees.set(invitees);
       this.lastLoaded.set(new Date().toLocaleTimeString());
+      console.log(`Loaded ${invitees.length} invitees from Firestore`);
     } catch (error) {
-      console.error('Error loading RSVPs:', error);
+      console.error('Error loading invitees:', error);
       if (isPlatformBrowser(this.platformId)) {
-        this.snackBar.open('Failed to load RSVPs. Check console for details.', 'Close', { duration: 5000 });
+        this.snackBar.open('Failed to load invitees from Firestore. Please check your connection.', 'Close', { duration: 5000 });
       }
+      // No fallback - app requires Firestore data
+      this.invitees.set([]);
     } finally {
       this.loading.set(false);
     }
@@ -188,16 +166,16 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
       data: { guestNamesDisplay: item.guestNamesDisplay },
       disableClose: true,
     });
-    
+
     dialogRef.afterClosed().subscribe(async (confirmed) => {
       if (!confirmed) {
         return;
       }
 
       try {
-        await this.rsvpService.delete(item.inviteeId, this.event.eventSlug);
-        // Reload from source of truth to keep statistics and table in sync.
-        await this.loadRsvps();
+        await this.inviteeService.deleteRsvp(item.id, this.event.eventSlug);
+        // Reload from source of truth to keep statistics and table in sync
+        await this.loadInvitees();
         this.snackBar.open(`Deleted RSVP for ${item.guestNamesDisplay}`, 'Close', { duration: 3000 });
       } catch (error) {
         console.error('Error deleting RSVP:', error);
@@ -209,7 +187,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   }
 
   protected trackByInviteeId(index: number, item: AdminRsvpRow): string {
-    return item.inviteeId;
+    return item.id;
   }
 
   protected exportToCSV(): void {
@@ -238,6 +216,62 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  protected async uploadInvitees(): Promise<void> {
+    if (this.uploadingInvitees()) {
+      return;
+    }
+
+    this.uploadingInvitees.set(true);
+    try {
+      // Convert local INVITEES to InviteeRecord format
+      const inviteesToUpload = INVITEES.map(inv => ({
+        id: inv.id,
+        eventSlug: this.event.eventSlug,
+        guestNames: inv.guestNames,
+        numberOfPeople: inv.numberOfPeople,
+      } as InviteeRecord));
+
+      await this.inviteeService.uploadInvitees(inviteesToUpload, this.event.eventSlug);
+      if (isPlatformBrowser(this.platformId)) {
+        this.snackBar.open(`Successfully uploaded ${inviteesToUpload.length} invitees to Firestore!`, 'Close', { duration: 5000 });
+      }
+      // Reload invitees from Firestore after upload
+      await this.loadInvitees();
+    } catch (error) {
+      console.error('Error uploading invitees:', error);
+      if (isPlatformBrowser(this.platformId)) {
+        this.snackBar.open('Failed to upload invitees. Check console for details.', 'Close', { duration: 5000 });
+      }
+    } finally {
+      this.uploadingInvitees.set(false);
+    }
+  }
+
+  protected async addInvitation(): Promise<void> {
+    const dialogRef = this.dialog.open(AddInvitationDialogComponent, {
+      width: '500px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) {
+        return;
+      }
+
+      try {
+        await this.inviteeService.createInvitee(result, this.event.eventSlug);
+        this.snackBar.open(`Successfully added invitation for ${result.guestNames.join(' & ')}`, 'Close', { duration: 3000 });
+        // Reload invitees from Firestore
+        await this.loadInvitees();
+      } catch (error: any) {
+        console.error('Error adding invitation:', error);
+        if (isPlatformBrowser(this.platformId)) {
+          this.snackBar.open(error.message || 'Failed to add invitation. Please try again.', 'Close', { duration: 5000 });
+        }
+      }
+    });
   }
 }
 

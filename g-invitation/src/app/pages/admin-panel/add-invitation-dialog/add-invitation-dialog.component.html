@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Add New Invitation</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Guest Name 1 (Required)</mat-label>
+        <input matInput formControlName="guestName1" placeholder="e.g., John Doe" />
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Guest Name 2 (Optional)</mat-label>
+        <input matInput formControlName="guestName2" placeholder="e.g., Jane Doe" />
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Guest Name 3 (Optional)</mat-label>
+        <input matInput formControlName="guestName3" placeholder="e.g., Child Doe" />
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Number of People Allowed</mat-label>
+        <input matInput type="number" formControlName="numberOfPeople" min="1" />
+        <mat-icon matPrefix>group</mat-icon>
+      </mat-form-field>
+
+      <p class="hint-text">
+        <mat-icon>info</mat-icon>
+        The invitation ID will be auto-generated from the guest names.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      <mat-icon>add</mat-icon>
+      Add Invitation
+    </button>
+  </mat-dialog-actions>
+</form>
+

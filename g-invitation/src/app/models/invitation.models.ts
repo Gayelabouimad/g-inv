@@ -94,23 +94,23 @@ export interface EventConfig {
   branding: Branding;
 }
 
-export interface Invitee {
+/**
+ * Unified Invitee Record that contains both invitation info and RSVP response
+ * - Core fields (id, eventSlug, guestNames, numberOfPeople) are always present
+ * - RSVP fields (attending, attendeeCount, message, etc.) are optional and only set when user responds
+ */
+export interface InviteeRecord {
   id: string;
-  guestNames: string[];
-  numberOfPeople: number;
-}
-
-export interface RSVPSubmission {
-  inviteeId: string;
   eventSlug: string;
   guestNames: string[];
-  guestNamesDisplay: string;
-  allowedPeople: number;
-  attending: boolean;
-  attendeeCount: number;
-  message: string;
-  submittedFromRoute: string;
+  numberOfPeople: number;
+
+  // RSVP fields - optional, only present if user has responded
+  attending?: boolean;
+  attendeeCount?: number;
+  message?: string;
   createdAt?: string;
   updatedAt?: string;
 }
+
 

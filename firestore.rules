@@ -5,7 +5,7 @@ service cloud.firestore {
     // Allow read and write for any RSVP-prefixed collection
     // Works with: rsvp-g-invitation, rsvp-wedding-2024, etc.
     match /{collectionName}/{documentId=**} {
-      allow read, write: if collectionName.matches('rsvp-.*');
+      allow read, write: if collectionName.matches('rsvp-.*') || collectionName.matches('invitees-.*');
     }
 
     // Block all other access by default
