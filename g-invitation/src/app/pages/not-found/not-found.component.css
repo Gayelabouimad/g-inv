@@ -4,9 +4,11 @@
   place-items: center;
   background: #111;
   color: #fff;
+  text-align: center;
 }
 
-a {
-  color: #d6c3a5;
+p {
+  color: #999;
+  margin-top: 1rem;
 }
 

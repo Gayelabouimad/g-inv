@@ -46,7 +46,6 @@ interface InvitationSlide {
 })
 export class InvitationPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly rsvpService = inject(RsvpService);
   private readonly platformId = inject(PLATFORM_ID);
 
@@ -118,22 +117,19 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const eventSlug = this.route.snapshot.paramMap.get('eventSlug');
     const guestId = this.route.snapshot.paramMap.get('guestId');
 
-    if (!eventSlug && !guestId) {
-      this.router.navigateByUrl(`/${this.event.eventSlug}/${INVITEES[0].id}`);
+    // If no guestId provided (home page), show generic invitation
+    if (!guestId) {
+      this.invitee.set(null);
       return;
     }
 
-    if (eventSlug !== this.event.eventSlug || !guestId) {
-      this.router.navigateByUrl('/not-found');
-      return;
-    }
-
+    // Look up the invitee by guestId
     const invitee = INVITEES.find((item: Invitee) => item.id === guestId) ?? null;
     if (!invitee) {
-      this.router.navigateByUrl('/not-found');
+      // Invalid guestId - set invitee to null to show a generic/error state
+      this.invitee.set(null);
       return;
     }
 

@@ -70,12 +70,12 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-pending">
+    <mat-card class="stat-card stat-card-info">
       <mat-card-content>
         <div class="stat-header">
-          <span class="stat-icon">⏳</span>
-          <h3 class="mat-body-small">No Response</h3>
-            <p class="stat-value">{{ pendingCount() }}</p>
+          <span class="stat-icon">🎫</span>
+          <h3 class="mat-body-small">Total Invitees</h3>
+            <p class="stat-value">{{ totalInviteesCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
@@ -90,7 +90,7 @@
           <mat-option value="">All Responses ({{ totalInvitations }})</mat-option>
           <mat-option value="attending">Attending ({{ confirmedCount() }})</mat-option>
           <mat-option value="notAttending">Not Attending ({{ declinedCount() }})</mat-option>
-          <mat-option value="pending">No Response ({{ pendingCount() }})</mat-option>
+          <mat-option value="pending">No Response</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-card-content>

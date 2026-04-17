@@ -108,10 +108,9 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
       }, 0)
   );
 
-  protected readonly pendingCount = computed(() => {
-    const submittedIds = new Set(this.rsvps().map(r => r.inviteeId));
-    return INVITEES.filter((inv: Invitee) => !submittedIds.has(inv.id)).length;
-  });
+  protected readonly totalInviteesCount = computed(() =>
+    INVITEES.reduce((sum, inv: Invitee) => sum + inv.numberOfPeople, 0)
+  );
 
   private readonly rsvpService = inject(RsvpService);
   private readonly dialog = inject(MatDialog);
@@ -172,7 +171,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   }
 
   protected getInvitationLink(inviteeId: string): string {
-    return `/${this.event.eventSlug}/${inviteeId}`;
+    return `/${inviteeId}`;
   }
 
   protected filterStatus(event: MatSelectChange): void {
