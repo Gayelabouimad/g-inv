@@ -167,6 +167,23 @@
   background-color: rgba(255, 152, 0, 0.1);
 }
 
+.invitation-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.invitation-actions button {
+  flex-shrink: 0;
+  min-width: 40px;
+}
+
+.invitation-actions button mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
 .loading-state {
   display: flex;
   flex-direction: column;

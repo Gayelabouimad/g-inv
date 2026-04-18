@@ -102,6 +102,7 @@ export class InviteeService {
           id: invitee.id,
           eventSlug: eventSlug,
           guestNames: invitee.guestNames,
+          guestNamesDisplay: invitee.guestNames.join(' & '),
           numberOfPeople: invitee.numberOfPeople,
         }, { merge: true }); // Use merge to not overwrite existing RSVP data
       }
@@ -131,6 +132,7 @@ export class InviteeService {
       id: invitee.id,
       eventSlug: eventSlug,
       guestNames: invitee.guestNames,
+      guestNamesDisplay: invitee.guestNames.join(' & '),
       numberOfPeople: invitee.numberOfPeople,
     });
 
@@ -152,23 +154,26 @@ export class InviteeService {
     const now = new Date().toISOString();
     const existing = await getDoc(docRef);
 
-    const updateData: Partial<InviteeRecord> = {
-      attending: rsvpData.attending,
-      attendeeCount: rsvpData.attending ? rsvpData.attendeeCount : 0,
-      message: rsvpData.message || '',
-      updatedAt: now,
-    };
-
-    if (existing.exists()) {
-      await updateDoc(docRef, updateData);
-    } else {
+    if (!existing.exists()) {
       // If document doesn't exist, we need to create it with full data
       // This shouldn't happen if invitees are pre-loaded, but handle it anyway
       throw new Error(`Invitee ${inviteeId} not found in database`);
     }
 
+    const existingData = existing.data() as InviteeRecord;
+
+    const updateData = {
+      attending: rsvpData.attending,
+      attendeeCount: rsvpData.attending ? rsvpData.attendeeCount : 0,
+      message: rsvpData.message || '',
+      updatedAt: now,
+      guestNamesDisplay: existingData.guestNames.join(' & '), // Ensure this is set for email notifications
+    };
+
+    await updateDoc(docRef, updateData);
+
     // Set createdAt only on first submission
-    if (!existing.data()?.['createdAt']) {
+    if (!existingData?.createdAt) {
       await updateDoc(docRef, { createdAt: now });
     }
   }

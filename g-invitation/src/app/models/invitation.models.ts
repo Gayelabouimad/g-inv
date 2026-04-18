@@ -103,6 +103,7 @@ export interface InviteeRecord {
   id: string;
   eventSlug: string;
   guestNames: string[];
+  guestNamesDisplay: string; // Computed field: guestNames.join(' & ')
   numberOfPeople: number;
 
   // RSVP fields - optional, only present if user has responded

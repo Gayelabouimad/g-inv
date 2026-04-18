@@ -63,7 +63,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     const allItems = allInvitees.map((inv) => ({
       ...inv,
       isResponded: inv.attending !== undefined && inv.attending !== null,
-      guestNamesDisplay: inv.guestNames.join(' & '),
+      guestNamesDisplay: inv.guestNamesDisplay || inv.guestNames.join(' & '), // Use stored value or compute it
     } as AdminRsvpRow));
 
     // Apply filters
@@ -152,6 +152,29 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     return `/${inviteeId}`;
   }
 
+  protected openInvitationPage(inviteeId: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const url = `${window.location.origin}/${inviteeId}`;
+    window.open(url, '_blank');
+  }
+
+  protected copyInvitationLink(inviteeId: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const fullUrl = `https://www.elia-and-gayel.com/${inviteeId}`;
+
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      this.snackBar.open('Invitation link copied to clipboard!', 'Close', { duration: 2000 });
+    }).catch((error) => {
+      console.error('Failed to copy link:', error);
+      this.snackBar.open('Failed to copy link. Please try again.', 'Close', { duration: 3000 });
+    });
+  }
+
   protected filterStatus(event: MatSelectChange): void {
     this.filter.set((event.value as string) ?? '');
   }
@@ -230,6 +253,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
         id: inv.id,
         eventSlug: this.event.eventSlug,
         guestNames: inv.guestNames,
+        guestNamesDisplay: inv.guestNames.join(' & '),
         numberOfPeople: inv.numberOfPeople,
       } as InviteeRecord));
 
