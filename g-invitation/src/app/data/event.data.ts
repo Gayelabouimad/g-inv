@@ -33,7 +33,7 @@ export const EVENT_CONFIG: EventConfig = {
           label: "Groom's Place",
           locationName: 'Jdeideh',
           time: 'Starting 2:30 pm',
-          mapUrl: 'https://maps.app.goo.gl/go4kGfbhJdwhY7Qm9',
+          mapUrl: 'https://maps.app.goo.gl/xSZwmNv7ryU4sdcP9',
         },
         {
           label: 'Ceremony and Dinner',

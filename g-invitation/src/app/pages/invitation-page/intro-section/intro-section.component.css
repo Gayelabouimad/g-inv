@@ -1,3 +1,42 @@
+@media (min-width: 768px) {
+  :host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .intro-section {
+    gap: 5rem !important;
+  }
+
+  .quote-text {
+    font-size: 1.44rem !important;
+  }
+
+  .quote-source {
+    font-size: 1rem !important;
+  }
+
+  .family-name {
+    font-size: 1rem !important;
+    max-width: 13rem !important;
+  }
+
+  .intro-text {
+    font-size: 1.25rem !important;
+  }
+
+  .couple-name {
+    font-size: 3.5rem !important;
+
+  }
+
+  .date-time-image {
+    width: 30rem !important;
+    max-height: 130px !important;
+  }
+
+}
+
 .intro-section {
   padding: 1rem 1.25rem 1.25rem;
   text-align: center;
