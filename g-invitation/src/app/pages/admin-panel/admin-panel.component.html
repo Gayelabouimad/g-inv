@@ -136,7 +136,13 @@
             <ng-container matColumnDef="attendees">
               <th mat-header-cell *matHeaderCellDef>Attendees</th>
               <td mat-cell *matCellDef="let item">
-                {{ item.isResponded && item.attending ? item.attendeeCount : '—' }}
+                @if (item.isResponded && item.attending) {
+                  {{ item.attendeeCount }}/{{ item.numberOfPeople }}
+                } @else if (!item.isResponded) {
+                  0/{{ item.numberOfPeople }}
+                } @else {
+                  —
+                }
               </td>
             </ng-container>
 

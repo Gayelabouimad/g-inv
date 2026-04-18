@@ -17,5 +17,15 @@
   transition: opacity 0.3s ease;
   object-fit: contain;
   flex-shrink: 1;
+  color: rgb(73, 80, 88);
+  filter: brightness(0) saturate(100%) invert(31%) sepia(6%) saturate(782%) hue-rotate(169deg) brightness(95%) contrast(89%);
+}
+
+@media (min-width: 769px) {
+  .timeline-image {
+    pointer-events: none;
+    cursor: default;
+    max-height: 50%;
+  }
 }
 
