@@ -75,7 +75,7 @@ export const EVENT_CONFIG: EventConfig = {
   },
   rsvp: {
     enabled: true,
-    deadlineText: 'Confirmation before July 1, 2026',
+    deadlineText: 'Confirmation before June 1, 2026',
     maxMessageLength: 120,
   },
   branding: {
