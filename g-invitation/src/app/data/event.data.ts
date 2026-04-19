@@ -6,8 +6,8 @@ export const EVENT_CONFIG: EventConfig = {
     titleLine: 'Are getting married',
     primaryNames: 'Elia & Gayel',
   },
-  date: '2026-06-18T17:30:00+03:00',
-  countdownTarget: '2026-06-18T17:30:00+03:00',
+  date: '2026-07-18T17:30:00+03:00',
+  countdownTarget: '2026-07-18T17:30:00+03:00',
   dateTimeImage: '/assets/date-time.svg',
   quote: 'Therefore what God has joined together, let no one separate.',
   quoteSource: 'Mark 10:9',
@@ -75,7 +75,7 @@ export const EVENT_CONFIG: EventConfig = {
   },
   rsvp: {
     enabled: true,
-    deadlineText: 'Confirmation before June 1, 2026',
+    deadlineText: 'Confirmation before July 1, 2026',
     maxMessageLength: 120,
   },
   branding: {
