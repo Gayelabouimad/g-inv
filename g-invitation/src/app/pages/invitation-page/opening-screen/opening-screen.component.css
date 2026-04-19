@@ -63,7 +63,7 @@
   animation: slideUp 0.8s ease-out 0.4s both;
 }
 
-.tap-hint {
+.swipe-hint {
   font-family: var(--font-accent, sans-serif), sans-serif;
   margin-top: 2.2rem;
   font-size: 0.78rem;
@@ -105,7 +105,7 @@
 }
 
 @media (max-width: 768px) {
-  .tap-hint {
+  .swipe-hint {
     margin-top: 1.8rem;
     font-size: 0.74rem;
   }

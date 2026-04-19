@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CountdownSectionComponent } from '../countdown-section/countdown-section.component';
 
 @Component({
@@ -11,13 +11,6 @@ import { CountdownSectionComponent } from '../countdown-section/countdown-sectio
 export class OpeningScreenComponent {
   @Input() coupleName = '';
   @Input() titleLine = '';
-  @Input() isVisible = true;
   @Input() targetDate!: Date;
-
-  @Output() tapStart = new EventEmitter<void>();
-
-  onTap(): void {
-    this.tapStart.emit();
-  }
 }
 

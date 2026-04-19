@@ -13,6 +13,7 @@ import { ThankYouSectionComponent } from '../thank-you-section/thank-you-section
 import { TimelineSectionComponent } from '../timeline-section/timeline-section.component';
 
 type SlideKey =
+  | 'opening'
   | 'intro'
   | 'gathering'
   | 'ceremony'
@@ -50,7 +51,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
 
   protected readonly event = EVENT_CONFIG;
   protected readonly invitee = signal<InviteeRecord | null>(null);
-  protected readonly showOpening = signal(true);
   protected readonly rsvpSubmitted = signal(false);
   protected readonly submittedResponse = signal<InviteeRecord | null>(null);
   protected readonly isSubmitting = signal(false);
@@ -76,7 +76,10 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     },
   ]);
   protected readonly slides = computed<InvitationSlide[]>(() => {
-    const list: InvitationSlide[] = [{ key: 'intro', label: 'Our Story' }];
+    const list: InvitationSlide[] = [
+      { key: 'opening', label: 'Welcome' },
+      { key: 'intro', label: 'Our Story' }
+    ];
 
     if (this.event.sections.gathering.enabled) {
       list.push({ key: 'gathering', label: this.event.sections.gathering.title });
@@ -158,11 +161,6 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onOpeningTap(): void {
-    this.startBgMusicFromUserGesture();
-    this.showOpening.set(false);
-    this.currentSlideIndex.set(0);
-  }
 
   protected toggleBgMusic(): void {
     const audio = this.getBgMusicElement();
@@ -206,6 +204,10 @@ export class InvitationPageComponent implements OnInit, OnDestroy {
   protected nextSlide(): void {
     const maxIndex = this.slides().length - 1;
     if (this.currentSlideIndex() < maxIndex) {
+      // Auto-play music when leaving opening screen
+      if (this.currentSlideIndex() === 0) {
+        this.startBgMusicFromUserGesture();
+      }
       this.currentSlideIndex.update((i) => i + 1);
     }
   }

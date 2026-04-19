@@ -25,18 +25,7 @@
     </svg>
   </button>
 
-  @if (showOpening()) {
-    <app-opening-screen
-      [coupleName]="event.couple.primaryNames"
-      [titleLine]="event.couple.titleLine"
-      [isVisible]="showOpening()"
-      [targetDate]="targetDate"
-      (tapStart)="onOpeningTap()"
-    ></app-opening-screen>
-  }
-
-  @if (!showOpening()) {
-    <div class="page-content">
+  <div class="page-content">
       <div
         class="slides-shell"
         (pointerdown)="onPointerDown($event)"
@@ -48,8 +37,16 @@
         <div class="slides-track" [style.transform]="'translateX(-' + (currentSlideIndex() * 100) + '%)'">
           @for (slide of slides(); track slide.key) {
             <section class="slide-page" [class.rsvp-slide]="slide.key === 'rsvp'">
-              <div class="slide-scroll" [class.intro-scroll]="slide.key === 'intro'">
+              <div class="slide-scroll" [class.intro-scroll]="slide.key === 'intro'" [class.opening-scroll]="slide.key === 'opening'">
                 @switch (slide.key) {
+                  @case ('opening') {
+                    <app-opening-screen
+                      [coupleName]="event.couple.primaryNames"
+                      [titleLine]="event.couple.titleLine"
+                      [targetDate]="targetDate"
+                    ></app-opening-screen>
+                  }
+
                   @case ('intro') {
                     <div class="slide-card intro-card">
                       <app-intro-section
@@ -159,6 +156,5 @@
         </div>
       </div>
     </div>
-  }
 </div>
 

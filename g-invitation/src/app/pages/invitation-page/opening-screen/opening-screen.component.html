@@ -1,8 +1,4 @@
-<div
-  class="opening-screen"
-  [class.hidden]="!isVisible"
-  (click)="onTap()"
->
+<div class="opening-screen">
   <div class="overlay"></div>
 
   <div class="content">
@@ -10,8 +6,8 @@
       <h1 class="couple-name">{{ coupleName }}</h1>
       <p class="subtitle">{{ titleLine }}</p>
       <app-countdown-section [targetDate]="targetDate"></app-countdown-section>
-      <div class="tap-hint">
-        <span>Tap to begin</span>
+      <div class="swipe-hint">
+        <span>Swipe to navigate</span>
       </div>
     </div>
   </div>
