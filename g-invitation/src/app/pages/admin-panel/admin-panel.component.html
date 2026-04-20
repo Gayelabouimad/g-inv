@@ -2,11 +2,19 @@
   <!-- Header -->
   <mat-card class="admin-header">
     <mat-card-content>
-      <h1 class="mat-headline-medium">{{ event.couple.primaryNames }}</h1>
-      <p class="mat-body-small">RSVP Management Console</p>
-      <div class="header-meta">
-        <span>Event: <strong>{{ event.eventSlug }}</strong></span>
-        <span>Collection: <strong>rsvp-{{ event.eventSlug }}</strong></span>
+      <div class="header-top-row">
+        <div>
+          <h1 class="mat-headline-medium">{{ event.couple.primaryNames }}</h1>
+          <p class="mat-body-small">RSVP Management Console</p>
+          <div class="header-meta">
+            <span>Event: <strong>{{ event.eventSlug }}</strong></span>
+            <span>Collection: <strong>rsvp-{{ event.eventSlug }}</strong></span>
+          </div>
+        </div>
+        <button mat-stroked-button color="warn" (click)="logout()" class="logout-button">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
       </div>
     </mat-card-content>
   </mat-card>

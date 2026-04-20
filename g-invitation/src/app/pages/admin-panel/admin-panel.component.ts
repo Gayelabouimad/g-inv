@@ -20,6 +20,8 @@ import { EVENT_CONFIG } from '../../data/event.data';
 import { INVITEES } from '../../data/invitees.data';
 import { InviteeRecord } from '../../models/invitation.models';
 import { InviteeService } from '../../services/invitee.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 type AdminRsvpRow = InviteeRecord & { isResponded: boolean; guestNamesDisplay: string };
 
@@ -108,6 +110,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   );
 
   private readonly inviteeService = inject(InviteeService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly platformId = inject(PLATFORM_ID);
@@ -300,6 +304,11 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    this.router.navigate(['/admin/login']);
   }
 }
 

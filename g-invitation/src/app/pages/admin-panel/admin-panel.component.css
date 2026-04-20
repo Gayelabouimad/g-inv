@@ -6,6 +6,18 @@
   margin-bottom: 2rem;
 }
 
+.header-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logout-button {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
 .admin-header p {
   color: #666;
 }

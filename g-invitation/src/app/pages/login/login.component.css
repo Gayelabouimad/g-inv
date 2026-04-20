@@ -1,0 +1,110 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7fa;
+  font-family: inherit;
+}
+
+.login-card {
+  background: #ffffff;
+  border: 1px solid rgba(216, 222, 228, 0.95);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 12px 32px rgba(36, 44, 55, 0.08);
+}
+
+.login-title {
+  margin: 0 0 1.8rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgba(79, 86, 93, 0.95);
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(79, 86, 93, 0.85);
+}
+
+.form-input {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(216, 222, 228, 0.95);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: rgba(79, 86, 93, 0.95);
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: rgba(189, 198, 207, 0.95);
+}
+
+.error-message {
+  color: rgba(168, 86, 86, 0.9);
+  font-size: 0.88rem;
+  margin: 0;
+  text-align: center;
+}
+
+.login-button {
+  height: 48px;
+  border: 1px solid #c9d1d9;
+  border-radius: 12px;
+  background: #eef2f5;
+  color: #4f565d;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  box-shadow: 0 6px 16px rgba(36, 44, 55, 0.1);
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(79, 86, 93, 0.2);
+  border-top-color: #4f565d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
