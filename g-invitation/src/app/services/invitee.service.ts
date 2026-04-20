@@ -195,6 +195,77 @@ export class InviteeService {
       updatedAt: null,
     });
   }
+
+  /**
+   * Get all tables for an event
+   */
+  async getTables(eventSlug: string): Promise<any[]> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const collectionRef = collection(db, `tables-${eventSlug}`);
+    const snapshot = await getDocs(collectionRef);
+
+    const tables: any[] = [];
+    snapshot.forEach((doc) => {
+      tables.push(doc.data());
+    });
+
+    return tables.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+
+  /**
+   * Create a new table
+   */
+  async createTable(name: string, eventSlug: string): Promise<string> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const tableId = name.toLowerCase().replace(/\s+/g, '-');
+    const now = new Date().toISOString();
+
+    const docRef = doc(db, `tables-${eventSlug}`, tableId);
+
+    await setDoc(docRef, {
+      id: tableId,
+      eventSlug: eventSlug,
+      name: name,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return tableId;
+  }
+
+  /**
+   * Delete a table
+   */
+  async deleteTable(tableId: string, eventSlug: string): Promise<void> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const { deleteDoc } = await import('firebase/firestore');
+    const docRef = doc(db, `tables-${eventSlug}`, tableId);
+    await deleteDoc(docRef);
+  }
+
+  /**
+   * Update invitee's table assignment
+   */
+  async updateInviteeTable(inviteeId: string, tableName: string | null, eventSlug: string): Promise<void> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const docRef = doc(db, this.getCollectionName(eventSlug), inviteeId);
+
+    if (tableName) {
+      await updateDoc(docRef, { table: tableName });
+    } else {
+      // Remove table field if unassigned
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = { ...docSnap.data() };
+        delete data['table'];
+        await setDoc(docRef, data, { merge: false });
+      }
+    }
+  }
 }
 
 

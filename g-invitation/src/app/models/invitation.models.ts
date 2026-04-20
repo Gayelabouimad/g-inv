@@ -98,6 +98,7 @@ export interface EventConfig {
  * Unified Invitee Record that contains both invitation info and RSVP response
  * - Core fields (id, eventSlug, guestNames, numberOfPeople) are always present
  * - RSVP fields (attending, attendeeCount, message, etc.) are optional and only set when user responds
+ * - Table field is optional and set when admin assigns invitee to a table
  */
 export interface InviteeRecord {
   id: string;
@@ -112,6 +113,20 @@ export interface InviteeRecord {
   message?: string;
   createdAt?: string;
   updatedAt?: string;
+
+  // Table assignment - optional, set when admin assigns to a table
+  table?: string;
+}
+
+/**
+ * Table record for persisting table data
+ */
+export interface TableRecord {
+  id: string;
+  eventSlug: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

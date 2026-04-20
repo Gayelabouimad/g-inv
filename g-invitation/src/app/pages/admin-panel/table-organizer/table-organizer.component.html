@@ -1,0 +1,126 @@
+<div class="table-organizer-wrapper">
+  <!-- Header -->
+  <mat-card class="organizer-header">
+    <mat-card-content>
+      <h1 class="mat-headline-medium">Table Organizer</h1>
+      <p class="mat-body-small">Drag and drop invitees between tables to assign seating</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Add Table Section -->
+  <mat-card class="add-table-section">
+    <mat-card-content>
+      <div class="add-table-form">
+        <mat-form-field appearance="outline" class="table-name-field">
+          <mat-label>Table Name</mat-label>
+          <input matInput
+                 placeholder="e.g., Table 1, Family Table, VIP Table"
+                 [value]="newTableName()"
+                 (input)="newTableName.set($any($event.target).value)"
+                 (keyup.enter)="addTable()">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="addTable()" [disabled]="!newTableName().trim()">
+          <mat-icon>add</mat-icon>
+          Add Table
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tables Grid -->
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p class="mat-body-medium">Loading invitees...</p>
+    </div>
+  } @else {
+    <div class="tables-grid" cdkDropListGroup>
+      @for (table of tables(); track table.id) {
+        <mat-card class="table-card" [class.unassigned]="table.id === 'unassigned'">
+          <mat-card-header>
+            <mat-card-title>{{ table.name }}</mat-card-title>
+            @if (table.id !== 'unassigned') {
+              <button mat-icon-button
+                      (click)="removeTable(table.id)"
+                      [disabled]="table.invitees.length > 0"
+                      matTooltip="Delete table (must be empty)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </mat-card-header>
+
+          <mat-card-content>
+            <!-- Table Stats -->
+            <div class="table-stats">
+              <div class="stat">
+                <span class="stat-label">Confirmed:</span>
+                <span class="stat-value">{{ getResponseCount(table.invitees) }}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Attendees:</span>
+                <span class="stat-value">{{ getAttendeeCount(table.invitees) }}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Invitations:</span>
+                <span class="stat-value">{{ table.invitees.length }}</span>
+              </div>
+            </div>
+
+            <!-- Drop Zone -->
+            <div class="drop-zone"
+                 cdkDropList
+                 [id]="table.id"
+                 [cdkDropListData]="table.invitees"
+                 (cdkDropListDropped)="drop($event)"
+                 [cdkDropListDisabled]="loading()">
+
+              @if (table.invitees.length === 0) {
+                <p class="empty-message">Drop invitees here</p>
+              } @else {
+                <div class="invitees-list">
+                   @for (invitee of table.invitees; track invitee.id) {
+                     <div class="invitee-item" cdkDrag [cdkDragData]="invitee">
+                       <div class="invitee-info">
+                         <p class="invitee-name">{{ invitee.guestNamesDisplay }}</p>
+                         @if (invitee.attending !== undefined) {
+                           <div class="invitee-details">
+                             <span class="status" [class.attending]="invitee.attending" [class.declined]="!invitee.attending">
+                               {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
+                             </span>
+                             @if (invitee.attending && invitee.attendeeCount) {
+                               <span class="count">{{ invitee.attendeeCount }} person(s)</span>
+                             }
+                           </div>
+                         } @else {
+                           <span class="status pending">⏳ No Response</span>
+                         }
+                       </div>
+                       <mat-icon class="drag-handle">drag_indicator</mat-icon>
+
+                       <!-- Custom drag preview for smooth visual feedback -->
+                       <ng-template cdkDragPreview>
+                         <div class="cdk-drag-preview-item">
+                           <div class="preview-content">
+                             <p class="preview-name">{{ invitee.guestNamesDisplay }}</p>
+                             @if (invitee.attending !== undefined) {
+                               <span class="preview-status" [class.attending]="invitee.attending">
+                                 {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
+                               </span>
+                             } @else {
+                               <span class="preview-status pending">⏳ No Response</span>
+                             }
+                           </div>
+                         </div>
+                       </ng-template>
+                     </div>
+                   }
+                 </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>
+

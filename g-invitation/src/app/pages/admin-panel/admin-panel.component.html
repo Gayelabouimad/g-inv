@@ -22,6 +22,10 @@
         <mat-icon>add</mat-icon>
         Add Invitation
       </button>
+      <button mat-raised-button color="accent" [routerLink]="['/admin/tables']">
+        <mat-icon>table_rows</mat-icon>
+        Table Organizer
+      </button>
       <button mat-raised-button color="accent" (click)="exportToCSV()" [disabled]="filteredRsvps().length === 0">
         <mat-icon>download</mat-icon>
         Export to CSV
