@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { initializeApp, getApps } from 'firebase/app';
 import {
+  Auth,
+  browserLocalPersistence,
   getAuth,
+  onAuthStateChanged,
+  setPersistence,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
   User,
 } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
@@ -21,18 +24,33 @@ const firebaseConfig = {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUser$ = new BehaviorSubject<User | null | undefined>(undefined);
+  private auth: Auth | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-      const auth = getAuth(app);
+      const auth = this.getAuthInstance();
+
+      void setPersistence(auth, browserLocalPersistence).catch((error) => {
+        console.error('Failed to configure auth persistence:', error);
+      });
+
       onAuthStateChanged(auth, (user) => {
         this.currentUser$.next(user);
       });
-    } else {
-      // SSR: no auth available, treat as logged out
-      this.currentUser$.next(null);
     }
+  }
+
+  private getAuthInstance(): Auth {
+    if (typeof window === 'undefined') {
+      throw new Error('Authentication is only available in the browser.');
+    }
+
+    if (!this.auth) {
+      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      this.auth = getAuth(app);
+    }
+
+    return this.auth;
   }
 
   get currentUser() {
@@ -44,14 +62,13 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<void> {
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const auth = this.getAuthInstance();
+    await setPersistence(auth, browserLocalPersistence);
     await signInWithEmailAndPassword(auth, email, password);
   }
 
   async logout(): Promise<void> {
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const auth = this.getAuthInstance();
     await signOut(auth);
   }
 

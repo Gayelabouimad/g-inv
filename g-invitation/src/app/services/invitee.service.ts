@@ -216,7 +216,7 @@ export class InviteeService {
   /**
    * Create a new table
    */
-  async createTable(name: string, eventSlug: string): Promise<string> {
+  async createTable(name: string, description: string = '', eventSlug: string): Promise<string> {
     this.ensureInitialized();
     const db = getFirestore();
     const tableId = name.toLowerCase().replace(/\s+/g, '-');
@@ -228,11 +228,27 @@ export class InviteeService {
       id: tableId,
       eventSlug: eventSlug,
       name: name,
+      description: description,
       createdAt: now,
       updatedAt: now,
     });
 
     return tableId;
+  }
+
+  /**
+   * Update a table's name and description
+   */
+  async updateTable(tableId: string, name: string, description: string, eventSlug: string): Promise<void> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const docRef = doc(db, `tables-${eventSlug}`, tableId);
+
+    await updateDoc(docRef, {
+      name: name,
+      description: description,
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   /**
@@ -246,26 +262,25 @@ export class InviteeService {
     await deleteDoc(docRef);
   }
 
-  /**
-   * Update invitee's table assignment
-   */
-  async updateInviteeTable(inviteeId: string, tableName: string | null, eventSlug: string): Promise<void> {
-    this.ensureInitialized();
-    const db = getFirestore();
-    const docRef = doc(db, this.getCollectionName(eventSlug), inviteeId);
+   /**
+    * Update invitee's table assignment
+    */
+   async updateInviteeTable(inviteeId: string, tableId: string | null, eventSlug: string): Promise<void> {
+     this.ensureInitialized();
+     const db = getFirestore();
+     const docRef = doc(db, this.getCollectionName(eventSlug), inviteeId);
 
-    if (tableName) {
-      await updateDoc(docRef, { table: tableName });
-    } else {
-      // Remove table field if unassigned
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = { ...docSnap.data() };
-        delete data['table'];
-        await setDoc(docRef, data, { merge: false });
-      }
-    }
-  }
+     if (tableId) {
+       await updateDoc(docRef, { table: tableId });
+     } else {
+       // Remove table field if unassigned
+       const docSnap = await getDoc(docRef);
+       if (docSnap.exists()) {
+         const data = { ...docSnap.data() };
+         delete data['table'];
+         await setDoc(docRef, data, { merge: false });
+       }
+     }
+   }
 }
-
 

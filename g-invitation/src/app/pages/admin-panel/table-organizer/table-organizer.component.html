@@ -1,4 +1,20 @@
-<div class="table-organizer-wrapper">
+<div class="table-organizer-wrapper" [class.is-busy]="moveInProgress()">
+  @if (moveInProgress()) {
+    <div class="move-overlay" aria-live="polite" aria-busy="true">
+      <div class="move-overlay-card">
+        <mat-spinner diameter="42"></mat-spinner>
+        <div class="move-overlay-text">
+          <p class="move-overlay-title">Updating seating arrangement...</p>
+          @if (movingInviteeName() && movingTargetTableName()) {
+            <p class="move-overlay-subtitle">
+              Moving {{ movingInviteeName() }} to {{ movingTargetTableName() }}
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- Header -->
   <mat-card class="organizer-header">
     <mat-card-content>
@@ -16,10 +32,11 @@
           <input matInput
                  placeholder="e.g., Table 1, Family Table, VIP Table"
                  [value]="newTableName()"
+                 [disabled]="moveInProgress()"
                  (input)="newTableName.set($any($event.target).value)"
                  (keyup.enter)="addTable()">
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="addTable()" [disabled]="!newTableName().trim()">
+        <button mat-raised-button color="primary" (click)="addTable()" [disabled]="!newTableName().trim() || moveInProgress()">
           <mat-icon>add</mat-icon>
           Add Table
         </button>
@@ -38,14 +55,61 @@
       @for (table of tables(); track table.id) {
         <mat-card class="table-card" [class.unassigned]="table.id === 'unassigned'">
           <mat-card-header>
-            <mat-card-title>{{ table.name }}</mat-card-title>
-            @if (table.id !== 'unassigned') {
-              <button mat-icon-button
-                      (click)="removeTable(table.id)"
-                      [disabled]="table.invitees.length > 0"
-                      matTooltip="Delete table (must be empty)">
-                <mat-icon>delete</mat-icon>
-              </button>
+            @if (!table.isEditing) {
+              <div class="table-header-display">
+                <mat-card-title>{{ table.name }}</mat-card-title>
+                @if (table.description) {
+                  <p class="table-description">{{ table.description }}</p>
+                }
+              </div>
+              @if (table.id !== 'unassigned') {
+                <div class="table-actions">
+                  <button mat-icon-button
+                          (click)="startEditing(table)"
+                          [disabled]="moveInProgress()"
+                          matTooltip="Edit table">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button
+                          (click)="removeTable(table.id)"
+                          [disabled]="table.invitees.length > 0 || moveInProgress()"
+                          matTooltip="Delete table (must be empty)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              }
+            } @else {
+              <div class="table-editing-form">
+                <mat-form-field appearance="outline" class="edit-table-name">
+                  <mat-label>Table Name</mat-label>
+                  <input matInput
+                         [disabled]="moveInProgress()"
+                         [(ngModel)]="table.editingName"
+                         placeholder="Enter table name">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="edit-table-description">
+                  <mat-label>Description (optional)</mat-label>
+                  <textarea matInput
+                            [disabled]="moveInProgress()"
+                            [(ngModel)]="table.editingDescription"
+                            placeholder="e.g., Family table, VIP guests, etc."
+                            rows="2"></textarea>
+                </mat-form-field>
+                <div class="edit-actions">
+                  <button mat-raised-button color="primary"
+                          [disabled]="moveInProgress()"
+                          (click)="saveTableEdit(table)">
+                    <mat-icon>check</mat-icon>
+                    Save
+                  </button>
+                  <button mat-stroked-button
+                          [disabled]="moveInProgress()"
+                          (click)="cancelEditing(table.id)">
+                    <mat-icon>close</mat-icon>
+                    Cancel
+                  </button>
+                </div>
+              </div>
             }
           </mat-card-header>
 
@@ -71,28 +135,31 @@
                  cdkDropList
                  [id]="table.id"
                  [cdkDropListData]="table.invitees"
+                 cdkDropListOrientation="vertical"
                  (cdkDropListDropped)="drop($event)"
-                 [cdkDropListDisabled]="loading()">
+                 [cdkDropListDisabled]="loading() || moveInProgress()">
 
               @if (table.invitees.length === 0) {
                 <p class="empty-message">Drop invitees here</p>
               } @else {
                 <div class="invitees-list">
                    @for (invitee of table.invitees; track invitee.id) {
-                     <div class="invitee-item" cdkDrag [cdkDragData]="invitee">
+                     <div class="invitee-item" cdkDrag [cdkDragData]="invitee" [cdkDragDisabled]="moveInProgress()">
                        <div class="invitee-info">
-                         <p class="invitee-name">{{ invitee.guestNamesDisplay }}</p>
-                         @if (invitee.attending !== undefined) {
-                           <div class="invitee-details">
+                         <div class="invitee-header-line">
+                           <p class="invitee-name">{{ invitee.guestNamesDisplay }}</p>
+                           @if (invitee.attending !== undefined) {
                              <span class="status" [class.attending]="invitee.attending" [class.declined]="!invitee.attending">
                                {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
                              </span>
-                             @if (invitee.attending && invitee.attendeeCount) {
-                               <span class="count">{{ invitee.attendeeCount }} person(s)</span>
-                             }
+                           } @else {
+                             <span class="status pending">⏳ No Response</span>
+                           }
+                         </div>
+                         @if (invitee.attending && invitee.attendeeCount) {
+                           <div class="invitee-details">
+                             <span class="count">{{ invitee.attendeeCount }} person(s)</span>
                            </div>
-                         } @else {
-                           <span class="status pending">⏳ No Response</span>
                          }
                        </div>
                        <mat-icon class="drag-handle">drag_indicator</mat-icon>

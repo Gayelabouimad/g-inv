@@ -94,7 +94,18 @@ exports.sendRsvpUpdatedEmail = onDocumentUpdated(
         return;
       }
 
-      const { guestNamesDisplay, attending, attendeeCount, message, updatedAt, eventSlug } = afterData;
+      // Check if any RSVP fields actually changed (not just table or other fields)
+      const rsvpFieldsChanged =
+        beforeData.attending !== afterData.attending ||
+        beforeData.attendeeCount !== afterData.attendeeCount ||
+        beforeData.message !== afterData.message;
+
+      if (!rsvpFieldsChanged) {
+        console.log('Skipping notification - only non-RSVP fields changed (e.g., table assignment)');
+        return;
+      }
+
+      const { guestNamesDisplay, attending, attendeeCount, message, updatedAt } = afterData;
 
       const mailOptions = {
         from: 'RSVP System <gayelabouimad@gmail.com>',

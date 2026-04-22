@@ -1,5 +1,56 @@
 .table-organizer-wrapper {
+  position: relative;
   padding: 2rem;
+}
+
+.table-organizer-wrapper.is-busy {
+  cursor: progress;
+}
+
+.move-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.move-overlay-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: min(420px, 100%);
+  max-width: 520px;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(25, 118, 210, 0.14);
+}
+
+.move-overlay-text {
+  min-width: 0;
+}
+
+.move-overlay-title,
+.move-overlay-subtitle {
+  margin: 0;
+}
+
+.move-overlay-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.move-overlay-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  color: #5f6b7a;
 }
 
 .organizer-header {
@@ -64,6 +115,12 @@
   align-items: center;
   padding: 1rem 1rem 0.5rem;
   border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.table-header-display {
+  flex: 1;
 }
 
 .table-card mat-card-title {
@@ -72,8 +129,36 @@
   font-weight: 600;
 }
 
-.table-card button {
-  margin: 0;
+.table-description {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  max-width: 300px;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-editing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.edit-table-name,
+.edit-table-description {
+  width: 100%;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .table-stats {
@@ -116,6 +201,8 @@
   justify-content: center;
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   will-change: background-color, border-color;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .drop-zone.cdk-drop-list-dragging {
@@ -135,28 +222,36 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  align-items: stretch;
+  gap: 0.45rem;
 }
 
 .invitee-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
+  padding: 0.45rem 0.55rem;
   background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
   cursor: move;
+  min-height: 44px;
+  width: 100%;
+  box-sizing: border-box;
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .invitee-item:hover {
-  background: #f5f5f5;
+  background: #f8f9fa;
   border-color: #1976d2;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+  box-shadow: 0 1px 5px rgba(25, 118, 210, 0.14);
 }
 
 .cdk-drag-placeholder {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
   opacity: 0.4;
   background: #e3f2fd;
   border: 2px dashed #1976d2;
@@ -225,10 +320,17 @@
   min-width: 0;
 }
 
+.invitee-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
 .invitee-name {
   margin: 0;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
@@ -237,17 +339,21 @@
 
 .invitee-details {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-  font-size: 0.75rem;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+  font-size: 0.7rem;
   flex-wrap: wrap;
 }
 
 .status {
-  padding: 0.25rem 0.5rem;
+  padding: 0.15rem 0.35rem;
   border-radius: 3px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  font-size: 0.66rem;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .status.attending {
@@ -263,10 +369,12 @@
 .status.pending {
   background: rgba(255, 152, 0, 0.1);
   color: #ff9800;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.6rem;
 }
 
 .count {
-  padding: 0.25rem 0.5rem;
+  padding: 0.15rem 0.35rem;
   background: rgba(33, 150, 243, 0.1);
   color: #1976d2;
   border-radius: 3px;
@@ -276,7 +384,13 @@
 .drag-handle {
   color: #999;
   flex-shrink: 0;
-  margin-left: 0.5rem;
+  margin-left: 0.35rem;
+  transform: scale(0.85);
+}
+
+.invitee-item.cdk-drag-disabled {
+  cursor: default;
+  opacity: 0.7;
 }
 
 .loading-state {
@@ -291,6 +405,16 @@
 @media (max-width: 768px) {
   .table-organizer-wrapper {
     padding: 1rem;
+  }
+
+  .move-overlay {
+    padding: 1rem;
+  }
+
+  .move-overlay-card {
+    align-items: flex-start;
+    min-width: 0;
+    width: 100%;
   }
 
   .add-table-form {
@@ -315,8 +439,26 @@
     gap: 1rem;
   }
 
+  .table-card mat-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .table-header-display {
+    width: 100%;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .table-editing-form {
+    width: 100%;
+  }
+
   .invitee-item {
-    padding: 0.5rem;
+    padding: 0.4rem 0.5rem;
   }
 
   .invitee-name {
