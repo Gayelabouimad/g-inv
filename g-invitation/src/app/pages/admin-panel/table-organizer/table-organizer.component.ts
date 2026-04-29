@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -50,21 +50,70 @@ interface TableGroup {
   styleUrl: './table-organizer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableOrganizerComponent implements OnInit {
+export class TableOrganizerComponent implements OnInit, OnDestroy {
   protected readonly event = EVENT_CONFIG;
   protected readonly loading = signal(false);
-  protected readonly moveInProgress = signal(false);
-  protected readonly movingInviteeName = signal<string | null>(null);
-  protected readonly movingTargetTableName = signal<string | null>(null);
+  protected readonly saveInProgress = signal(false);
+  protected readonly pendingSaveCount = signal(0);
+  protected readonly lastSaveError = signal<string | null>(null);
+  protected readonly lastSavedAt = signal<number | null>(null);
+  protected readonly autosaveStatusText = computed(() => {
+    if (this.saveInProgress()) {
+      return 'Saving seating changes...';
+    }
+
+    if (this.lastSaveError() && this.pendingSaveCount() > 0) {
+      return 'Autosave failed. Retrying...';
+    }
+
+    if (this.pendingSaveCount() > 0) {
+      return `${this.pendingSaveCount()} unsaved seating change${this.pendingSaveCount() === 1 ? '' : 's'}`;
+    }
+
+    return this.lastSavedAt() ? 'All seating changes saved' : 'No pending seating changes';
+  });
+  protected readonly autosaveStatusTone = computed(() => {
+    if (this.lastSaveError() && this.pendingSaveCount() > 0) {
+      return 'error';
+    }
+
+    if (this.saveInProgress()) {
+      return 'saving';
+    }
+
+    if (this.pendingSaveCount() > 0) {
+      return 'pending';
+    }
+
+    return 'saved';
+  });
   protected readonly invitees = signal<InviteeRecord[]>([]);
   protected readonly tables = signal<TableGroup[]>([]);
   protected readonly newTableName = signal('');
 
   private readonly inviteeService = inject(InviteeService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly pendingTableAssignments = new Map<string, string | null>();
+  private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
+  private readonly visibilityChangeHandler = () => {
+    if (typeof document !== 'undefined' && document.hidden) {
+      void this.flushPendingTableAssignments();
+    }
+  };
+  private readonly beforeUnloadHandler = () => {
+    void this.flushPendingTableAssignments();
+  };
 
   ngOnInit(): void {
+    this.startAutosaveLoop();
+    this.registerAutosaveLifecycleListeners();
     this.loadInviteesAndTables();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutosaveLoop();
+    this.unregisterAutosaveLifecycleListeners();
+    void this.flushPendingTableAssignments();
   }
 
   private async loadInviteesAndTables(): Promise<void> {
@@ -209,7 +258,7 @@ export class TableOrganizerComponent implements OnInit {
    }
 
    protected async drop(event: CdkDragDrop<InviteeRecord[]>): Promise<void> {
-     if (this.loading() || this.moveInProgress()) {
+     if (this.loading()) {
        return;
      }
 
@@ -230,54 +279,107 @@ export class TableOrganizerComponent implements OnInit {
      // Store table ID (not name) in the invitee record
      const tableIdToStore = targetTable.id === 'unassigned' ? null : targetTable.id;
 
+     const updatedInvitee: InviteeRecord = {
+       ...invitee,
+       table: tableIdToStore ?? undefined,
+     };
+
+     const newTables = this.tables().map((table) => {
+       if (table.id === sourceTableId) {
+         const filtered = table.invitees.filter((i) => i.id !== invitee.id);
+         return filtered.length === table.invitees.length
+           ? table
+           : { ...table, invitees: filtered };
+       }
+
+       if (table.id === targetTableId) {
+         const hasInvitee = table.invitees.some((i) => i.id === invitee.id);
+         return hasInvitee
+           ? table
+           : { ...table, invitees: [...table.invitees, updatedInvitee] };
+       }
+
+       return table;
+     });
+
+     this.tables.set(newTables);
+     this.queuePendingTableAssignment(invitee.id, tableIdToStore);
+   }
+
+   private startAutosaveLoop(): void {
+     if (this.autosaveIntervalId) {
+       return;
+     }
+
+     this.autosaveIntervalId = setInterval(() => {
+       void this.flushPendingTableAssignments();
+     }, 5000);
+   }
+
+   private stopAutosaveLoop(): void {
+     if (this.autosaveIntervalId) {
+       clearInterval(this.autosaveIntervalId);
+       this.autosaveIntervalId = null;
+     }
+   }
+
+   private registerAutosaveLifecycleListeners(): void {
+     if (typeof document !== 'undefined') {
+       document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+     }
+
+     if (typeof window !== 'undefined') {
+       window.addEventListener('beforeunload', this.beforeUnloadHandler);
+     }
+   }
+
+   private unregisterAutosaveLifecycleListeners(): void {
+     if (typeof document !== 'undefined') {
+       document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
+     }
+
+     if (typeof window !== 'undefined') {
+       window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+     }
+   }
+
+   private queuePendingTableAssignment(inviteeId: string, tableId: string | null): void {
+     this.pendingTableAssignments.set(inviteeId, tableId);
+     this.pendingSaveCount.set(this.pendingTableAssignments.size);
+     this.lastSaveError.set(null);
+   }
+
+   private async flushPendingTableAssignments(): Promise<void> {
+     if (this.saveInProgress() || this.pendingTableAssignments.size === 0) {
+       return;
+     }
+
+     const assignmentsToPersist = new Map(this.pendingTableAssignments);
+     this.pendingTableAssignments.clear();
+     this.pendingSaveCount.set(0);
+     this.saveInProgress.set(true);
+
      try {
-       this.moveInProgress.set(true);
-       this.movingInviteeName.set(invitee.guestNamesDisplay);
-       this.movingTargetTableName.set(targetTable.name);
-
-       await this.inviteeService.updateInviteeTable(invitee.id, tableIdToStore, this.event.eventSlug);
-
-       // Keep local state aligned with persisted assignment - batch updates to minimize reflows
-       const updatedInvitee: InviteeRecord = {
-         ...invitee,
-         table: tableIdToStore ?? undefined,
-       };
-
-       // Build new tables array in a single pass to minimize signal updates
-       const newTables = this.tables().map((table) => {
-         // Remove from source table
-         if (table.id === sourceTableId) {
-           const filtered = table.invitees.filter((i) => i.id !== invitee.id);
-           return filtered.length === table.invitees.length
-             ? table
-             : { ...table, invitees: filtered };
-         }
-
-         // Add to target table
-         if (table.id === targetTableId) {
-           const hasInvitee = table.invitees.some((i) => i.id === invitee.id);
-           return hasInvitee
-             ? table
-             : { ...table, invitees: [...table.invitees, updatedInvitee] };
-         }
-
-         return table;
-       });
-
-       this.tables.set(newTables);
-
-       this.snackBar.open(
-         `Moved ${invitee.guestNamesDisplay} to ${targetTable.name}`,
-         'Close',
-         { duration: 2000 }
+       await this.inviteeService.updateInviteeTables(
+         Array.from(assignmentsToPersist.entries()).map(([inviteeId, tableId]) => ({ inviteeId, tableId })),
+         this.event.eventSlug
        );
+
+       this.lastSaveError.set(null);
+       this.lastSavedAt.set(Date.now());
      } catch (error) {
-       console.error('Error updating invitee table:', error);
-       this.snackBar.open('Failed to update table assignment', 'Close', { duration: 3000 });
+       console.error('Error autosaving table assignments:', error);
+
+       for (const [inviteeId, tableId] of assignmentsToPersist.entries()) {
+         if (!this.pendingTableAssignments.has(inviteeId)) {
+           this.pendingTableAssignments.set(inviteeId, tableId);
+         }
+       }
+
+       this.pendingSaveCount.set(this.pendingTableAssignments.size);
+       this.lastSaveError.set('Failed to save seating changes. Retrying automatically.');
      } finally {
-       this.moveInProgress.set(false);
-       this.movingInviteeName.set(null);
-       this.movingTargetTableName.set(null);
+       this.saveInProgress.set(false);
      }
    }
 

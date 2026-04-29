@@ -115,6 +115,7 @@ export interface InviteeRecord {
   updatedAt?: string;
 
   // Table assignment - optional, set when admin assigns to a table
+  // IMPORTANT: this stores the table document ID, not the table display name.
   table?: string;
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   collection,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -262,25 +263,25 @@ export class InviteeService {
     await deleteDoc(docRef);
   }
 
-   /**
-    * Update invitee's table assignment
-    */
-   async updateInviteeTable(inviteeId: string, tableId: string | null, eventSlug: string): Promise<void> {
-     this.ensureInitialized();
-     const db = getFirestore();
-     const docRef = doc(db, this.getCollectionName(eventSlug), inviteeId);
+    async updateInviteeTables(
+      updates: Array<{ inviteeId: string; tableId: string | null }>,
+      eventSlug: string
+    ): Promise<void> {
+      this.ensureInitialized();
 
-     if (tableId) {
-       await updateDoc(docRef, { table: tableId });
-     } else {
-       // Remove table field if unassigned
-       const docSnap = await getDoc(docRef);
-       if (docSnap.exists()) {
-         const data = { ...docSnap.data() };
-         delete data['table'];
-         await setDoc(docRef, data, { merge: false });
-       }
-     }
-   }
+      if (updates.length === 0) {
+        return;
+      }
+
+      const db = getFirestore();
+      const batch = writeBatch(db);
+
+      for (const update of updates) {
+        const docRef = doc(db, this.getCollectionName(eventSlug), update.inviteeId);
+        batch.update(docRef, update.tableId ? { table: update.tableId } : { table: deleteField() });
+      }
+
+      await batch.commit();
+    }
 }
 
