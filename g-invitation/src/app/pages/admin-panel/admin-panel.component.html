@@ -75,7 +75,7 @@
         <div class="stat-header">
           <span class="stat-icon">❌</span>
           <h3 class="mat-body-small">Declined</h3>
-            <p class="stat-value">{{ declinedCount() }}</p>
+            <p class="stat-value">{{ declinedInviteesCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
@@ -153,7 +153,7 @@
                 } @else if (!item.isResponded) {
                   0/{{ item.numberOfPeople }}
                 } @else {
-                  —
+                  0/{{ item.numberOfPeople }}
                 }
               </td>
             </ng-container>

@@ -96,6 +96,12 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     this.invitees().filter(r => r.attending === false).length
   );
 
+  protected readonly declinedInviteesCount = computed(() =>
+    this.invitees()
+      .filter(r => r.attending === false)
+      .reduce((sum, r) => sum + (Number(r.numberOfPeople) || 0), 0)
+  );
+
   protected readonly totalAttendees = computed(() =>
     this.invitees()
       .filter(r => r.attending === true)
@@ -227,7 +233,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     const rows = data.map(rsvp => [
       rsvp.guestNamesDisplay,
       rsvp.isResponded ? (rsvp.attending ? 'Yes' : 'No') : 'No Response',
-      rsvp.isResponded && rsvp.attending ? rsvp.attendeeCount : '-',
+      rsvp.isResponded && rsvp.attending ? `${rsvp.attendeeCount}/${rsvp.numberOfPeople}` : `0/${rsvp.numberOfPeople}`,
       rsvp.message || '',
       this.formatDate(rsvp.createdAt || ''),
       this.formatDate(rsvp.updatedAt || ''),
