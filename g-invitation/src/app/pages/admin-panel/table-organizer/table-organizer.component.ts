@@ -12,7 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CdkDropList, CdkDrag, CdkDragDrop, CdkDropListGroup, CdkDragPreview, DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import { EVENT_CONFIG } from '../../../data/event.data';
-import { InviteeRecord } from '../../../models/invitation.models';
+import { InviteeRecord, TableRecord } from '../../../models/invitation.models';
 import { InviteeService } from '../../../services/invitee.service';
 
 interface TableGroup {
@@ -87,13 +87,15 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
 
     return 'saved';
   });
-  protected readonly invitees = signal<InviteeRecord[]>([]);
   protected readonly tables = signal<TableGroup[]>([]);
+  protected readonly unassignedTable = computed(() => this.tables().find((table) => table.id === 'unassigned') ?? null);
+  protected readonly assignedTables = computed(() => this.tables().filter((table) => table.id !== 'unassigned'));
+  protected readonly dropListIds = computed(() => this.tables().map((table) => table.id));
   protected readonly newTableName = signal('');
+  protected readonly hideDeclinedInvitees = signal(false);
 
   private readonly inviteeService = inject(InviteeService);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly pendingTableAssignments = new Map<string, string | null>();
   private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
   private readonly visibilityChangeHandler = () => {
     if (typeof document !== 'undefined' && document.hidden) {
@@ -125,9 +127,7 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.invitees.set(allInvitees);
-
-    let dbTables: any[];
+    let dbTables: TableRecord[];
     try {
       dbTables = await this.inviteeService.getTables(this.event.eventSlug);
     } catch (error) {
@@ -166,63 +166,80 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
     }
   }
 
-   private initializeTables(allInvitees: InviteeRecord[], dbTables: any[]): void {
-     // Group invitees by table ID assignment
-     const tableMap = new Map<string, InviteeRecord[]>();
-     const unassigned: InviteeRecord[] = [];
+  private initializeTables(allInvitees: InviteeRecord[], dbTables: TableRecord[]): void {
+    const inviteesById = new Map(allInvitees.map((invitee) => [invitee.id, invitee]));
+    const assignedInviteeIds = new Set<string>();
+    const hasTableInviteeLinks = dbTables.some((table) => Array.isArray(table.inviteeIds));
 
-     allInvitees.forEach((invitee) => {
-       const tableId = invitee.table;
-       if (tableId) {
-         if (!tableMap.has(tableId)) {
-           tableMap.set(tableId, []);
-         }
-         tableMap.get(tableId)!.push(invitee);
-       } else {
-         unassigned.push(invitee);
-       }
-     });
+    const legacyAssignments = new Map<string, InviteeRecord[]>();
+    if (!hasTableInviteeLinks) {
+      for (const invitee of allInvitees) {
+        const legacyTableId = (invitee as InviteeRecord & { table?: string }).table;
+        if (!legacyTableId) {
+          continue;
+        }
 
-     // Build table groups primarily from persisted table documents...
-     const tables: TableGroup[] = dbTables.map((dbTable) => ({
-       id: dbTable.id,
-       name: dbTable.name,
-       description: dbTable.description || '',
-       invitees: tableMap.get(dbTable.id) || [],
-       isEditing: false,
-       editingName: dbTable.name,
-       editingDescription: dbTable.description || '',
-     }));
+        if (!legacyAssignments.has(legacyTableId)) {
+          legacyAssignments.set(legacyTableId, []);
+        }
+        legacyAssignments.get(legacyTableId)!.push(invitee);
+      }
+    }
 
-     // ...and include any table IDs that exist only in invitee assignments but not in dbTables.
-     const existingIds = new Set(tables.map((t) => t.id));
-     for (const [tableId, invitees] of tableMap.entries()) {
-       if (!existingIds.has(tableId)) {
-         tables.push({
-           id: tableId,
-           name: tableId, // fallback to ID if table document doesn't exist
-           description: '',
-           invitees,
-           isEditing: false,
-           editingName: tableId,
-           editingDescription: '',
-         });
-       }
-     }
+    const tables: TableGroup[] = dbTables.map((dbTable) => {
+      const linkedInvitees = (dbTable.inviteeIds || [])
+        .map((inviteeId) => inviteesById.get(inviteeId))
+        .filter((invitee): invitee is InviteeRecord => !!invitee);
 
-     // Add unassigned list at the beginning
-     tables.unshift({
-       id: 'unassigned',
-       name: 'Unassigned',
-       description: 'Guests who haven\'t been assigned to a table yet',
-       invitees: unassigned,
-       isEditing: false,
-       editingName: 'Unassigned',
-       editingDescription: 'Guests who haven\'t been assigned to a table yet',
-     });
+      const invitees = linkedInvitees.length > 0 ? linkedInvitees : (legacyAssignments.get(dbTable.id) || []);
 
-     this.tables.set(tables);
-   }
+      invitees.forEach((invitee) => assignedInviteeIds.add(invitee.id));
+
+      return {
+        id: dbTable.id,
+        name: dbTable.name,
+        description: dbTable.description || '',
+        invitees,
+        isEditing: false,
+        editingName: dbTable.name,
+        editingDescription: dbTable.description || '',
+      };
+    });
+
+    if (!hasTableInviteeLinks) {
+      const existingIds = new Set(tables.map((table) => table.id));
+      for (const [tableId, invitees] of legacyAssignments.entries()) {
+        if (existingIds.has(tableId)) {
+          continue;
+        }
+
+        invitees.forEach((invitee) => assignedInviteeIds.add(invitee.id));
+        tables.push({
+          id: tableId,
+          name: tableId,
+          description: '',
+          invitees,
+          isEditing: false,
+          editingName: tableId,
+          editingDescription: '',
+        });
+      }
+    }
+
+    const unassigned = allInvitees.filter((invitee) => !assignedInviteeIds.has(invitee.id));
+
+    tables.unshift({
+      id: 'unassigned',
+      name: 'Unassigned',
+      description: 'Guests who haven\'t been assigned to a table yet',
+      invitees: unassigned,
+      isEditing: false,
+      editingName: 'Unassigned',
+      editingDescription: 'Guests who haven\'t been assigned to a table yet',
+    });
+
+    this.tables.set(tables);
+  }
 
   protected addTable(): void {
     const name = this.newTableName().trim();
@@ -257,7 +274,7 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
      }
    }
 
-   protected async drop(event: CdkDragDrop<InviteeRecord[]>): Promise<void> {
+  protected async drop(event: CdkDragDrop<InviteeRecord[]>): Promise<void> {
      if (this.loading()) {
        return;
      }
@@ -276,35 +293,27 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
        return;
      }
 
-     // Store table ID (not name) in the invitee record
-     const tableIdToStore = targetTable.id === 'unassigned' ? null : targetTable.id;
+    const newTables = this.tables().map((table) => {
+      if (table.id === sourceTableId) {
+        const filtered = table.invitees.filter((i) => i.id !== invitee.id);
+        return filtered.length === table.invitees.length
+          ? table
+          : { ...table, invitees: filtered };
+      }
 
-     const updatedInvitee: InviteeRecord = {
-       ...invitee,
-       table: tableIdToStore ?? undefined,
-     };
+      if (table.id === targetTableId) {
+        const hasInvitee = table.invitees.some((i) => i.id === invitee.id);
+        return hasInvitee
+          ? table
+          : { ...table, invitees: [...table.invitees, invitee] };
+      }
 
-     const newTables = this.tables().map((table) => {
-       if (table.id === sourceTableId) {
-         const filtered = table.invitees.filter((i) => i.id !== invitee.id);
-         return filtered.length === table.invitees.length
-           ? table
-           : { ...table, invitees: filtered };
-       }
+      return table;
+    });
 
-       if (table.id === targetTableId) {
-         const hasInvitee = table.invitees.some((i) => i.id === invitee.id);
-         return hasInvitee
-           ? table
-           : { ...table, invitees: [...table.invitees, updatedInvitee] };
-       }
-
-       return table;
-     });
-
-     this.tables.set(newTables);
-     this.queuePendingTableAssignment(invitee.id, tableIdToStore);
-   }
+    this.tables.set(newTables);
+    this.queuePendingTableAssignment();
+  }
 
    private startAutosaveLoop(): void {
      if (this.autosaveIntervalId) {
@@ -343,45 +352,39 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
      }
    }
 
-   private queuePendingTableAssignment(inviteeId: string, tableId: string | null): void {
-     this.pendingTableAssignments.set(inviteeId, tableId);
-     this.pendingSaveCount.set(this.pendingTableAssignments.size);
-     this.lastSaveError.set(null);
-   }
+  private queuePendingTableAssignment(): void {
+    this.pendingSaveCount.update((count) => count + 1);
+    this.lastSaveError.set(null);
+  }
 
-   private async flushPendingTableAssignments(): Promise<void> {
-     if (this.saveInProgress() || this.pendingTableAssignments.size === 0) {
-       return;
-     }
+  private async flushPendingTableAssignments(): Promise<void> {
+    if (this.saveInProgress() || this.pendingSaveCount() === 0) {
+      return;
+    }
 
-     const assignmentsToPersist = new Map(this.pendingTableAssignments);
-     this.pendingTableAssignments.clear();
-     this.pendingSaveCount.set(0);
-     this.saveInProgress.set(true);
+    const changesToPersist = this.pendingSaveCount();
+    this.pendingSaveCount.set(0);
+    this.saveInProgress.set(true);
 
-     try {
-       await this.inviteeService.updateInviteeTables(
-         Array.from(assignmentsToPersist.entries()).map(([inviteeId, tableId]) => ({ inviteeId, tableId })),
-         this.event.eventSlug
-       );
+    const tableAssignments = this.tables()
+      .filter((table) => table.id !== 'unassigned')
+      .map((table) => ({
+        tableId: table.id,
+        inviteeIds: table.invitees.map((invitee) => invitee.id),
+      }));
 
-       this.lastSaveError.set(null);
-       this.lastSavedAt.set(Date.now());
-     } catch (error) {
-       console.error('Error autosaving table assignments:', error);
-
-       for (const [inviteeId, tableId] of assignmentsToPersist.entries()) {
-         if (!this.pendingTableAssignments.has(inviteeId)) {
-           this.pendingTableAssignments.set(inviteeId, tableId);
-         }
-       }
-
-       this.pendingSaveCount.set(this.pendingTableAssignments.size);
-       this.lastSaveError.set('Failed to save seating changes. Retrying automatically.');
-     } finally {
-       this.saveInProgress.set(false);
-     }
-   }
+    try {
+      await this.inviteeService.updateTableInvitees(tableAssignments, this.event.eventSlug);
+      this.lastSaveError.set(null);
+      this.lastSavedAt.set(Date.now());
+    } catch (error) {
+      console.error('Error autosaving table assignments:', error);
+      this.pendingSaveCount.update((count) => count + changesToPersist);
+      this.lastSaveError.set('Failed to save seating changes. Retrying automatically.');
+    } finally {
+      this.saveInProgress.set(false);
+    }
+  }
 
   protected getAttendeeCount(invitees: InviteeRecord[]): number {
     return invitees.reduce((sum, inv) => {
@@ -393,7 +396,41 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
   }
 
   protected getResponseCount(invitees: InviteeRecord[]): number {
-    return invitees.filter(inv => inv.attending === true).length;
+    return this.getAttendeeCount(invitees);
+  }
+
+  protected getTotalTableAttendeeCapacity(invitees: InviteeRecord[]): number {
+    return invitees.reduce((sum, invitee) => {
+      if (invitee.attending === false) {
+        return sum;
+      }
+
+      if (invitee.attending === true) {
+        return sum + (invitee.attendeeCount ?? invitee.numberOfPeople ?? 0);
+      }
+
+      return sum + (invitee.numberOfPeople ?? 0);
+    }, 0);
+  }
+
+  protected getVisibleInvitees(invitees: InviteeRecord[]): InviteeRecord[] {
+    if (!this.hideDeclinedInvitees()) {
+      return invitees;
+    }
+
+    return invitees.filter((invitee) => invitee.attending !== false);
+  }
+
+  protected getDeclinedCount(invitees: InviteeRecord[]): number {
+    return invitees.filter((invitee) => invitee.attending === false).length;
+  }
+
+  protected toggleDeclinedVisibility(): void {
+    this.hideDeclinedInvitees.update((hideDeclined) => !hideDeclined);
+  }
+
+  protected getConnectedDropListIds(currentTableId: string): string[] {
+    return this.dropListIds().filter((tableId) => tableId !== currentTableId);
   }
 
    protected async removeTable(tableId: string): Promise<void> {

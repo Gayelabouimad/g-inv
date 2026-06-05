@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   collection,
-  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -11,7 +10,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { initializeApp, getApps } from 'firebase/app';
-import { InviteeRecord } from '../models/invitation.models';
+import { InviteeRecord, TableRecord } from '../models/invitation.models';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCzRQCwGXAyXW_ej-LbBpR_yc8xD3Xkigo',
@@ -200,15 +199,15 @@ export class InviteeService {
   /**
    * Get all tables for an event
    */
-  async getTables(eventSlug: string): Promise<any[]> {
+  async getTables(eventSlug: string): Promise<TableRecord[]> {
     this.ensureInitialized();
     const db = getFirestore();
     const collectionRef = collection(db, `tables-${eventSlug}`);
     const snapshot = await getDocs(collectionRef);
 
-    const tables: any[] = [];
+    const tables: TableRecord[] = [];
     snapshot.forEach((doc) => {
-      tables.push(doc.data());
+      tables.push(doc.data() as TableRecord);
     });
 
     return tables.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
@@ -230,6 +229,7 @@ export class InviteeService {
       eventSlug: eventSlug,
       name: name,
       description: description,
+      inviteeIds: [],
       createdAt: now,
       updatedAt: now,
     });
@@ -263,25 +263,29 @@ export class InviteeService {
     await deleteDoc(docRef);
   }
 
-    async updateInviteeTables(
-      updates: Array<{ inviteeId: string; tableId: string | null }>,
-      eventSlug: string
-    ): Promise<void> {
-      this.ensureInitialized();
+  async updateTableInvitees(
+    tableAssignments: Array<{ tableId: string; inviteeIds: string[] }>,
+    eventSlug: string
+  ): Promise<void> {
+    this.ensureInitialized();
 
-      if (updates.length === 0) {
-        return;
-      }
-
-      const db = getFirestore();
-      const batch = writeBatch(db);
-
-      for (const update of updates) {
-        const docRef = doc(db, this.getCollectionName(eventSlug), update.inviteeId);
-        batch.update(docRef, update.tableId ? { table: update.tableId } : { table: deleteField() });
-      }
-
-      await batch.commit();
+    if (tableAssignments.length === 0) {
+      return;
     }
+
+    const db = getFirestore();
+    const batch = writeBatch(db);
+    const now = new Date().toISOString();
+
+    for (const assignment of tableAssignments) {
+      const docRef = doc(db, `tables-${eventSlug}`, assignment.tableId);
+      batch.set(docRef, {
+        inviteeIds: assignment.inviteeIds,
+        updatedAt: now,
+      }, { merge: true });
+    }
+
+    await batch.commit();
+  }
 }
 

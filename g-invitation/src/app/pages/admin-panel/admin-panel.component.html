@@ -50,22 +50,12 @@
 
   <!-- Statistics Cards -->
   <div class="stats-grid">
-    <mat-card class="stat-card">
+    <mat-card class="stat-card stat-card-info">
       <mat-card-content>
         <div class="stat-header">
-          <span class="stat-icon">📋</span>
-          <h3 class="mat-body-small">Total Invitations</h3>
-            <p class="stat-value">{{ totalInvitations() }}</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card stat-card-yes">
-      <mat-card-content>
-        <div class="stat-header">
-          <span class="stat-icon">✅</span>
-          <h3 class="mat-body-small">Confirmed</h3>
-            <p class="stat-value">{{ confirmedCount() }}</p>
+          <span class="stat-icon">👥</span>
+          <h3 class="mat-body-small">Total Attendees</h3>
+          <p class="stat-value">{{ totalAttendees() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
@@ -74,18 +64,18 @@
       <mat-card-content>
         <div class="stat-header">
           <span class="stat-icon">❌</span>
-          <h3 class="mat-body-small">Declined</h3>
+          <h3 class="mat-body-small">Total Declined</h3>
             <p class="stat-value">{{ declinedInviteesCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card stat-card-info">
+    <mat-card class="stat-card stat-card-pending">
       <mat-card-content>
         <div class="stat-header">
-          <span class="stat-icon">👥</span>
-          <h3 class="mat-body-small">Total Attendees</h3>
-            <p class="stat-value">{{ totalAttendees() }}</p>
+          <span class="stat-icon">⏳</span>
+          <h3 class="mat-body-small">Total Unresponded</h3>
+            <p class="stat-value">{{ unrespondedInviteesCount() }}</p>
         </div>
       </mat-card-content>
     </mat-card>

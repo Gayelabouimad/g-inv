@@ -64,23 +64,50 @@
   align-items: flex-end;
 }
 
+.visibility-controls {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .table-name-field {
   flex: 1;
   min-width: 250px;
 }
 
-.tables-grid {
+.tables-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
   gap: 1.5rem;
+  align-items: stretch;
+}
+
+.unassigned-column {
+  display: flex;
+}
+
+.assigned-column {
+  min-width: 0;
+}
+
+.assigned-tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+  grid-auto-flow: row dense;
 }
 
 .table-card {
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  min-height: 400px;
+  min-height: 0;
   will-change: transform;
+}
+
+.unassigned-column .table-card {
+  flex: 1;
 }
 
 .table-card:hover {
@@ -159,8 +186,9 @@
 
 .stat {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
 
 .stat-label {
@@ -408,7 +436,20 @@
     width: 100%;
   }
 
-  .tables-grid {
+  .visibility-controls {
+    justify-content: stretch;
+  }
+
+  .visibility-controls button {
+    width: 100%;
+  }
+
+  .tables-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .assigned-tables-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }

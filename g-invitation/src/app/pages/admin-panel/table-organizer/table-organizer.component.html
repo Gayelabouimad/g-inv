@@ -34,6 +34,12 @@
           Add Table
         </button>
       </div>
+      <div class="visibility-controls">
+        <button mat-stroked-button type="button" (click)="toggleDeclinedVisibility()">
+          <mat-icon>{{ hideDeclinedInvitees() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          {{ hideDeclinedInvitees() ? 'Show declined invitees' : 'Hide declined invitees' }}
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 
@@ -44,138 +50,154 @@
       <p class="mat-body-medium">Loading invitees...</p>
     </div>
   } @else {
-    <div class="tables-grid" cdkDropListGroup>
-      @for (table of tables(); track table.id) {
-        <mat-card class="table-card" [class.unassigned]="table.id === 'unassigned'">
-          <mat-card-header>
-            @if (!table.isEditing) {
-              <div class="table-header-display">
-                <mat-card-title>{{ table.name }}</mat-card-title>
-                @if (table.description) {
-                  <p class="table-description">{{ table.description }}</p>
-                }
-              </div>
-              @if (table.id !== 'unassigned') {
-                <div class="table-actions">
-                  <button mat-icon-button
-                          (click)="startEditing(table)"
-                          matTooltip="Edit table">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button
-                          (click)="removeTable(table.id)"
-                          [disabled]="table.invitees.length > 0"
-                          matTooltip="Delete table (must be empty)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
+    <div class="tables-layout" cdkDropListGroup>
+      @if (unassignedTable(); as unassigned) {
+        <div class="unassigned-column">
+          <ng-container [ngTemplateOutlet]="tableCardTemplate" [ngTemplateOutletContext]="{ $implicit: unassigned }"></ng-container>
+        </div>
+      }
+
+      <div class="assigned-column">
+        <div class="assigned-tables-grid">
+          @for (table of assignedTables(); track table.id) {
+            <ng-container [ngTemplateOutlet]="tableCardTemplate" [ngTemplateOutletContext]="{ $implicit: table }"></ng-container>
+          }
+        </div>
+      </div>
+    </div>
+
+    <ng-template #tableCardTemplate let-table>
+      <mat-card class="table-card" [class.unassigned]="table.id === 'unassigned'">
+        <mat-card-header>
+          @if (!table.isEditing) {
+            <div class="table-header-display">
+              <mat-card-title>{{ table.name }}</mat-card-title>
+              @if (table.description) {
+                <p class="table-description">{{ table.description }}</p>
               }
-            } @else {
-              <div class="table-editing-form">
-                <mat-form-field appearance="outline" class="edit-table-name">
-                  <mat-label>Table Name</mat-label>
-                  <input matInput
-                         [(ngModel)]="table.editingName"
-                         placeholder="Enter table name">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="edit-table-description">
-                  <mat-label>Description (optional)</mat-label>
-                  <textarea matInput
-                            [(ngModel)]="table.editingDescription"
-                            placeholder="e.g., Family table, VIP guests, etc."
-                            rows="2"></textarea>
-                </mat-form-field>
-                <div class="edit-actions">
-                  <button mat-raised-button color="primary"
-                          (click)="saveTableEdit(table)">
-                    <mat-icon>check</mat-icon>
-                    Save
-                  </button>
-                  <button mat-stroked-button
-                          (click)="cancelEditing(table.id)">
-                    <mat-icon>close</mat-icon>
-                    Cancel
-                  </button>
-                </div>
+            </div>
+            @if (table.id !== 'unassigned') {
+              <div class="table-actions">
+                <button mat-icon-button
+                        (click)="startEditing(table)"
+                        matTooltip="Edit table">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="removeTable(table.id)"
+                        [disabled]="table.invitees.length > 0"
+                        matTooltip="Delete table (must be empty)">
+                  <mat-icon>delete</mat-icon>
+                </button>
               </div>
             }
-          </mat-card-header>
-
-          <mat-card-content>
-            <!-- Table Stats -->
-            <div class="table-stats">
-              <div class="stat">
-                <span class="stat-label">Confirmed:</span>
-                <span class="stat-value">{{ getResponseCount(table.invitees) }}</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">Attendees:</span>
-                <span class="stat-value">{{ getAttendeeCount(table.invitees) }}</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">Invitations:</span>
-                <span class="stat-value">{{ table.invitees.length }}</span>
+          } @else {
+            <div class="table-editing-form">
+              <mat-form-field appearance="outline" class="edit-table-name">
+                <mat-label>Table Name</mat-label>
+                <input matInput
+                       [(ngModel)]="table.editingName"
+                       placeholder="Enter table name">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="edit-table-description">
+                <mat-label>Description (optional)</mat-label>
+                <textarea matInput
+                          [(ngModel)]="table.editingDescription"
+                          placeholder="e.g., Family table, VIP guests, etc."
+                          rows="2"></textarea>
+              </mat-form-field>
+              <div class="edit-actions">
+                <button mat-raised-button color="primary"
+                        (click)="saveTableEdit(table)">
+                  <mat-icon>check</mat-icon>
+                  Save
+                </button>
+                <button mat-stroked-button
+                        (click)="cancelEditing(table.id)">
+                  <mat-icon>close</mat-icon>
+                  Cancel
+                </button>
               </div>
             </div>
+          }
+        </mat-card-header>
 
-            <!-- Drop Zone -->
-            <div class="drop-zone"
-                 cdkDropList
-                 [id]="table.id"
-                 [cdkDropListData]="table.invitees"
-                 cdkDropListOrientation="vertical"
-                 (cdkDropListDropped)="drop($event)"
-                 [cdkDropListDisabled]="loading()">
+        <mat-card-content>
+          <!-- Table Stats -->
+          <div class="table-stats">
+            <div class="stat">
+              <span class="stat-label">Total Count:</span>
+              <span class="stat-value">{{ getAttendeeCount(table.invitees) }}/{{ getTotalTableAttendeeCapacity(table.invitees) }}</span>
+            </div>
+            @if (hideDeclinedInvitees() && getDeclinedCount(table.invitees) > 0) {
+              <div class="stat">
+                <span class="stat-label">Hidden:</span>
+                <span class="stat-value">{{ getDeclinedCount(table.invitees) }}</span>
+              </div>
+            }
+          </div>
 
-              @if (table.invitees.length === 0) {
-                <p class="empty-message">Drop invitees here</p>
-              } @else {
-                <div class="invitees-list">
-                   @for (invitee of table.invitees; track invitee.id) {
-                     <div class="invitee-item" cdkDrag [cdkDragData]="invitee">
-                       <div class="invitee-info">
-                         <div class="invitee-header-line">
-                           <p class="invitee-name">{{ invitee.guestNamesDisplay }}</p>
+          <!-- Drop Zone -->
+          <div class="drop-zone"
+               cdkDropList
+               [id]="table.id"
+               [cdkDropListData]="table.invitees"
+               [cdkDropListConnectedTo]="getConnectedDropListIds(table.id)"
+               cdkDropListOrientation="vertical"
+               (cdkDropListDropped)="drop($event)"
+               [cdkDropListDisabled]="loading()">
+
+            @let visibleInvitees = getVisibleInvitees(table.invitees);
+            @if (visibleInvitees.length === 0) {
+              <p class="empty-message">
+                {{ hideDeclinedInvitees() && getDeclinedCount(table.invitees) > 0 ? 'Declined invitees are hidden' : 'Drop invitees here' }}
+              </p>
+            } @else {
+              <div class="invitees-list">
+                 @for (invitee of visibleInvitees; track invitee.id) {
+                   <div class="invitee-item" cdkDrag [cdkDragData]="invitee">
+                     <div class="invitee-info">
+                       <div class="invitee-header-line">
+                         <p class="invitee-name">{{ invitee.guestNamesDisplay }}</p>
+                         @if (invitee.attending !== undefined) {
+                           <span class="status" [class.attending]="invitee.attending" [class.declined]="!invitee.attending">
+                             {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
+                           </span>
+                         } @else {
+                           <span class="status pending">⏳ No Response</span>
+                         }
+                       </div>
+                       @if (invitee.attending && invitee.attendeeCount) {
+                         <div class="invitee-details">
+                           <span class="count">{{ invitee.attendeeCount }} person(s)</span>
+                         </div>
+                       }
+                     </div>
+                     <mat-icon class="drag-handle">drag_indicator</mat-icon>
+
+                     <!-- Custom drag preview for smooth visual feedback -->
+                     <ng-template cdkDragPreview>
+                       <div class="cdk-drag-preview-item">
+                         <div class="preview-content">
+                           <p class="preview-name">{{ invitee.guestNamesDisplay }}</p>
                            @if (invitee.attending !== undefined) {
-                             <span class="status" [class.attending]="invitee.attending" [class.declined]="!invitee.attending">
+                             <span class="preview-status" [class.attending]="invitee.attending">
                                {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
                              </span>
                            } @else {
-                             <span class="status pending">⏳ No Response</span>
+                             <span class="preview-status pending">⏳ No Response</span>
                            }
                          </div>
-                         @if (invitee.attending && invitee.attendeeCount) {
-                           <div class="invitee-details">
-                             <span class="count">{{ invitee.attendeeCount }} person(s)</span>
-                           </div>
-                         }
                        </div>
-                       <mat-icon class="drag-handle">drag_indicator</mat-icon>
-
-                       <!-- Custom drag preview for smooth visual feedback -->
-                       <ng-template cdkDragPreview>
-                         <div class="cdk-drag-preview-item">
-                           <div class="preview-content">
-                             <p class="preview-name">{{ invitee.guestNamesDisplay }}</p>
-                             @if (invitee.attending !== undefined) {
-                               <span class="preview-status" [class.attending]="invitee.attending">
-                                 {{ invitee.attending ? '✓ Attending' : '✗ Declined' }}
-                               </span>
-                             } @else {
-                               <span class="preview-status pending">⏳ No Response</span>
-                             }
-                           </div>
-                         </div>
-                       </ng-template>
-                     </div>
-                   }
-                 </div>
-              }
-            </div>
-          </mat-card-content>
-        </mat-card>
-      }
-    </div>
+                     </ng-template>
+                   </div>
+                 }
+               </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
   }
 </div>
 

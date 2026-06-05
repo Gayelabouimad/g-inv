@@ -58,6 +58,26 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['guestNames', 'attending', 'attendees', 'message', 'submitted', 'updated', 'invitation', 'delete'];
   lastLoaded = signal('Never');
 
+  private getInviteeCapacity(invitee: InviteeRecord): number {
+    const count = Number(invitee.numberOfPeople);
+    return Number.isFinite(count) && count > 0 ? count : 0;
+  }
+
+  private getConfirmedAttendeeCount(invitee: InviteeRecord): number {
+    if (invitee.attending !== true) {
+      return 0;
+    }
+
+    const capacity = this.getInviteeCapacity(invitee);
+    const count = Number(invitee.attendeeCount);
+
+    if (!Number.isFinite(count)) {
+      return capacity;
+    }
+
+    return Math.min(Math.max(count, 0), capacity);
+  }
+
   protected readonly totalInvitations = computed(() => this.invitees().length);
 
   // Computed signals to prevent unnecessary re-renders
@@ -98,21 +118,35 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
 
   protected readonly declinedInviteesCount = computed(() =>
     this.invitees()
-      .filter(r => r.attending === false)
-      .reduce((sum, r) => sum + (Number(r.numberOfPeople) || 0), 0)
+      .reduce((sum, invitee) => {
+        const capacity = this.getInviteeCapacity(invitee);
+
+        if (invitee.attending === false) {
+          return sum + capacity;
+        }
+
+        if (invitee.attending === true) {
+          return sum + (capacity - this.getConfirmedAttendeeCount(invitee));
+        }
+
+        return sum;
+      }, 0)
+  );
+
+  protected readonly unrespondedInviteesCount = computed(() =>
+    this.invitees()
+      .filter(r => r.attending === undefined || r.attending === null)
+      .reduce((sum, r) => sum + this.getInviteeCapacity(r), 0)
   );
 
   protected readonly totalAttendees = computed(() =>
     this.invitees()
       .filter(r => r.attending === true)
-      .reduce((sum, r) => {
-        const count = Number(r.attendeeCount);
-        return sum + (Number.isFinite(count) ? count : 0);
-      }, 0)
+      .reduce((sum, r) => sum + this.getConfirmedAttendeeCount(r), 0)
   );
 
   protected readonly totalInviteesCount = computed(() =>
-    this.invitees().reduce((sum, inv) => sum + inv.numberOfPeople, 0)
+    this.invitees().reduce((sum, inv) => sum + this.getInviteeCapacity(inv), 0)
   );
 
   private readonly inviteeService = inject(InviteeService);
