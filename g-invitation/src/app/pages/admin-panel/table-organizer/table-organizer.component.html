@@ -58,11 +58,21 @@
       }
 
       <div class="assigned-column">
-        <div class="assigned-tables-grid">
-          @for (table of assignedTables(); track table.id) {
-            <ng-container [ngTemplateOutlet]="tableCardTemplate" [ngTemplateOutletContext]="{ $implicit: table }"></ng-container>
-          }
-        </div>
+        @let assigned = assignedTables();
+
+        @if (assigned.length > 0) {
+          <div class="first-assigned-table-row">
+            <ng-container [ngTemplateOutlet]="tableCardTemplate" [ngTemplateOutletContext]="{ $implicit: assigned[0] }"></ng-container>
+          </div>
+        }
+
+        @if (assigned.length > 1) {
+          <div class="assigned-tables-grid">
+            @for (table of assigned.slice(1); track table.id) {
+              <ng-container [ngTemplateOutlet]="tableCardTemplate" [ngTemplateOutletContext]="{ $implicit: table }"></ng-container>
+            }
+          </div>
+        }
       </div>
     </div>
 
@@ -200,4 +210,3 @@
     </ng-template>
   }
 </div>
-

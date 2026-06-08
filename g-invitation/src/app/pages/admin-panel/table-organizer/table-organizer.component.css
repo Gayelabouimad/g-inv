@@ -88,6 +88,17 @@
 
 .assigned-column {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.first-assigned-table-row {
+  width: 100%;
+}
+
+.first-assigned-table-row .table-card {
+  width: 100%;
 }
 
 .assigned-tables-grid {
@@ -108,6 +119,14 @@
 
 .unassigned-column .table-card {
   flex: 1;
+  max-height: 110vh;
+}
+
+.unassigned-column .drop-zone {
+  max-height: 100vh;
+  overflow-y: auto;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .table-card:hover {
@@ -484,4 +503,3 @@
     font-size: 0.85rem;
   }
 }
-

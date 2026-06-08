@@ -89,7 +89,12 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
   });
   protected readonly tables = signal<TableGroup[]>([]);
   protected readonly unassignedTable = computed(() => this.tables().find((table) => table.id === 'unassigned') ?? null);
-  protected readonly assignedTables = computed(() => this.tables().filter((table) => table.id !== 'unassigned'));
+  protected readonly assignedTables = computed(() =>
+    this.tables()
+      .filter((table) => table.id !== 'unassigned')
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base', numeric: true }))
+  );
   protected readonly dropListIds = computed(() => this.tables().map((table) => table.id));
   protected readonly newTableName = signal('');
   protected readonly hideDeclinedInvitees = signal(false);
