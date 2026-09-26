@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>Edit RSVP Response</h2>
+
+<mat-dialog-content>
+  <mat-card class="invitee-info">
+    <mat-card-content>
+      <p class="guest-names"><strong>{{ guestNames }}</strong></p>
+      <p class="capacity-info">Capacity: {{ maxCapacity }} person(s)</p>
+    </mat-card-content>
+  </mat-card>
+
+  <form [formGroup]="form" class="response-form">
+    <!-- Attending Toggle -->
+    <div class="form-section">
+      <label>Will they attend?</label>
+      <mat-slide-toggle
+        formControlName="attending"
+        (change)="onAttendingChange()"
+        color="accent">
+        {{ form.get('attending')?.value ? 'Attending' : 'Not Attending' }}
+      </mat-slide-toggle>
+    </div>
+
+    <!-- Attendee Count (only when attending) -->
+    @if (form.get('attending')?.value) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Number of Attendees</mat-label>
+        <input matInput
+               formControlName="attendeeCount"
+               type="number"
+               [min]="1"
+               [max]="maxCapacity">
+        <mat-error *ngIf="form.get('attendeeCount')?.hasError('required')">
+          Required
+        </mat-error>
+        <mat-error *ngIf="form.get('attendeeCount')?.hasError('min')">
+          Must be at least 1
+        </mat-error>
+        <mat-error *ngIf="form.get('attendeeCount')?.hasError('max')">
+          Cannot exceed capacity of {{ maxCapacity }}
+        </mat-error>
+      </mat-form-field>
+    }
+
+    <!-- Message -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message (optional)</mat-label>
+      <textarea matInput
+                formControlName="message"
+                placeholder="Any special requests or dietary restrictions..."
+                rows="4"></textarea>
+      <mat-hint align="end">{{ form.get('message')?.value?.length || 0 }}/500</mat-hint>
+      <mat-error *ngIf="form.get('message')?.hasError('maxlength')">
+        Message cannot exceed 500 characters
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()">
+    <mat-icon>close</mat-icon>
+    Cancel
+  </button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+    <mat-icon>check</mat-icon>
+    Save Changes
+  </button>
+</mat-dialog-actions>
+

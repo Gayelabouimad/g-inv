@@ -1,13 +1,23 @@
-<h2 mat-dialog-title>Delete RSVP Response</h2>
+<h2 mat-dialog-title>{{ data.isFullDelete ? 'Delete Invitation' : 'Delete RSVP Response' }}</h2>
 <div mat-dialog-content>
-  <p>
-    Delete RSVP response for
-    <strong>{{ data.guestNamesDisplay }}</strong>?
-  </p>
-  <p>This action cannot be undone.</p>
+  @if (data.isFullDelete) {
+    <p>
+      Delete invitation for
+      <strong>{{ data.guestNamesDisplay }}</strong>?
+    </p>
+    <p style="color: #d32f2f; font-weight: 500;">This will permanently remove the invitation and all associated data. This action cannot be undone.</p>
+  } @else {
+    <p>
+      Delete RSVP response for
+      <strong>{{ data.guestNamesDisplay }}</strong>?
+    </p>
+    <p>This action cannot be undone.</p>
+  }
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button (click)="close(false)">Cancel</button>
-  <button mat-flat-button color="warn" (click)="close(true)">Delete</button>
+  <button mat-flat-button [color]="data.isFullDelete ? 'warn' : 'warn'" (click)="close(true)">
+    {{ data.isFullDelete ? 'Delete Invitation' : 'Delete Response' }}
+  </button>
 </div>
 

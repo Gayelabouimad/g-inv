@@ -16,6 +16,9 @@
     {
       "backendId": "g-invitation-app",
       "rootDir": "g-invitation",
+      "runConfig": {
+        "minInstances": 1
+      },
       "ignore": [
         "node_modules",
         ".git",

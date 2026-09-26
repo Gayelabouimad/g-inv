@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { EVENT_CONFIG } from '../../../data/event.data';
 import { InviteeRecord, TableRecord } from '../../../models/invitation.models';
 import { InviteeService } from '../../../services/invitee.service';
+import * as XLSX from 'xlsx';
 
 interface TableGroup {
   id: string;
@@ -520,4 +521,50 @@ export class TableOrganizerComponent implements OnInit, OnDestroy {
        this.snackBar.open('Failed to update table', 'Close', { duration: 3000 });
      }
    }
+
+  protected exportTableOrganizerToExcel(): void {
+    const rows = this.tables()
+      .flatMap((table) =>
+        table.invitees.map((invitee) => ({
+          'Invitee Name': invitee.guestNamesDisplay,
+          'Number of Coming Guests': invitee.attending ? (invitee.attendeeCount ?? invitee.numberOfPeople ?? 0) : 0,
+          'Table Name': table.name,
+          'Invitation Status': this.getInvitationStatus(invitee),
+        }))
+      )
+      .sort((a, b) => {
+        const tableComparison = a['Table Name'].localeCompare(b['Table Name'], undefined, { sensitivity: 'base', numeric: true });
+        if (tableComparison !== 0) {
+          return tableComparison;
+        }
+
+        return a['Invitee Name'].localeCompare(b['Invitee Name'], undefined, { sensitivity: 'base', numeric: true });
+      });
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    worksheet['!cols'] = [
+      { wch: 30 },
+      { wch: 24 },
+      { wch: 20 },
+      { wch: 20 },
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Table Organizer');
+
+    const datePart = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `table-organizer-${this.event.eventSlug}-${datePart}.xlsx`);
+  }
+
+  private getInvitationStatus(invitee: InviteeRecord): string {
+    if (invitee.attending === true) {
+      return 'Attending';
+    }
+
+    if (invitee.attending === false) {
+      return 'Declined';
+    }
+
+    return 'No Response';
+  }
 }

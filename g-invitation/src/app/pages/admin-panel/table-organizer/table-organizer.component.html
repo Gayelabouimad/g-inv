@@ -39,6 +39,10 @@
           <mat-icon>{{ hideDeclinedInvitees() ? 'visibility' : 'visibility_off' }}</mat-icon>
           {{ hideDeclinedInvitees() ? 'Show declined invitees' : 'Hide declined invitees' }}
         </button>
+        <button mat-raised-button color="primary" type="button" (click)="exportTableOrganizerToExcel()" [disabled]="loading()">
+          <mat-icon>download</mat-icon>
+          Export Tables (Excel)
+        </button>
       </div>
     </mat-card-content>
   </mat-card>

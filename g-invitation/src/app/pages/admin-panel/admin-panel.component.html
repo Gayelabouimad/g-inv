@@ -34,6 +34,10 @@
         <mat-icon>table_rows</mat-icon>
         Table Organizer
       </button>
+      <button mat-raised-button color="accent" (click)="exportToExcel()" [disabled]="filteredRsvps().length === 0">
+        <mat-icon>file_download</mat-icon>
+        Export to Excel
+      </button>
       <button mat-raised-button color="accent" (click)="exportToCSV()" [disabled]="filteredRsvps().length === 0">
         <mat-icon>download</mat-icon>
         Export to CSV
@@ -183,17 +187,35 @@
 
             <!-- Delete Column -->
             <ng-container matColumnDef="delete">
-              <th mat-header-cell *matHeaderCellDef>Delete Response</th>
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let item">
-                <button
-                  mat-icon-button
-                  color="warn"
-                  [disabled]="!item.isResponded"
-                  (click)="deleteResponse(item)"
-                  [matTooltip]="item.isResponded ? 'Delete response' : 'No response to delete'"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
+                <div class="action-buttons">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="editResponse(item)"
+                    matTooltip="Edit response"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    [disabled]="!item.isResponded"
+                    (click)="deleteResponse(item)"
+                    [matTooltip]="item.isResponded ? 'Delete response' : 'No response to delete'"
+                  >
+                    <mat-icon>clear</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="deleteInvitation(item)"
+                    matTooltip="Delete invitation"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
               </td>
             </ng-container>
 

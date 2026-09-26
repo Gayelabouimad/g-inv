@@ -16,12 +16,14 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AddInvitationDialogComponent } from './add-invitation-dialog/add-invitation-dialog.component';
 import { DeleteRsvpConfirmDialogComponent } from './delete-rsvp-confirm-dialog/delete-rsvp-confirm-dialog.component';
+import { EditResponseDialogComponent, EditResponseResult } from './edit-response-dialog/edit-response-dialog.component';
 import { EVENT_CONFIG } from '../../data/event.data';
 import { INVITEES } from '../../data/invitees.data';
 import { InviteeRecord } from '../../models/invitation.models';
 import { InviteeService } from '../../services/invitee.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import * as XLSX from 'xlsx';
 
 type AdminRsvpRow = InviteeRecord & { isResponded: boolean; guestNamesDisplay: string };
 
@@ -227,67 +229,168 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     this.filter.set((event.value as string) ?? '');
   }
 
-  protected deleteResponse(item: AdminRsvpRow): void {
-    // Prevent deletion if loading or item hasn't responded
-    if (this.loading() || !item.isResponded) {
-      return;
-    }
+   protected deleteResponse(item: AdminRsvpRow): void {
+     // Prevent deletion if loading or item hasn't responded
+     if (this.loading() || !item.isResponded) {
+       return;
+     }
 
-    const dialogRef = this.dialog.open(DeleteRsvpConfirmDialogComponent, {
-      data: { guestNamesDisplay: item.guestNamesDisplay },
-      disableClose: true,
-    });
+     const dialogRef = this.dialog.open(DeleteRsvpConfirmDialogComponent, {
+       data: { guestNamesDisplay: item.guestNamesDisplay },
+       disableClose: true,
+     });
 
-    dialogRef.afterClosed().subscribe(async (confirmed) => {
-      if (!confirmed) {
-        return;
-      }
+     dialogRef.afterClosed().subscribe(async (confirmed) => {
+       if (!confirmed) {
+         return;
+       }
 
-      try {
-        await this.inviteeService.deleteRsvp(item.id, this.event.eventSlug);
-        // Reload from source of truth to keep statistics and table in sync
-        await this.loadInvitees();
-        this.snackBar.open(`Deleted RSVP for ${item.guestNamesDisplay}`, 'Close', { duration: 3000 });
-      } catch (error) {
-        console.error('Error deleting RSVP:', error);
-        if (isPlatformBrowser(this.platformId)) {
-          this.snackBar.open('Failed to delete RSVP. Please try again.', 'Close', { duration: 5000 });
-        }
-      }
-    });
-  }
+       try {
+         await this.inviteeService.deleteRsvp(item.id, this.event.eventSlug);
+         // Reload from source of truth to keep statistics and table in sync
+         await this.loadInvitees();
+         this.snackBar.open(`Deleted RSVP for ${item.guestNamesDisplay}`, 'Close', { duration: 3000 });
+       } catch (error) {
+         console.error('Error deleting RSVP:', error);
+         if (isPlatformBrowser(this.platformId)) {
+           this.snackBar.open('Failed to delete RSVP. Please try again.', 'Close', { duration: 5000 });
+         }
+       }
+     });
+   }
+
+   protected editResponse(item: AdminRsvpRow): void {
+     if (this.loading()) {
+       return;
+     }
+
+     const dialogRef = this.dialog.open(EditResponseDialogComponent, {
+       data: { invitee: item },
+       width: '500px',
+       disableClose: true,
+     });
+
+     dialogRef.afterClosed().subscribe(async (result: EditResponseResult | null) => {
+       if (!result) {
+         return;
+       }
+
+       try {
+         await this.inviteeService.submitRsvp(item.id, this.event.eventSlug, result);
+         // Reload from source of truth to keep statistics and table in sync
+         await this.loadInvitees();
+         this.snackBar.open(`Updated RSVP for ${item.guestNamesDisplay}`, 'Close', { duration: 3000 });
+       } catch (error) {
+         console.error('Error updating RSVP:', error);
+         if (isPlatformBrowser(this.platformId)) {
+           this.snackBar.open('Failed to update RSVP. Please try again.', 'Close', { duration: 5000 });
+         }
+       }
+     });
+   }
+
+   protected deleteInvitation(item: AdminRsvpRow): void {
+     if (this.loading()) {
+       return;
+     }
+
+     const dialogRef = this.dialog.open(DeleteRsvpConfirmDialogComponent, {
+       data: { guestNamesDisplay: item.guestNamesDisplay, isFullDelete: true },
+       disableClose: true,
+     });
+
+     dialogRef.afterClosed().subscribe(async (confirmed) => {
+       if (!confirmed) {
+         return;
+       }
+
+       try {
+         await this.inviteeService.deleteInvitee(item.id, this.event.eventSlug);
+         // Reload from source of truth to keep statistics and table in sync
+         await this.loadInvitees();
+         this.snackBar.open(`Deleted invitation for ${item.guestNamesDisplay}`, 'Close', { duration: 3000 });
+       } catch (error) {
+         console.error('Error deleting invitation:', error);
+         if (isPlatformBrowser(this.platformId)) {
+           this.snackBar.open('Failed to delete invitation. Please try again.', 'Close', { duration: 5000 });
+         }
+       }
+     });
+   }
 
   protected trackByInviteeId(index: number, item: AdminRsvpRow): string {
     return item.id;
   }
 
-  protected exportToCSV(): void {
-    const data = this.filteredRsvps();
-    const headers = ['Guest Names', 'Attending', 'Attendees', 'Message', 'Submitted', 'Last Updated'];
-    const rows = data.map(rsvp => [
-      rsvp.guestNamesDisplay,
-      rsvp.isResponded ? (rsvp.attending ? 'Yes' : 'No') : 'No Response',
-      rsvp.isResponded && rsvp.attending ? `${rsvp.attendeeCount}/${rsvp.numberOfPeople}` : `0/${rsvp.numberOfPeople}`,
-      rsvp.message || '',
-      this.formatDate(rsvp.createdAt || ''),
-      this.formatDate(rsvp.updatedAt || ''),
-    ]);
+   protected exportToCSV(): void {
+     const data = this.filteredRsvps();
+     const headers = ['Guest Names', 'Attending', 'Attendees', 'Message', 'Submitted', 'Last Updated'];
+     const rows = data.map(rsvp => [
+       rsvp.guestNamesDisplay,
+       rsvp.isResponded ? (rsvp.attending ? 'Yes' : 'No') : 'No Response',
+       rsvp.isResponded && rsvp.attending ? `${rsvp.attendeeCount}/${rsvp.numberOfPeople}` : `0/${rsvp.numberOfPeople}`,
+       rsvp.message || '',
+       this.formatDate(rsvp.createdAt || ''),
+       this.formatDate(rsvp.updatedAt || ''),
+     ]);
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
-    ].join('\n');
+     const csvContent = [
+       headers.join(','),
+       ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+     ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `rsvp-${this.event.eventSlug}-${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+     const link = document.createElement('a');
+     const url = URL.createObjectURL(blob);
+     link.setAttribute('href', url);
+     link.setAttribute('download', `rsvp-${this.event.eventSlug}-${new Date().toISOString().split('T')[0]}.csv`);
+     link.style.visibility = 'hidden';
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+   }
+
+   protected exportToExcel(): void {
+     const data = this.filteredRsvps();
+
+     // Prepare data with separated count columns
+     const excelData = data.map(rsvp => ({
+       'Guest Names': rsvp.guestNamesDisplay,
+       'Attending': rsvp.isResponded ? (rsvp.attending ? 'Yes' : 'No') : 'No Response',
+       'Confirmed Attendees': rsvp.isResponded && rsvp.attending ? rsvp.attendeeCount : 0,
+       'Invited Capacity': rsvp.numberOfPeople,
+       'Count': rsvp.isResponded && rsvp.attending ? rsvp.attendeeCount : 0,
+       'Message': rsvp.message || '',
+       'Submitted': this.formatDate(rsvp.createdAt || ''),
+       'Last Updated': this.formatDate(rsvp.updatedAt || ''),
+     }));
+
+     // Create a worksheet from the data
+     const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+     // Set column widths for better readability
+     const columnWidths = [
+       { wch: 25 },  // Guest Names
+       { wch: 12 },  // Attending
+       { wch: 18 },  // Confirmed Attendees
+       { wch: 16 },  // Invited Capacity
+       { wch: 10 },  // Count
+       { wch: 30 },  // Message
+       { wch: 20 },  // Submitted
+       { wch: 20 },  // Last Updated
+     ];
+     worksheet['!cols'] = columnWidths;
+
+     // Create a workbook and add the worksheet
+     const workbook = XLSX.utils.book_new();
+     XLSX.utils.book_append_sheet(workbook, worksheet, 'RSVP Data');
+
+     // Generate file name with date
+     const fileName = `rsvp-${this.event.eventSlug}-${new Date().toISOString().split('T')[0]}.xlsx`;
+
+     // Write the file
+     XLSX.writeFile(workbook, fileName);
+   }
 
   protected async uploadInvitees(): Promise<void> {
     if (this.uploadingInvitees()) {

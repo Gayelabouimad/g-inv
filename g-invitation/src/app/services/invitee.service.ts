@@ -197,6 +197,17 @@ export class InviteeService {
   }
 
   /**
+   * Delete entire invitee record including all data
+   */
+  async deleteInvitee(inviteeId: string, eventSlug: string): Promise<void> {
+    this.ensureInitialized();
+    const db = getFirestore();
+    const { deleteDoc } = await import('firebase/firestore');
+    const docRef = doc(db, this.getCollectionName(eventSlug), inviteeId);
+    await deleteDoc(docRef);
+  }
+
+  /**
    * Get all tables for an event
    */
   async getTables(eventSlug: string): Promise<TableRecord[]> {

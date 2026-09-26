@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
   styleUrl: './delete-rsvp-confirm-dialog.component.css',
 })
 export class DeleteRsvpConfirmDialogComponent {
-  readonly data = inject<{ guestNamesDisplay: string }>(MAT_DIALOG_DATA);
+  readonly data = inject<{ guestNamesDisplay: string; isFullDelete?: boolean }>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<DeleteRsvpConfirmDialogComponent>);
 
   close(result: boolean): void {
